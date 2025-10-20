@@ -1,4 +1,24 @@
-# File Size
+<h2 align="center">
+  Sized File
+</h2>
+
+<p align="center">
+  <a href="https://codecov.io/github/hossameldinmi/sized_file">
+    <img src="https://codecov.io/github/hossameldinmi/sized_file/graph/badge.svg?token=JzTIIzoQOq" alt="Code Coverage">
+  </a>
+  <a href="https://pub.dev/packages/sized_file">
+    <img alt="Pub Package" src="https://img.shields.io/pub/v/sized_file">
+  </a>
+   <a href="https://pub.dev/packages/sized_file">
+    <img alt="Pub Points" src="https://img.shields.io/pub/points/sized_file">
+  </a>
+  <br/>
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-blue.svg">
+  </a>
+</p>
+
+---
 
 A lightweight and intuitive Dart package for handling file size conversions and formatting. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes with ease, and format them for human-readable display.
 
