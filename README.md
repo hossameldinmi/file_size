@@ -17,7 +17,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  file_size: ^1.0.0
+  sized_file: ^1.0.0
 ```
 
 Then run:
@@ -41,7 +41,7 @@ flutter pub get
 You can create a `FileSize` instance from any unit:
 
 ```dart
-import 'package:file_size/file_size.dart';
+import 'package:sized_file/sized_file.dart';
 
 // From bytes
 final size1 = FileSize.b(1024);

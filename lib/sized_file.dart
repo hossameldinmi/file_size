@@ -2,7 +2,7 @@ import 'dart:math';
 
 /// A utility class for handling file size conversions and formatting.
 ///
-/// The [FileSize] class provides an easy way to work with file sizes across
+/// The [SizedFile] class provides an easy way to work with file sizes across
 /// different units (bytes, kilobytes, megabytes, gigabytes, terabytes).
 /// It uses 1024 as the divider (binary) for accurate storage size calculations.
 ///
@@ -12,14 +12,14 @@ import 'dart:math';
 /// print(fileSize.format()); // "5.00 MB"
 /// print(fileSize.inBytes);  // 5242880
 /// ```
-class FileSize {
+class SizedFile {
   /// The divider used for unit conversions (1024 for binary).
   ///
   /// This aligns with how most operating systems and storage devices
   /// report file sizes (KiB, MiB, GiB rather than KB, MB, GB).
   static const int _divider = 1024;
 
-  /// Creates a [FileSize] instance from bytes.
+  /// Creates a [SizedFile] instance from bytes.
   ///
   /// The byte value must be non-negative. All other unit values
   /// (KB, MB, GB) are automatically calculated.
@@ -31,7 +31,7 @@ class FileSize {
   /// ```
   ///
   /// Throws [AssertionError] if [inBytes] is negative.
-  FileSize.b(this.inBytes)
+  SizedFile.b(this.inBytes)
     : assert(inBytes >= 0, 'File size cannot be negative'),
       inKB = inBytes / _divider,
       inMB = inBytes / pow(_divider, 2),
@@ -57,41 +57,41 @@ class FileSize {
   /// Calculated as bytes / (1024³).
   final double inGB;
 
-  /// Creates a [FileSize] instance from kilobytes.
+  /// Creates a [SizedFile] instance from kilobytes.
   ///
   /// Example:
   /// ```dart
   /// final fileSize = FileSize.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  FileSize.kb(double inKB) : this.b((inKB * _divider).toInt());
+  SizedFile.kb(double inKB) : this.b((inKB * _divider).toInt());
 
-  /// Creates a [FileSize] instance from megabytes.
+  /// Creates a [SizedFile] instance from megabytes.
   ///
   /// Example:
   /// ```dart
   /// final fileSize = FileSize.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  FileSize.mb(double inMB) : this.b((inMB * pow(_divider, 2)).toInt());
+  SizedFile.mb(double inMB) : this.b((inMB * pow(_divider, 2)).toInt());
 
-  /// Creates a [FileSize] instance from gigabytes.
+  /// Creates a [SizedFile] instance from gigabytes.
   ///
   /// Example:
   /// ```dart
   /// final fileSize = FileSize.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  FileSize.gb(double inGB) : this.b((inGB * pow(_divider, 3)).toInt());
+  SizedFile.gb(double inGB) : this.b((inGB * pow(_divider, 3)).toInt());
 
-  /// Creates a [FileSize] instance from terabytes.
+  /// Creates a [SizedFile] instance from terabytes.
   ///
   /// Example:
   /// ```dart
   /// final fileSize = FileSize.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  FileSize.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
+  SizedFile.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
 
   /// Formats the file size as a human-readable string.
   ///
@@ -138,7 +138,7 @@ class FileSize {
     }
   }
 
-  /// Sets a global postfix generator for all [FileSize] instances.
+  /// Sets a global postfix generator for all [SizedFile] instances.
   ///
   /// This is useful for internationalization or custom unit labeling.
   /// The generator function will be called whenever [format] needs
