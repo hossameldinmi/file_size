@@ -88,7 +88,10 @@ void main() {
         'GB': 'gigabytes',
         'TB': 'terabytes',
       };
-      expect(fileSize.format(postfixes: customPostfixes), equals('1.50 kilobytes'));
+      expect(
+        fileSize.format(postfixes: customPostfixes),
+        equals('1.50 kilobytes'),
+      );
     });
 
     test('formats bytes without fraction digits', () {
@@ -121,7 +124,13 @@ void main() {
     tearDown(() {
       // Reset to default postfixes after each test
       SizedFile.setPostfixesGenerator(() {
-        return <String, String>{'B': 'B', 'KB': 'KB', 'MB': 'MB', 'GB': 'GB', 'TB': 'TB'};
+        return <String, String>{
+          'B': 'B',
+          'KB': 'KB',
+          'MB': 'MB',
+          'GB': 'GB',
+          'TB': 'TB',
+        };
       });
     });
 
@@ -141,7 +150,13 @@ void main() {
 
     test('custom postfix generator affects all instances', () {
       SizedFile.setPostfixesGenerator(() {
-        return <String, String>{'B': 'b', 'KB': 'kb', 'MB': 'mb', 'GB': 'gb', 'TB': 'tb'};
+        return <String, String>{
+          'B': 'b',
+          'KB': 'kb',
+          'MB': 'mb',
+          'GB': 'gb',
+          'TB': 'tb',
+        };
       });
       final fileSize1 = SizedFile.b(100);
       final fileSize2 = SizedFile.mb(1.0);

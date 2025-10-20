@@ -41,7 +41,13 @@ void main() {
   // Example 4: Custom postfixes for a single format call
   print('4. Custom postfixes:');
   final customSize = SizedFile.mb(5);
-  final customPostfixes = {'B': 'bytes', 'KB': 'kilobytes', 'MB': 'megabytes', 'GB': 'gigabytes', 'TB': 'terabytes'};
+  final customPostfixes = {
+    'B': 'bytes',
+    'KB': 'kilobytes',
+    'MB': 'megabytes',
+    'GB': 'gigabytes',
+    'TB': 'terabytes',
+  };
   print('Default: ${customSize.format()}');
   print('Custom:  ${customSize.format(postfixes: customPostfixes)}');
   print('');
