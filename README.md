@@ -36,27 +36,27 @@ flutter pub get
 
 ### Basic Usage
 
-#### Creating FileSize Instances
+#### Creating SizedFile Instances
 
-You can create a `FileSize` instance from any unit:
+You can create a `SizedFile` instance from any unit:
 
 ```dart
 import 'package:sized_file/sized_file.dart';
 
 // From bytes
-final size1 = FileSize.b(1024);
+final size1 = SizedFile.b(1024);
 
 // From kilobytes
-final size2 = FileSize.kb(1.5);
+final size2 = SizedFile.kb(1.5);
 
 // From megabytes
-final size3 = FileSize.mb(100);
+final size3 = SizedFile.mb(100);
 
 // From gigabytes
-final size4 = FileSize.gb(2.5);
+final size4 = SizedFile.gb(2.5);
 
 // From terabytes
-final size5 = FileSize.tb(1);
+final size5 = SizedFile.tb(1);
 ```
 
 #### Accessing Different Units
@@ -64,7 +64,7 @@ final size5 = FileSize.tb(1);
 Once created, you can access the size in any unit:
 
 ```dart
-final fileSize = FileSize.mb(5);
+final fileSize = SizedFile.mb(5);
 
 print(fileSize.inBytes);  // 5242880
 print(fileSize.inKB);     // 5120.0
@@ -79,10 +79,10 @@ print(fileSize.inGB);     // 0.0048828125
 The `format()` method automatically selects the most appropriate unit:
 
 ```dart
-print(FileSize.b(500).format());           // "500 B"
-print(FileSize.b(2048).format());          // "2.00 KB"
-print(FileSize.kb(1536).format());         // "1.50 MB"
-print(FileSize.mb(2048).format());         // "2.00 GB"
+print(SizedFile.b(500).format());           // "500 B"
+print(SizedFile.b(2048).format());          // "2.00 KB"
+print(SizedFile.kb(1536).format());         // "1.50 MB"
+print(SizedFile.mb(2048).format());         // "2.00 GB"
 ```
 
 #### Custom Fraction Digits
@@ -90,7 +90,7 @@ print(FileSize.mb(2048).format());         // "2.00 GB"
 Control the number of decimal places:
 
 ```dart
-final fileSize = FileSize.kb(1.5);
+final fileSize = SizedFile.kb(1.5);
 
 print(fileSize.format(fractionDigits: 0));  // "2 KB"
 print(fileSize.format(fractionDigits: 1));  // "1.5 KB"
@@ -102,7 +102,7 @@ print(fileSize.format(fractionDigits: 3));  // "1.500 KB"
 Override the default unit labels for a single format call:
 
 ```dart
-final fileSize = FileSize.mb(5);
+final fileSize = SizedFile.mb(5);
 
 final customPostfixes = {
   'B': 'bytes',
@@ -122,7 +122,7 @@ Set a global postfix generator for internationalization:
 
 ```dart
 // Set custom postfixes globally (e.g., for Spanish)
-FileSize.setPostfixesGenerator(() {
+SizedFile.setPostfixesGenerator(() {
   return {
     'B': 'B',
     'KB': 'KB',
@@ -132,7 +132,7 @@ FileSize.setPostfixesGenerator(() {
   };
 });
 
-final fileSize = FileSize.mb(5);
+final fileSize = SizedFile.mb(5);
 print(fileSize.format());  // Uses custom postfixes
 ```
 
@@ -142,8 +142,8 @@ print(fileSize.format());  // Uses custom postfixes
 
 ```dart
 void displayProgress(int uploadedBytes, int totalBytes) {
-  final uploaded = FileSize.b(uploadedBytes);
-  final total = FileSize.b(totalBytes);
+  final uploaded = SizedFile.b(uploadedBytes);
+  final total = SizedFile.b(totalBytes);
   
   print('Uploaded: ${uploaded.format()} of ${total.format()}');
 }
@@ -156,7 +156,7 @@ displayProgress(524288, 5242880);
 
 ```dart
 bool isFileTooLarge(int fileSizeBytes, double maxMB) {
-  final fileSize = FileSize.b(fileSizeBytes);
+  final fileSize = SizedFile.b(fileSizeBytes);
   return fileSize.inMB > maxMB;
 }
 
@@ -169,9 +169,9 @@ if (isFileTooLarge(10485760, 5.0)) {
 
 ```dart
 void printStorageSummary(int usedBytes, int totalBytes) {
-  final used = FileSize.b(usedBytes);
-  final total = FileSize.b(totalBytes);
-  final free = FileSize.b(totalBytes - usedBytes);
+  final used = SizedFile.b(usedBytes);
+  final total = SizedFile.b(totalBytes);
+  final free = SizedFile.b(totalBytes - usedBytes);
   
   final percentUsed = (usedBytes / totalBytes * 100).toStringAsFixed(1);
   
@@ -189,7 +189,7 @@ printStorageSummary(107374182400, 268435456000);
 
 ```dart
 void estimateDownloadTime(int fileSizeBytes, double speedMBps) {
-  final fileSize = FileSize.b(fileSizeBytes);
+  final fileSize = SizedFile.b(fileSizeBytes);
   final seconds = fileSize.inMB / speedMBps;
   
   print('File size: ${fileSize.format()}');
@@ -228,11 +228,11 @@ See the [example README](example/README.md) for detailed information about each 
 
 | Constructor | Description | Example |
 |------------|-------------|---------|
-| `FileSize.b(int bytes)` | Creates instance from bytes | `FileSize.b(1024)` |
-| `FileSize.kb(double kb)` | Creates instance from kilobytes | `FileSize.kb(1.5)` |
-| `FileSize.mb(double mb)` | Creates instance from megabytes | `FileSize.mb(100)` |
-| `FileSize.gb(double gb)` | Creates instance from gigabytes | `FileSize.gb(2.5)` |
-| `FileSize.tb(double tb)` | Creates instance from terabytes | `FileSize.tb(1)` |
+| `SizedFile.b(int bytes)` | Creates instance from bytes | `SizedFile.b(1024)` |
+| `SizedFile.kb(double kb)` | Creates instance from kilobytes | `SizedFile.kb(1.5)` |
+| `SizedFile.mb(double mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
+| `SizedFile.gb(double gb)` | Creates instance from gigabytes | `SizedFile.gb(2.5)` |
+| `SizedFile.tb(double tb)` | Creates instance from terabytes | `SizedFile.tb(1)` |
 
 ### Properties
 

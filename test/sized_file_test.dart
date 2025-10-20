@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sized_file/sized_file.dart';
 
 void main() {
-  group('FileSize constructors', () {
-    test('FileSize.b creates instance with bytes', () {
+  group('SizedFile constructors', () {
+    test('SizedFile.b creates instance with bytes', () {
       final fileSize = SizedFile.b(1024);
       expect(fileSize.inBytes, equals(1024));
       expect(fileSize.inKB, equals(1.0));
@@ -11,7 +11,7 @@ void main() {
       expect(fileSize.inGB, closeTo(9.5367431640625e-7, 0.0000001));
     });
 
-    test('FileSize.b with zero bytes', () {
+    test('SizedFile.b with zero bytes', () {
       final fileSize = SizedFile.b(0);
       expect(fileSize.inBytes, equals(0));
       expect(fileSize.inKB, equals(0.0));
@@ -19,20 +19,20 @@ void main() {
       expect(fileSize.inGB, equals(0.0));
     });
 
-    test('FileSize.kb creates instance from kilobytes', () {
+    test('SizedFile.kb creates instance from kilobytes', () {
       final fileSize = SizedFile.kb(1.0);
       expect(fileSize.inBytes, equals(1024));
       expect(fileSize.inKB, equals(1.0));
     });
 
-    test('FileSize.mb creates instance from megabytes', () {
+    test('SizedFile.mb creates instance from megabytes', () {
       final fileSize = SizedFile.mb(1.0);
       expect(fileSize.inBytes, equals(1048576));
       expect(fileSize.inMB, equals(1.0));
       expect(fileSize.inKB, equals(1024.0));
     });
 
-    test('FileSize.gb creates instance from gigabytes', () {
+    test('SizedFile.gb creates instance from gigabytes', () {
       final fileSize = SizedFile.gb(1.0);
       expect(fileSize.inBytes, equals(1073741824));
       expect(fileSize.inGB, equals(1.0));
@@ -40,18 +40,18 @@ void main() {
       expect(fileSize.inKB, equals(1048576.0));
     });
 
-    test('FileSize.tb creates instance from terabytes', () {
+    test('SizedFile.tb creates instance from terabytes', () {
       final fileSize = SizedFile.tb(1.0);
       expect(fileSize.inBytes, equals(1099511627776));
       expect(fileSize.inGB, equals(1024.0));
     });
 
-    test('FileSize.b throws assertion error for negative bytes', () {
+    test('SizedFile.b throws assertion error for negative bytes', () {
       expect(() => SizedFile.b(-1), throwsA(isA<AssertionError>()));
     });
   });
 
-  group('FileSize.format', () {
+  group('SizedFile.format', () {
     test('formats bytes correctly', () {
       final fileSize = SizedFile.b(512);
       expect(fileSize.format(), equals('512 B'));
@@ -88,10 +88,7 @@ void main() {
         'GB': 'gigabytes',
         'TB': 'terabytes',
       };
-      expect(
-        fileSize.format(postfixes: customPostfixes),
-        equals('1.50 kilobytes'),
-      );
+      expect(fileSize.format(postfixes: customPostfixes), equals('1.50 kilobytes'));
     });
 
     test('formats bytes without fraction digits', () {
@@ -120,17 +117,11 @@ void main() {
     });
   });
 
-  group('FileSize.setPostfixesGenerator', () {
+  group('SizedFile.setPostfixesGenerator', () {
     tearDown(() {
       // Reset to default postfixes after each test
       SizedFile.setPostfixesGenerator(() {
-        return <String, String>{
-          'B': 'B',
-          'KB': 'KB',
-          'MB': 'MB',
-          'GB': 'GB',
-          'TB': 'TB',
-        };
+        return <String, String>{'B': 'B', 'KB': 'KB', 'MB': 'MB', 'GB': 'GB', 'TB': 'TB'};
       });
     });
 
@@ -150,13 +141,7 @@ void main() {
 
     test('custom postfix generator affects all instances', () {
       SizedFile.setPostfixesGenerator(() {
-        return <String, String>{
-          'B': 'b',
-          'KB': 'kb',
-          'MB': 'mb',
-          'GB': 'gb',
-          'TB': 'tb',
-        };
+        return <String, String>{'B': 'b', 'KB': 'kb', 'MB': 'mb', 'GB': 'gb', 'TB': 'tb'};
       });
       final fileSize1 = SizedFile.b(100);
       final fileSize2 = SizedFile.mb(1.0);
@@ -165,7 +150,7 @@ void main() {
     });
   });
 
-  group('FileSize edge cases', () {
+  group('SizedFile edge cases', () {
     test('handles very large byte values', () {
       final fileSize = SizedFile.b(999999999999);
       expect(fileSize.inBytes, equals(999999999999));
@@ -203,7 +188,7 @@ void main() {
     });
   });
 
-  group('FileSize conversions', () {
+  group('SizedFile conversions', () {
     test('1 KB equals 1024 bytes', () {
       final fileSize = SizedFile.kb(1.0);
       expect(fileSize.inBytes, equals(1024));

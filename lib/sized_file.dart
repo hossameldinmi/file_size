@@ -26,7 +26,7 @@ import 'dart:math';
 ///
 /// Example:
 /// ```dart
-/// final fileSize = FileSize.mb(5);
+/// final fileSize = SizedFile.mb(5);
 /// print(fileSize.format()); // "5.00 MB"
 /// print(fileSize.inBytes);  // 5242880
 /// ```
@@ -191,12 +191,6 @@ class SizedFile {
   /// Returns a map of default English unit labels.
   /// Can be overridden using [setPostfixesGenerator].
   static Map<String, String> Function() _postfixesGenerator = () {
-    return <String, String>{
-      'B': 'B',
-      'KB': 'KB',
-      'MB': 'MB',
-      'GB': 'GB',
-      'TB': 'TB',
-    };
+    return <String, String>{'B': 'B', 'KB': 'KB', 'MB': 'MB', 'GB': 'GB', 'TB': 'TB'};
   };
 }
