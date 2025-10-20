@@ -191,6 +191,12 @@ class SizedFile {
   /// Returns a map of default English unit labels.
   /// Can be overridden using [setPostfixesGenerator].
   static Map<String, String> Function() _postfixesGenerator = () {
-    return <String, String>{'B': 'B', 'KB': 'KB', 'MB': 'MB', 'GB': 'GB', 'TB': 'TB'};
+    return <String, String>{
+      'B': 'B',
+      'KB': 'KB',
+      'MB': 'MB',
+      'GB': 'GB',
+      'TB': 'TB',
+    };
   };
 }

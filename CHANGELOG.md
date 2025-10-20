@@ -31,3 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tested and verified with 100% test coverage
 
 [1.0.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.0
+
+## [1.0.1] - 2025-10-21
+
+### Added
+- remove unnecessary_library_name rule from analysis_options.yaml
+
