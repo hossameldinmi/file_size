@@ -6,8 +6,7 @@ version: 1.0.2
 repository: https://github.com/hossameldinmi/sized_file
 
 environment:
-  sdk: ^3.9.2
-  flutter: ">=1.17.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:
