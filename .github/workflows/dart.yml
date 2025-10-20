@@ -41,6 +41,9 @@ jobs:
       - name: Run tests
         run: dart test --coverage=coverage
 
+      - name: Print working directory
+        run: pwd
+
       - name: List coverage files (debug)
         run: |
           echo "Contents of coverage directory:"
