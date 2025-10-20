@@ -204,6 +204,24 @@ estimateDownloadTime(52428800, 10.5);
 // Estimated time: 4.8 seconds
 ```
 
+## Examples
+
+For more comprehensive examples, check out the [example](example/) directory which includes:
+
+- **Complete working examples** demonstrating all package features
+- **Real-world use cases** like file upload progress, storage summaries, and bandwidth calculations
+- **Step-by-step demonstrations** of formatting options and localization
+
+To run the examples:
+
+```bash
+cd example
+dart pub get
+dart run example.dart
+```
+
+See the [example README](example/README.md) for detailed information about each example.
+
 ## API Reference
 
 ### Constructors

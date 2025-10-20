@@ -1,0 +1,11 @@
+name: sized_file_example
+description: Example application for the sized_file package
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  sized_file:
+    path: ../
