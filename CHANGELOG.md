@@ -37,3 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - remove unnecessary_library_name rule from analysis_options.yaml
 
+## [1.0.2] - 2025-10-21
+
+### Added
+- Enhance Docs
+
