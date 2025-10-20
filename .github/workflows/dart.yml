@@ -41,11 +41,20 @@ jobs:
       - name: Run tests
         run: dart test --coverage=coverage
 
+      - name: List coverage files (debug)
+        run: |
+          echo "Contents of coverage directory:"
+          ls -la coverage/
+          echo "Coverage file content preview:"
+          head -10 coverage/lcov.info || echo "lcov.info not found"
+
       - name: Codecov
         # You may pin to the exact commit or the version.
         # uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7
         uses: codecov/codecov-action@v5.5.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage
+          directory: coverage
+          files: coverage/lcov.info
+          fail_ci_if_error: true
         
