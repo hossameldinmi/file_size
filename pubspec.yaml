@@ -1,5 +1,5 @@
 name: file_size
-description: "A new Flutter package project."
+description: A lightweight Dart package for handling file size conversions and formatting. Convert between bytes, KB, MB, GB, and TB with easy-to-use utilities.
 version: 0.0.1
 repository: https://github.com/hossameldinmi/file_size
 
