@@ -1,3 +1,21 @@
+/// A lightweight Dart library for handling file size conversions and formatting.
+///
+/// This library provides the [SizedFile] class for easy file size manipulation
+/// across different units (bytes, KB, MB, GB, TB) with support for custom
+/// formatting and internationalization.
+///
+/// Example usage:
+/// ```dart
+/// import 'package:sized_file/sized_file.dart';
+///
+/// void main() {
+///   final fileSize = SizedFile.mb(5);
+///   print(fileSize.format()); // "5.00 MB"
+///   print(fileSize.inBytes);  // 5242880
+/// }
+/// ```
+library sized_file;
+
 import 'dart:math';
 
 /// A utility class for handling file size conversions and formatting.
@@ -26,7 +44,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.b(1024);
+  /// final fileSize = SizedFile.b(1024);
   /// print(fileSize.inKB); // 1.0
   /// ```
   ///
@@ -61,7 +79,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.kb(1.5);
+  /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
   SizedFile.kb(double inKB) : this.b((inKB * _divider).toInt());
@@ -70,7 +88,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.mb(100);
+  /// final fileSize = SizedFile.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
   SizedFile.mb(double inMB) : this.b((inMB * pow(_divider, 2)).toInt());
@@ -79,7 +97,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.gb(2.5);
+  /// final fileSize = SizedFile.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
   SizedFile.gb(double inGB) : this.b((inGB * pow(_divider, 3)).toInt());
@@ -88,7 +106,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.tb(1);
+  /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
   SizedFile.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
@@ -109,7 +127,7 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = FileSize.kb(1.5);
+  /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.format());                    // "1.50 KB"
   /// print(fileSize.format(fractionDigits: 0));   // "2 KB"
   ///
@@ -146,8 +164,8 @@ class SizedFile {
   ///
   /// Example:
   /// ```dart
-  /// // Set Spanish postfixes
-  /// FileSize.setPostfixesGenerator(() {
+  /// // Set custom postfixes
+  /// SizedFile.setPostfixesGenerator(() {
   ///   return {
   ///     'B': 'B',
   ///     'KB': 'KB',
@@ -157,7 +175,7 @@ class SizedFile {
   ///   };
   /// });
   ///
-  /// final fileSize = FileSize.mb(5);
+  /// final fileSize = SizedFile.mb(5);
   /// print(fileSize.format()); // Uses custom postfixes
   /// ```
   ///
