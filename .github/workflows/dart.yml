@@ -38,13 +38,11 @@ jobs:
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
-      
-      - name: Dart Full Coverage
-        # You may pin to the exact commit or the version.
-        # uses: stelynx/dart-full-coverage@fc91fc4cf52e65867c0ad0e54390d0fd4e22f7d8
-        uses: stelynx/dart-full-coverage@v1.1.1
-        with:
-          package: sized_file
+      - name: Run tests
+        run: |
+          dart test --coverage=coverage
+          dart pub global activate coverage
+          dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages
 
       - name: Print working directory
         run: | 
