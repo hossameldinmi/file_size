@@ -199,4 +199,86 @@ class SizedFile {
       'TB': 'TB',
     };
   };
+
+  /// Compares this [SizedFile] with another for equality.
+  ///
+  /// Two [SizedFile] instances are equal if they have the same size in bytes.
+  ///
+  /// Example:
+  /// ```dart
+  /// final size1 = SizedFile.kb(1);
+  /// final size2 = SizedFile.b(1024);
+  /// print(size1 == size2); // true
+  /// ```
+  @override
+  bool operator ==(covariant SizedFile other) {
+    if (identical(this, other)) return true;
+    return other.inBytes == inBytes;
+  }
+
+  /// Returns a hash code for this [SizedFile].
+  ///
+  /// The hash code is based on the size in bytes.
+  @override
+  int get hashCode => inBytes.hashCode;
+
+  /// Compares this [SizedFile] with another to determine if it's smaller.
+  ///
+  /// Returns `true` if this file size is smaller than [other].
+  ///
+  /// Example:
+  /// ```dart
+  /// final size1 = SizedFile.kb(1);
+  /// final size2 = SizedFile.mb(1);
+  /// print(size1 < size2); // true
+  /// ```
+  bool operator <(covariant SizedFile other) => inBytes < other.inBytes;
+
+  /// Compares this [SizedFile] with another to determine if it's smaller or equal.
+  ///
+  /// Returns `true` if this file size is smaller than or equal to [other].
+  ///
+  /// Example:
+  /// ```dart
+  /// final size1 = SizedFile.kb(1);
+  /// final size2 = SizedFile.b(1024);
+  /// print(size1 <= size2); // true
+  /// ```
+  bool operator <=(covariant SizedFile other) => inBytes <= other.inBytes;
+
+  /// Compares this [SizedFile] with another to determine if it's larger.
+  ///
+  /// Returns `true` if this file size is larger than [other].
+  ///
+  /// Example:
+  /// ```dart
+  /// final size1 = SizedFile.mb(1);
+  /// final size2 = SizedFile.kb(1);
+  /// print(size1 > size2); // true
+  /// ```
+  bool operator >(covariant SizedFile other) => inBytes > other.inBytes;
+
+  /// Compares this [SizedFile] with another to determine if it's larger or equal.
+  ///
+  /// Returns `true` if this file size is larger than or equal to [other].
+  ///
+  /// Example:
+  /// ```dart
+  /// final size1 = SizedFile.mb(1);
+  /// final size2 = SizedFile.b(1048576);
+  /// print(size1 >= size2); // true
+  /// ```
+  bool operator >=(covariant SizedFile other) => inBytes >= other.inBytes;
+
+  /// Returns a string representation of this [SizedFile].
+  ///
+  /// Uses the default formatting with 2 decimal places.
+  ///
+  /// Example:
+  /// ```dart
+  /// final size = SizedFile.mb(1.5);
+  /// print(size.toString()); // "1.50 MB"
+  /// ```
+  @override
+  String toString() => format();
 }

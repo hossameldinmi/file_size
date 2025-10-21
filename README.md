@@ -30,6 +30,8 @@ A lightweight and intuitive Dart package for handling file size conversions and 
 - 🌍 **Localization Support**: Set custom postfix generators for internationalization
 - ⚡ **Lightweight**: Zero dependencies, pure Dart implementation
 - 🧮 **Precise Calculations**: Uses 1024 as the divider (binary) for accurate storage size calculations
+- ⚖️ **Comparison Support**: Full equality and comparison operators (`==`, `<`, `>`, `<=`, `>=`)
+- 🗂️ **Collection Ready**: Works seamlessly with `Set`, `Map`, and sorting operations
 
 ## Installation
 
@@ -154,6 +156,85 @@ SizedFile.setPostfixesGenerator(() {
 
 final fileSize = SizedFile.mb(5);
 print(fileSize.format());  // Uses custom postfixes
+```
+
+### Equality and Comparison
+
+The `SizedFile` class supports equality and comparison operations, making it easy to compare file sizes regardless of the units used to create them.
+
+#### Equality Operations
+
+```dart
+final size1 = SizedFile.kb(1);
+final size2 = SizedFile.b(1024);
+final size3 = SizedFile.mb(0.0009765625);
+
+print(size1 == size2); // true - same size in different units
+print(size2 == size3); // true - all represent 1024 bytes
+print(size1 == size3); // true
+
+// Works with collections
+final uniqueSizes = <SizedFile>{size1, size2, size3};
+print(uniqueSizes.length); // 1 - all are equal, so only one unique size
+
+// Use as Map keys
+final sizeMap = <SizedFile, String>{
+  SizedFile.mb(1): 'Small file',
+  SizedFile.gb(1): 'Large file',
+};
+```
+
+#### Comparison Operations
+
+```dart
+final small = SizedFile.kb(500);
+final medium = SizedFile.mb(1);
+final large = SizedFile.gb(1);
+
+// Less than / Greater than
+print(small < medium);  // true
+print(large > medium);  // true
+
+// Less than or equal / Greater than or equal
+print(small <= SizedFile.kb(500));  // true (equal)
+print(medium >= SizedFile.mb(0.5)); // true (greater)
+
+// Sorting file sizes
+final sizes = [large, small, medium];
+sizes.sort((a, b) => a.inBytes.compareTo(b.inBytes));
+// Result: [small, medium, large]
+
+// Find maximum/minimum
+final maxSize = sizes.reduce((a, b) => a > b ? a : b);
+final minSize = sizes.reduce((a, b) => a < b ? a : b);
+print('Largest: ${maxSize.format()}');   // "1.00 GB"
+print('Smallest: ${minSize.format()}');  // "500.00 KB"
+```
+
+#### Practical Use Cases
+
+```dart
+// File size validation
+bool isValidFileSize(SizedFile fileSize, SizedFile maxSize) {
+  return fileSize <= maxSize;
+}
+
+// Storage management
+void manageStorage(List<SizedFile> files, SizedFile availableSpace) {
+  final totalSize = files.fold<SizedFile>(
+    SizedFile.b(0),
+    (sum, file) => SizedFile.b(sum.inBytes + file.inBytes),
+  );
+  
+  if (totalSize > availableSpace) {
+    print('Not enough space! Need ${totalSize.format()}, have ${availableSpace.format()}');
+  }
+}
+
+// Find files larger than threshold
+List<SizedFile> findLargeFiles(List<SizedFile> files, SizedFile threshold) {
+  return files.where((file) => file > threshold).toList();
+}
 ```
 
 ### Practical Examples
@@ -282,6 +363,30 @@ Static method to set a global postfix generator for all instances.
 **Parameters:**
 - `generator`: Function that returns a map of unit postfixes
 
+### Operators
+
+#### Equality Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `==` | Equality comparison | `SizedFile.kb(1) == SizedFile.b(1024)` |
+| `hashCode` | Hash code for collections | Used automatically in `Set` and `Map` |
+
+#### Comparison Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `<` | Less than | `SizedFile.kb(1) < SizedFile.mb(1)` |
+| `<=` | Less than or equal | `SizedFile.kb(1) <= SizedFile.b(1024)` |
+| `>` | Greater than | `SizedFile.mb(1) > SizedFile.kb(1)` |
+| `>=` | Greater than or equal | `SizedFile.mb(1) >= SizedFile.b(1048576)` |
+
+#### Other Methods
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `toString()` | String representation | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
+
 ## Understanding the Divider
 
 This package uses **1024** as the divider (binary) rather than 1000 (decimal):
@@ -302,6 +407,10 @@ The package includes comprehensive unit tests covering:
 - Edge cases and boundary conditions
 - Custom postfix generators
 - Localization scenarios
+- Equality and comparison operations
+- Hash code consistency
+- Collection behavior (Set, Map)
+- Sorting and ordering
 
 Run tests with:
 

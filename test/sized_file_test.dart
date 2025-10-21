@@ -236,4 +236,200 @@ void main() {
       expect(fromGB.inBytes, equals(bytesValue));
     });
   });
+
+  group('SizedFile equality operations', () {
+    test('equality operator works with same sizes in different units', () {
+      final size1 = SizedFile.b(1024);
+      final size2 = SizedFile.kb(1.0);
+      final size3 = SizedFile.mb(0.0009765625);
+
+      expect(size1 == size2, isTrue);
+      expect(size2 == size3, isTrue);
+      expect(size1 == size3, isTrue);
+    });
+
+    test('equality operator works with identical instances', () {
+      final size = SizedFile.mb(5);
+      expect(size == size, isTrue);
+    });
+
+    test('equality operator returns false for different sizes', () {
+      final size1 = SizedFile.kb(1);
+      final size2 = SizedFile.kb(2);
+
+      expect(size1 == size2, isFalse);
+    });
+
+    test('equality operator works with zero bytes', () {
+      final size1 = SizedFile.b(0);
+      final size2 = SizedFile.kb(0);
+      final size3 = SizedFile.mb(0);
+
+      expect(size1 == size2, isTrue);
+      expect(size2 == size3, isTrue);
+      expect(size1 == size3, isTrue);
+    });
+
+    test('hashCode is consistent with equality', () {
+      final size1 = SizedFile.b(1024);
+      final size2 = SizedFile.kb(1.0);
+
+      expect(size1 == size2, isTrue);
+      expect(size1.hashCode, equals(size2.hashCode));
+    });
+
+    test('hashCode is different for different sizes', () {
+      final size1 = SizedFile.kb(1);
+      final size2 = SizedFile.kb(2);
+
+      expect(size1.hashCode, isNot(equals(size2.hashCode)));
+    });
+
+    test('objects work correctly in Set collections', () {
+      final size1 = SizedFile.b(1024);
+      final size2 = SizedFile.kb(1.0); // Same as size1
+      final size3 = SizedFile.kb(2.0);
+
+      final sizeSet = <SizedFile>{size1, size2, size3};
+
+      expect(sizeSet.length, equals(2)); // size1 and size2 are equal
+      expect(sizeSet.contains(SizedFile.b(1024)), isTrue);
+      expect(sizeSet.contains(SizedFile.kb(2.0)), isTrue);
+      expect(sizeSet.contains(SizedFile.kb(3.0)), isFalse);
+    });
+
+    test('objects work correctly in Map keys', () {
+      final size1 = SizedFile.b(1024);
+      final size2 = SizedFile.kb(1.0); // Same as size1
+
+      final sizeMap = <SizedFile, String>{
+        size1: 'first',
+        size2: 'second', // Should overwrite 'first'
+        SizedFile.kb(2.0): 'third',
+      };
+
+      expect(sizeMap.length, equals(2));
+      expect(sizeMap[SizedFile.b(1024)], equals('second'));
+      expect(sizeMap[SizedFile.kb(2.0)], equals('third'));
+    });
+  });
+
+  group('SizedFile comparison operations', () {
+    test('less than operator works correctly', () {
+      final smaller = SizedFile.kb(1);
+      final larger = SizedFile.mb(1);
+
+      expect(smaller < larger, isTrue);
+      expect(larger < smaller, isFalse);
+    });
+
+    test('less than or equal operator works correctly', () {
+      final size1 = SizedFile.kb(1);
+      final size2 = SizedFile.b(1024); // Same as size1
+      final size3 = SizedFile.mb(1);
+
+      expect(size1 <= size2, isTrue); // Equal
+      expect(size1 <= size3, isTrue); // Less than
+      expect(size3 <= size1, isFalse); // Greater than
+    });
+
+    test('greater than operator works correctly', () {
+      final smaller = SizedFile.kb(1);
+      final larger = SizedFile.mb(1);
+
+      expect(larger > smaller, isTrue);
+      expect(smaller > larger, isFalse);
+    });
+
+    test('greater than or equal operator works correctly', () {
+      final size1 = SizedFile.kb(1);
+      final size2 = SizedFile.b(1024); // Same as size1
+      final size3 = SizedFile.mb(1);
+
+      expect(size1 >= size2, isTrue); // Equal
+      expect(size3 >= size1, isTrue); // Greater than
+      expect(size1 >= size3, isFalse); // Less than
+    });
+
+    test('comparison with zero bytes', () {
+      final zero = SizedFile.b(0);
+      final nonZero = SizedFile.b(1);
+
+      expect(zero < nonZero, isTrue);
+      expect(zero <= nonZero, isTrue);
+      expect(nonZero > zero, isTrue);
+      expect(nonZero >= zero, isTrue);
+      expect(zero >= zero, isTrue);
+      expect(zero <= zero, isTrue);
+    });
+
+    test('comparison across different units', () {
+      final bytes = SizedFile.b(500);
+      final kilobytes = SizedFile.kb(1); // 1024 bytes
+      final megabytes = SizedFile.mb(1); // 1048576 bytes
+      final gigabytes = SizedFile.gb(1); // 1073741824 bytes
+
+      expect(bytes < kilobytes, isTrue);
+      expect(kilobytes < megabytes, isTrue);
+      expect(megabytes < gigabytes, isTrue);
+
+      expect(gigabytes > megabytes, isTrue);
+      expect(megabytes > kilobytes, isTrue);
+      expect(kilobytes > bytes, isTrue);
+    });
+
+    test('comparison transitivity', () {
+      final small = SizedFile.kb(1);
+      final medium = SizedFile.mb(1);
+      final large = SizedFile.gb(1);
+
+      // Transitivity: if a < b and b < c, then a < c
+      expect(small < medium, isTrue);
+      expect(medium < large, isTrue);
+      expect(small < large, isTrue);
+    });
+
+    test('sorting works correctly', () {
+      final sizes = [
+        SizedFile.gb(1),
+        SizedFile.b(500),
+        SizedFile.mb(100),
+        SizedFile.kb(750),
+      ];
+
+      sizes.sort((a, b) => a.inBytes.compareTo(b.inBytes));
+
+      expect(sizes[0].inBytes, equals(500)); // 500 B
+      expect(sizes[1].inBytes, equals(768000)); // 750 KB
+      expect(sizes[2].inBytes, equals(104857600)); // 100 MB
+      expect(sizes[3].inBytes, equals(1073741824)); // 1 GB
+    });
+
+    test('comparison with identical values', () {
+      final size1 = SizedFile.mb(5);
+      final size2 = SizedFile.mb(5);
+
+      expect(size1 <= size2, isTrue);
+      expect(size1 >= size2, isTrue);
+      expect(size1 < size2, isFalse);
+      expect(size1 > size2, isFalse);
+    });
+  });
+
+  group('SizedFile toString operation', () {
+    test('toString returns formatted string', () {
+      final size = SizedFile.mb(1.5);
+      expect(size.toString(), equals('1.50 MB'));
+    });
+
+    test('toString works with different sizes', () {
+      expect(SizedFile.b(500).toString(), equals('500 B'));
+      expect(SizedFile.kb(2.5).toString(), equals('2.50 KB'));
+      expect(SizedFile.gb(1.25).toString(), equals('1.25 GB'));
+    });
+
+    test('toString works with zero', () {
+      expect(SizedFile.b(0).toString(), equals('0 B'));
+    });
+  });
 }

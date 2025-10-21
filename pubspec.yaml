@@ -8,8 +8,7 @@ repository: https://github.com/hossameldinmi/sized_file
 environment:
   sdk: ">=2.12.0 <4.0.0"
 
-dependencies:
-
+dependencies: null
 
 dev_dependencies:
-  test: ^1.16.0
+  test: ^1.26.3
