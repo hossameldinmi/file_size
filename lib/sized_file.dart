@@ -14,7 +14,7 @@
 ///   print(fileSize.inBytes);  // 5242880
 /// }
 /// ```
-library;
+library sized_file;
 
 import 'dart:math';
 
@@ -50,10 +50,10 @@ class SizedFile {
   ///
   /// Throws [AssertionError] if [inBytes] is negative.
   SizedFile.b(this.inBytes)
-    : assert(inBytes >= 0, 'File size cannot be negative'),
-      inKB = inBytes / _divider,
-      inMB = inBytes / pow(_divider, 2),
-      inGB = inBytes / pow(_divider, 3);
+      : assert(inBytes >= 0, 'File size cannot be negative'),
+        inKB = inBytes / _divider,
+        inMB = inBytes / pow(_divider, 2),
+        inGB = inBytes / pow(_divider, 3);
 
   /// The size in bytes.
   ///
