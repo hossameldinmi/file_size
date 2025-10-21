@@ -40,25 +40,8 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: |
-          dart test --coverage=coverage
           dart pub global activate coverage
           dart pub global run coverage:test_with_coverage
-          cd coverage
-          ls -la
-
-      - name: Print working directory
-        run: | 
-          pwd 
-          ls -la
-          cd coverage
-          ls -la
-
-      - name: List coverage files (debug)
-        run: |
-          echo "Contents of coverage directory:"
-          ls -la coverage/
-          echo "Coverage file content preview:"
-          head -10 coverage/lcov.info || echo "lcov.info not found"
 
       - name: Codecov
         # You may pin to the exact commit or the version.
@@ -66,7 +49,6 @@ jobs:
         uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/lcov.info
-          # fail_ci_if_error: true
+          fail_ci_if_error: true
           verbose: true
         
