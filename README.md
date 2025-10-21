@@ -30,6 +30,11 @@ A lightweight and intuitive Dart package for handling file size conversions and 
 - 🌍 **Localization Support**: Set custom postfix generators for internationalization
 - ⚡ **Lightweight**: Zero dependencies, pure Dart implementation
 - 🧮 **Precise Calculations**: Uses 1024 as the divider (binary) for accurate storage size calculations
+- ⚖️ **Comparison Support**: Full equality and comparison operators (`==`, `<`, `>`, `<=`, `>=`)
+- 🗂️ **Collection Ready**: Works seamlessly with `Set`, `Map`, and sorting operations
+- ➕ **Arithmetic Operations**: Add, subtract, multiply, and divide file sizes
+- 🔢 **Mathematical Functions**: Built-in `min`, `max`, `sum`, and `average` helpers
+- 📐 **Comparable Interface**: Implements `Comparable<SizedFile>` for natural sorting
 
 ## Installation
 
@@ -156,6 +161,191 @@ final fileSize = SizedFile.mb(5);
 print(fileSize.format());  // Uses custom postfixes
 ```
 
+### Arithmetic Operations
+
+The `SizedFile` class supports arithmetic operations for calculating storage totals, quotas, and proportions.
+
+#### Addition and Subtraction
+
+```dart
+// Adding file sizes
+final document = SizedFile.mb(2);
+final spreadsheet = SizedFile.kb(500);
+final presentation = SizedFile.kb(1);
+final total = document + spreadsheet + presentation;
+print(total.format()); // "2.49 MB"
+
+// Subtracting file sizes
+final totalStorage = SizedFile.gb(1);
+final usedSpace = SizedFile.mb(750);
+final available = totalStorage - usedSpace;
+print(available.format()); // "274.00 MB"
+
+// Result is clamped to zero if negative
+final small = SizedFile.kb(100);
+final large = SizedFile.mb(1);
+final diff = small - large;
+print(diff.format()); // "0 B"
+```
+
+#### Multiplication and Division
+
+```dart
+// Multiply by scalar to scale sizes
+final fileSize = SizedFile.mb(10);
+final tripled = fileSize * 3;
+print(tripled.format()); // "30.00 MB"
+
+final half = fileSize * 0.5;
+print(half.format()); // "5.00 MB"
+
+// Divide by scalar
+final total = SizedFile.gb(1);
+final quarter = total / 4;
+print(quarter.format()); // "256.00 MB"
+
+// Calculate ratio between two sizes
+final used = SizedFile.mb(250);
+final capacity = SizedFile.gb(1);
+final ratio = used.ratioTo(capacity);
+print('${(ratio * 100).toStringAsFixed(1)}% used'); // "24.4% used"
+
+// Calculate per-item size
+final totalSize = SizedFile.gb(10);
+final fileCount = 1000;
+final avgSize = totalSize / fileCount;
+print(avgSize.format()); // "10.49 MB"
+```
+
+### Static Helper Methods
+
+Work with multiple file sizes using built-in utility methods:
+
+```dart
+final files = [
+  SizedFile.mb(10),
+  SizedFile.mb(25),
+  SizedFile.mb(15),
+  SizedFile.kb(500),
+];
+
+// Find minimum and maximum
+final smallest = SizedFile.min(files[0], files[1]);
+print(smallest.format()); // "10.00 MB"
+
+final largest = SizedFile.max(files[0], files[1]);
+print(largest.format()); // "25.00 MB"
+
+// Calculate total size
+final totalSize = SizedFile.sum(files);
+print(totalSize.format()); // "50.49 MB"
+
+// Calculate average size
+final avgSize = SizedFile.average(files);
+print(avgSize.format()); // "12.62 MB"
+```
+
+### Comparable Interface
+
+`SizedFile` implements `Comparable<SizedFile>` for seamless sorting:
+
+```dart
+final sizes = [
+  SizedFile.gb(1),
+  SizedFile.kb(100),
+  SizedFile.mb(50),
+  SizedFile.b(500),
+];
+
+// Natural sorting with compareTo
+sizes.sort(); // Uses compareTo automatically
+print(sizes.first.format()); // "500 B"
+print(sizes.last.format()); // "1.00 GB"
+
+// Manual comparison
+final result = sizes[0].compareTo(sizes[1]);
+// Negative if smaller, 0 if equal, positive if larger
+```
+
+### Equality and Comparison
+
+The `SizedFile` class supports equality and comparison operations, making it easy to compare file sizes regardless of the units used to create them.
+
+#### Equality Operations
+
+```dart
+final size1 = SizedFile.kb(1);
+final size2 = SizedFile.b(1024);
+final size3 = SizedFile.mb(0.0009765625);
+
+print(size1 == size2); // true - same size in different units
+print(size2 == size3); // true - all represent 1024 bytes
+print(size1 == size3); // true
+
+// Works with collections
+final uniqueSizes = <SizedFile>{size1, size2, size3};
+print(uniqueSizes.length); // 1 - all are equal, so only one unique size
+
+// Use as Map keys
+final sizeMap = <SizedFile, String>{
+  SizedFile.mb(1): 'Small file',
+  SizedFile.gb(1): 'Large file',
+};
+```
+
+#### Comparison Operations
+
+```dart
+final small = SizedFile.kb(500);
+final medium = SizedFile.mb(1);
+final large = SizedFile.gb(1);
+
+// Less than / Greater than
+print(small < medium);  // true
+print(large > medium);  // true
+
+// Less than or equal / Greater than or equal
+print(small <= SizedFile.kb(500));  // true (equal)
+print(medium >= SizedFile.mb(0.5)); // true (greater)
+
+// Sorting file sizes
+final sizes = [large, small, medium];
+sizes.sort((a, b) => a.inBytes.compareTo(b.inBytes));
+// Result: [small, medium, large]
+
+// Find maximum/minimum
+final maxSize = sizes.reduce((a, b) => a > b ? a : b);
+final minSize = sizes.reduce((a, b) => a < b ? a : b);
+print('Largest: ${maxSize.format()}');   // "1.00 GB"
+print('Smallest: ${minSize.format()}');  // "500.00 KB"
+```
+
+#### Practical Use Cases
+
+```dart
+// File size validation
+bool isValidFileSize(SizedFile fileSize, SizedFile maxSize) {
+  return fileSize <= maxSize;
+}
+
+// Storage management
+void manageStorage(List<SizedFile> files, SizedFile availableSpace) {
+  final totalSize = files.fold<SizedFile>(
+    SizedFile.b(0),
+    (sum, file) => SizedFile.b(sum.inBytes + file.inBytes),
+  );
+  
+  if (totalSize > availableSpace) {
+    print('Not enough space! Need ${totalSize.format()}, have ${availableSpace.format()}');
+  }
+}
+
+// Find files larger than threshold
+List<SizedFile> findLargeFiles(List<SizedFile> files, SizedFile threshold) {
+  return files.where((file) => file > threshold).toList();
+}
+```
+
 ### Practical Examples
 
 #### Displaying File Upload Progress
@@ -231,13 +421,20 @@ For more comprehensive examples, check out the [example](example/) directory whi
 - **Complete working examples** demonstrating all package features
 - **Real-world use cases** like file upload progress, storage summaries, and bandwidth calculations
 - **Step-by-step demonstrations** of formatting options and localization
+- **Equality and comparison operations** with practical scenarios
+- **Collection management** using SizedFile with Set, Map, and sorting
 
 To run the examples:
 
 ```bash
 cd example
 dart pub get
-dart run example.dart
+
+# Run the comprehensive overview
+dart run main.dart
+
+# Run the focused equality and comparison examples  
+dart run equality_comparison_example.dart
 ```
 
 See the [example README](example/README.md) for detailed information about each example.
@@ -248,6 +445,7 @@ See the [example README](example/README.md) for detailed information about each 
 
 | Constructor | Description | Example |
 |------------|-------------|---------|
+| `SizedFile.zero` | Static instance with zero bytes | `SizedFile.zero` |
 | `SizedFile.b(int bytes)` | Creates instance from bytes | `SizedFile.b(1024)` |
 | `SizedFile.kb(double kb)` | Creates instance from kilobytes | `SizedFile.kb(1.5)` |
 | `SizedFile.mb(double mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
@@ -282,6 +480,51 @@ Static method to set a global postfix generator for all instances.
 **Parameters:**
 - `generator`: Function that returns a map of unit postfixes
 
+### Operators
+
+#### Equality Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `==` | Equality comparison | `SizedFile.kb(1) == SizedFile.b(1024)` |
+| `hashCode` | Hash code for collections | Used automatically in `Set` and `Map` |
+
+#### Comparison Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `<` | Less than | `SizedFile.kb(1) < SizedFile.mb(1)` |
+| `<=` | Less than or equal | `SizedFile.kb(1) <= SizedFile.b(1024)` |
+| `>` | Greater than | `SizedFile.mb(1) > SizedFile.kb(1)` |
+| `>=` | Greater than or equal | `SizedFile.mb(1) >= SizedFile.b(1048576)` |
+
+#### Arithmetic Operators
+
+| Operator | Description | Returns | Example |
+|----------|-------------|---------|---------|
+| `+` | Addition | `SizedFile` | `SizedFile.mb(1) + SizedFile.kb(500)` |
+| `-` | Subtraction (clamped to 0) | `SizedFile` | `SizedFile.mb(2) - SizedFile.kb(500)` |
+| `*` | Multiplication by scalar | `SizedFile` | `SizedFile.mb(10) * 3` |
+| `/` | Division by scalar | `SizedFile` | `SizedFile.mb(30) / 3` |
+
+#### Other Methods
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `toString()` | String representation | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
+| `compareTo()` | Comparable implementation | `size1.compareTo(size2)` returns int |
+| `ratioTo()` | Calculate ratio to another size | `used.ratioTo(total)` returns double |
+
+### Static Methods
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `min(a, b)` | Returns smaller size | `SizedFile.min(size1, size2)` |
+| `max(a, b)` | Returns larger size | `SizedFile.max(size1, size2)` |
+| `sum(sizes)` | Sum of all sizes | `SizedFile.sum([size1, size2, size3])` |
+| `average(sizes)` | Average of all sizes | `SizedFile.average([size1, size2, size3])` |
+| `setPostfixesGenerator()` | Set global postfix generator | `SizedFile.setPostfixesGenerator(fn)` |
+
 ## Understanding the Divider
 
 This package uses **1024** as the divider (binary) rather than 1000 (decimal):
@@ -302,6 +545,13 @@ The package includes comprehensive unit tests covering:
 - Edge cases and boundary conditions
 - Custom postfix generators
 - Localization scenarios
+- Equality and comparison operations
+- Hash code consistency
+- Collection behavior (Set, Map)
+- Sorting and ordering
+- Arithmetic operations (+, -, *, /)
+- Static helper methods (min, max, sum, average)
+- Comparable interface implementation
 
 Run tests with:
 

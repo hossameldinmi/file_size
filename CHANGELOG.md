@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2025-10-22
+
+### Added
+- Equality and comparison operators (`==`, `<`, `<=`, `>`, `>=`)
+- Hash code support for use in `Set` and `Map` collections
+- Arithmetic operators for addition (`+`) and subtraction (`-`)
+- Multiplication operator (`*`) for scaling by numeric factors
+- Division operator (`/`) for dividing by numeric values (returns `SizedFile`)
+- `Comparable<SizedFile>` interface implementation with `compareTo()` method
+- Static helper methods: `min()`, `max()`, `sum()`, `average()`
+- New `ratioTo()` method for calculating ratios between two `SizedFile` instances
+  - Returns `double` representing the ratio
+  - Example: `used.ratioTo(total)` returns 0.244 for 250 MB / 1 GB
+- `SizedFile.zero` static constant for zero-byte instances
+- Comprehensive test suite expanded to 104 tests
+- Advanced features examples demonstrating all new capabilities
+- Equality and comparison focused example file
+
+### Changed
+- Updated all documentation to reflect the new API
+- Updated README.md with arithmetic operations, static helpers, and comparison features
+- Updated all example files to use `ratioTo()` for ratio calculations
+- Simplified test expectations by removing unnecessary `equals()` matchers
+
+### Fixed
+- Removed ambiguous division operator behavior
+- Improved code clarity with dedicated methods for different operations
+
+## [1.0.2] - 2025-10-21
+
+### Changed
+- Enhanced documentation
+
+## [1.0.1] - 2025-10-21
+
+### Changed
+- Removed `unnecessary_library_name` rule from analysis_options.yaml
+
 ## [1.0.0] - 2025-10-21
 
 ### Added
@@ -30,15 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully documented code with dartdoc comments
 - Tested and verified with 100% test coverage
 
+[1.1.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.1.2
+[1.0.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.2
+[1.0.1]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.1
 [1.0.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.0
-
-## [1.0.1] - 2025-10-21
-
-### Added
-- remove unnecessary_library_name rule from analysis_options.yaml
-
-## [1.0.2] - 2025-10-21
-
-### Added
-- Enhance Docs
 
