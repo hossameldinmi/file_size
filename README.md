@@ -312,13 +312,20 @@ For more comprehensive examples, check out the [example](example/) directory whi
 - **Complete working examples** demonstrating all package features
 - **Real-world use cases** like file upload progress, storage summaries, and bandwidth calculations
 - **Step-by-step demonstrations** of formatting options and localization
+- **Equality and comparison operations** with practical scenarios
+- **Collection management** using SizedFile with Set, Map, and sorting
 
 To run the examples:
 
 ```bash
 cd example
 dart pub get
-dart run example.dart
+
+# Run the comprehensive overview
+dart run main.dart
+
+# Run the focused equality and comparison examples  
+dart run equality_comparison_example.dart
 ```
 
 See the [example README](example/README.md) for detailed information about each example.
