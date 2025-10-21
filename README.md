@@ -3,6 +3,9 @@
 </h2>
 
 <p align="center">
+   <a href="https://github.com/hossameldinmi/sized_file/actions/workflows/dart.yml">
+    <img src="https://github.com/hossameldinmi/sized_file/actions/workflows/dart.yml/badge.svg?branch=main" alt="Github action">
+  </a>
   <a href="https://codecov.io/github/hossameldinmi/sized_file">
     <img src="https://codecov.io/github/hossameldinmi/sized_file/graph/badge.svg?token=JzTIIzoQOq" alt="Code Coverage">
   </a>
@@ -443,23 +446,23 @@ See the [example README](example/README.md) for detailed information about each 
 
 ### Constructors
 
-| Constructor | Description | Example |
-|------------|-------------|---------|
-| `SizedFile.zero` | Static instance with zero bytes | `SizedFile.zero` |
-| `SizedFile.b(int bytes)` | Creates instance from bytes | `SizedFile.b(1024)` |
+| Constructor               | Description                     | Example             |
+| ------------------------- | ------------------------------- | ------------------- |
+| `SizedFile.zero`          | Static instance with zero bytes | `SizedFile.zero`    |
+| `SizedFile.b(int bytes)`  | Creates instance from bytes     | `SizedFile.b(1024)` |
 | `SizedFile.kb(double kb)` | Creates instance from kilobytes | `SizedFile.kb(1.5)` |
 | `SizedFile.mb(double mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
 | `SizedFile.gb(double gb)` | Creates instance from gigabytes | `SizedFile.gb(2.5)` |
-| `SizedFile.tb(double tb)` | Creates instance from terabytes | `SizedFile.tb(1)` |
+| `SizedFile.tb(double tb)` | Creates instance from terabytes | `SizedFile.tb(1)`   |
 
 ### Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `inBytes` | `int` | Size in bytes |
-| `inKB` | `double` | Size in kilobytes |
-| `inMB` | `double` | Size in megabytes |
-| `inGB` | `double` | Size in gigabytes |
+| Property  | Type     | Description       |
+| --------- | -------- | ----------------- |
+| `inBytes` | `int`    | Size in bytes     |
+| `inKB`    | `double` | Size in kilobytes |
+| `inMB`    | `double` | Size in megabytes |
+| `inGB`    | `double` | Size in gigabytes |
 
 ### Methods
 
@@ -484,46 +487,46 @@ Static method to set a global postfix generator for all instances.
 
 #### Equality Operators
 
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `==` | Equality comparison | `SizedFile.kb(1) == SizedFile.b(1024)` |
-| `hashCode` | Hash code for collections | Used automatically in `Set` and `Map` |
+| Operator   | Description               | Example                                |
+| ---------- | ------------------------- | -------------------------------------- |
+| `==`       | Equality comparison       | `SizedFile.kb(1) == SizedFile.b(1024)` |
+| `hashCode` | Hash code for collections | Used automatically in `Set` and `Map`  |
 
 #### Comparison Operators
 
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `<` | Less than | `SizedFile.kb(1) < SizedFile.mb(1)` |
-| `<=` | Less than or equal | `SizedFile.kb(1) <= SizedFile.b(1024)` |
-| `>` | Greater than | `SizedFile.mb(1) > SizedFile.kb(1)` |
-| `>=` | Greater than or equal | `SizedFile.mb(1) >= SizedFile.b(1048576)` |
+| Operator | Description           | Example                                   |
+| -------- | --------------------- | ----------------------------------------- |
+| `<`      | Less than             | `SizedFile.kb(1) < SizedFile.mb(1)`       |
+| `<=`     | Less than or equal    | `SizedFile.kb(1) <= SizedFile.b(1024)`    |
+| `>`      | Greater than          | `SizedFile.mb(1) > SizedFile.kb(1)`       |
+| `>=`     | Greater than or equal | `SizedFile.mb(1) >= SizedFile.b(1048576)` |
 
 #### Arithmetic Operators
 
-| Operator | Description | Returns | Example |
-|----------|-------------|---------|---------|
-| `+` | Addition | `SizedFile` | `SizedFile.mb(1) + SizedFile.kb(500)` |
-| `-` | Subtraction (clamped to 0) | `SizedFile` | `SizedFile.mb(2) - SizedFile.kb(500)` |
-| `*` | Multiplication by scalar | `SizedFile` | `SizedFile.mb(10) * 3` |
-| `/` | Division by scalar | `SizedFile` | `SizedFile.mb(30) / 3` |
+| Operator | Description                | Returns     | Example                               |
+| -------- | -------------------------- | ----------- | ------------------------------------- |
+| `+`      | Addition                   | `SizedFile` | `SizedFile.mb(1) + SizedFile.kb(500)` |
+| `-`      | Subtraction (clamped to 0) | `SizedFile` | `SizedFile.mb(2) - SizedFile.kb(500)` |
+| `*`      | Multiplication by scalar   | `SizedFile` | `SizedFile.mb(10) * 3`                |
+| `/`      | Division by scalar         | `SizedFile` | `SizedFile.mb(30) / 3`                |
 
 #### Other Methods
 
-| Method | Description | Example |
-|--------|-------------|---------|
-| `toString()` | String representation | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
-| `compareTo()` | Comparable implementation | `size1.compareTo(size2)` returns int |
-| `ratioTo()` | Calculate ratio to another size | `used.ratioTo(total)` returns double |
+| Method        | Description                     | Example                                            |
+| ------------- | ------------------------------- | -------------------------------------------------- |
+| `toString()`  | String representation           | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
+| `compareTo()` | Comparable implementation       | `size1.compareTo(size2)` returns int               |
+| `ratioTo()`   | Calculate ratio to another size | `used.ratioTo(total)` returns double               |
 
 ### Static Methods
 
-| Method | Description | Example |
-|--------|-------------|---------|
-| `min(a, b)` | Returns smaller size | `SizedFile.min(size1, size2)` |
-| `max(a, b)` | Returns larger size | `SizedFile.max(size1, size2)` |
-| `sum(sizes)` | Sum of all sizes | `SizedFile.sum([size1, size2, size3])` |
-| `average(sizes)` | Average of all sizes | `SizedFile.average([size1, size2, size3])` |
-| `setPostfixesGenerator()` | Set global postfix generator | `SizedFile.setPostfixesGenerator(fn)` |
+| Method                    | Description                  | Example                                    |
+| ------------------------- | ---------------------------- | ------------------------------------------ |
+| `min(a, b)`               | Returns smaller size         | `SizedFile.min(size1, size2)`              |
+| `max(a, b)`               | Returns larger size          | `SizedFile.max(size1, size2)`              |
+| `sum(sizes)`              | Sum of all sizes             | `SizedFile.sum([size1, size2, size3])`     |
+| `average(sizes)`          | Average of all sizes         | `SizedFile.average([size1, size2, size3])` |
+| `setPostfixesGenerator()` | Set global postfix generator | `SizedFile.setPostfixesGenerator(fn)`      |
 
 ## Understanding the Divider
 
