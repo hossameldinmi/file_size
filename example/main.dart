@@ -65,12 +65,17 @@ void main() {
   });
   print('');
 
-  // Example 6: Equality and comparison operations
-  print('6. Equality and comparison operations:');
+  // Example 6: Arithmetic operations
+  print('6. Arithmetic operations:');
+  demonstrateArithmeticOperations();
+  print('');
+
+  // Example 7: Equality and comparison operations
+  print('7. Equality and comparison operations:');
   demonstrateEqualityAndComparison();
   print('');
 
-  // Example 7: File collection management
+  // Example 8: File collection management
   print('7. File collection management:');
   demonstrateFileCollections();
   print('');
@@ -180,7 +185,8 @@ void demonstrateEqualityAndComparison() {
   print('  ${small.format()} < ${medium.format()}: ${small < medium}');
   print('  ${medium.format()} < ${large.format()}: ${medium < large}');
   print('  ${large.format()} > ${small.format()}: ${large > small}');
-  print('  ${small.format()} <= ${SizedFile.kb(500).format()}: ${small <= SizedFile.kb(500)}');
+  print(
+      '  ${small.format()} <= ${SizedFile.kb(500).format()}: ${small <= SizedFile.kb(500)}');
   print('  ${large.format()} >= ${medium.format()}: ${large >= medium}');
 
   print('');
@@ -260,8 +266,10 @@ void demonstrateFileCollections() {
   final smallFiles = allFiles.where((file) => file <= threshold).toList();
 
   print('  All files: ${allFiles.map((f) => f.format()).join(', ')}');
-  print('  Large files (> ${threshold.format()}): ${largeFiles.map((f) => f.format()).join(', ')}');
-  print('  Small files (<= ${threshold.format()}): ${smallFiles.map((f) => f.format()).join(', ')}');
+  print(
+      '  Large files (> ${threshold.format()}): ${largeFiles.map((f) => f.format()).join(', ')}');
+  print(
+      '  Small files (<= ${threshold.format()}): ${smallFiles.map((f) => f.format()).join(', ')}');
 
   print('');
   print('Storage capacity check:');
@@ -273,5 +281,297 @@ void demonstrateFileCollections() {
 
   print('  Total files size: ${totalStorage.format()}');
   print('  Available space: ${availableSpace.format()}');
-  print('  Fits in storage: ${totalStorage <= availableSpace ? "✓ Yes" : "✗ No"}');
+  print(
+      '  Fits in storage: ${totalStorage <= availableSpace ? "✓ Yes" : "✗ No"}');
+}
+
+/// Demonstrates arithmetic operations with SizedFile objects
+void demonstrateArithmeticOperations() {
+  print('Addition operations:');
+  final doc1 = SizedFile.mb(2);
+  final doc2 = SizedFile.kb(500);
+  final doc3 = SizedFile.b(1024);
+
+  print('  Document 1: ${doc1.format()}');
+  print('  Document 2: ${doc2.format()}');
+  print('  Document 3: ${doc3.format()}');
+
+  final totalDocs = doc1 + doc2 + doc3;
+  print('  Total size: ${totalDocs.format()}');
+  print('');
+
+  print('Subtraction operations:');
+  final totalStorage = SizedFile.gb(1);
+  final usedSpace = SizedFile.mb(750);
+  final availableSpace = totalStorage - usedSpace;
+
+  print('  Total storage: ${totalStorage.format()}');
+  print('  Used space:    ${usedSpace.format()}');
+  print('  Available:     ${availableSpace.format()}');
+  print('');
+
+  print('Combining operations:');
+  final photos = SizedFile.mb(200);
+  final videos = SizedFile.gb(1.5);
+  final backup = SizedFile.mb(50);
+
+  final mediaTotal = photos + videos;
+  final withBackup = mediaTotal + backup;
+  final withoutBackup = withBackup - backup;
+
+  print('  Photos: ${photos.format()}');
+  print('  Videos: ${videos.format()}');
+  print('  Backup: ${backup.format()}');
+  print('  Media total: ${mediaTotal.format()}');
+  print('  With backup: ${withBackup.format()}');
+  print('  Without backup: ${withoutBackup.format()}');
+  print('  Backup removed correctly: ${withoutBackup == mediaTotal}');
+  print('');
+
+  print('Practical storage calculation:');
+  final files = [
+    SizedFile.mb(5), // Document
+    SizedFile.mb(25), // Presentation
+    SizedFile.mb(150), // Video
+    SizedFile.kb(750), // Spreadsheet
+    SizedFile.gb(1), // Database backup
+  ];
+
+  var runningTotal = SizedFile.b(0);
+  print('  Building total from individual files:');
+  for (int i = 0; i < files.length; i++) {
+    runningTotal = runningTotal + files[i];
+    print(
+        '    Adding ${files[i].format()}: Running total = ${runningTotal.format()}');
+  }
+
+  final deviceCapacity = SizedFile.gb(2);
+  final remainingSpace = deviceCapacity - runningTotal;
+  print('  Device capacity: ${deviceCapacity.format()}');
+  print('  Remaining space: ${remainingSpace.format()}');
+  print(
+      '  Can fit more files: ${remainingSpace > SizedFile.mb(100) ? "✓ Yes" : "✗ No"}');
+  print('');
+
+  // Example 8: Multiplication and Division operations
+  print('8. Multiplication and Division Operations:');
+  multiplicationDivisionExample();
+  print('');
+
+  // Example 9: Static helper methods
+  print('9. Static Helper Methods:');
+  staticHelpersExample();
+  print('');
+
+  // Example 10: Comparable interface and sorting
+  print('10. Comparable Interface and Sorting:');
+  comparableExample();
+  print('');
+
+  // Example 11: Practical real-world scenarios
+  print('11. Real-World Scenarios:');
+  realWorldScenarios();
+}
+
+/// Demonstrates multiplication, division, and ratio calculation operations
+void multiplicationDivisionExample() {
+  print('Multiplication by scalar:');
+  final baseSize = SizedFile.mb(10);
+
+  print('  Base size: ${baseSize.format()}');
+  print('  × 2: ${(baseSize * 2).format()}');
+  print('  × 3: ${(baseSize * 3).format()}');
+  print('  × 0.5: ${(baseSize * 0.5).format()}');
+  print('  × 1.5: ${(baseSize * 1.5).format()}');
+  print('');
+
+  print('Division by scalar:');
+  final largeFile = SizedFile.gb(1);
+
+  print('  Base size: ${largeFile.format()}');
+  print('  ÷ 2: ${(largeFile / 2).format()}');
+  print('  ÷ 4: ${(largeFile / 4).format()}');
+  print('  ÷ 10: ${(largeFile / 10).format()}');
+  print('');
+
+  print('Ratio calculation with ratioTo():');
+  final used = SizedFile.mb(250);
+  final capacity = SizedFile.gb(1);
+  final ratio = used.ratioTo(capacity);
+
+  print('  Used: ${used.format()}');
+  print('  Capacity: ${capacity.format()}');
+  print('  Usage ratio: ${(ratio * 100).toStringAsFixed(1)}%');
+  print('');
+
+  print('Calculating per-item size:');
+  final totalSize = SizedFile.gb(5);
+  const fileCount = 500;
+  final avgFileSize = totalSize / fileCount;
+
+  print('  Total: ${totalSize.format()}');
+  print('  File count: $fileCount');
+  print('  Average per file: ${avgFileSize.format()}');
+  print('');
+
+  print('Quota calculation:');
+  final userQuota = SizedFile.gb(10);
+  final quotaPercentage = 0.25; // 25% of quota
+  final allocatedSpace = userQuota * quotaPercentage;
+
+  print('  Total quota: ${userQuota.format()}');
+  print('  Allocated (25%): ${allocatedSpace.format()}');
+}
+
+/// Demonstrates static helper methods
+void staticHelpersExample() {
+  final sizes = [
+    SizedFile.mb(150),
+    SizedFile.kb(500),
+    SizedFile.gb(2),
+    SizedFile.mb(75),
+    SizedFile.kb(250),
+  ];
+
+  print('File sizes: ${sizes.map((s) => s.format()).join(", ")}');
+  print('');
+
+  print('Using min() and max():');
+  var currentMin = sizes[0];
+  var currentMax = sizes[0];
+
+  for (final size in sizes.skip(1)) {
+    currentMin = SizedFile.min(currentMin, size);
+    currentMax = SizedFile.max(currentMax, size);
+  }
+
+  print('  Smallest file: ${currentMin.format()}');
+  print('  Largest file: ${currentMax.format()}');
+  print('');
+
+  print('Using sum():');
+  final total = SizedFile.sum(sizes);
+  print('  Total size: ${total.format()}');
+  print('  Total bytes: ${total.inBytes}');
+  print('');
+
+  print('Using average():');
+  final avg = SizedFile.average(sizes);
+  print('  Average size: ${avg.format()}');
+  print('  Count: ${sizes.length}');
+  print('');
+
+  print('Filtering and aggregating:');
+  final largeSizes = sizes.where((s) => s > SizedFile.mb(100)).toList();
+  final smallSizes = sizes.where((s) => s <= SizedFile.mb(100)).toList();
+
+  print(
+      '  Large files (> 100 MB): ${largeSizes.map((s) => s.format()).join(", ")}');
+  print('  Large files total: ${SizedFile.sum(largeSizes).format()}');
+  print(
+      '  Small files (≤ 100 MB): ${smallSizes.map((s) => s.format()).join(", ")}');
+  print('  Small files total: ${SizedFile.sum(smallSizes).format()}');
+}
+
+/// Demonstrates Comparable interface and sorting
+void comparableExample() {
+  final unsorted = [
+    SizedFile.gb(5),
+    SizedFile.kb(100),
+    SizedFile.mb(500),
+    SizedFile.b(2048),
+    SizedFile.gb(1),
+    SizedFile.mb(50),
+  ];
+
+  print('Unsorted files:');
+  for (final size in unsorted) {
+    print('  ${size.format()}');
+  }
+  print('');
+
+  print('Sorted (ascending) using .sort():');
+  final ascending = List<SizedFile>.from(unsorted);
+  ascending.sort(); // Uses compareTo automatically
+  for (final size in ascending) {
+    print('  ${size.format()}');
+  }
+  print('');
+
+  print('Sorted (descending):');
+  final descending = List<SizedFile>.from(unsorted);
+  descending.sort((a, b) => b.compareTo(a));
+  for (final size in descending) {
+    print('  ${size.format()}');
+  }
+  print('');
+
+  print('Using compareTo directly:');
+  final size1 = SizedFile.mb(100);
+  final size2 = SizedFile.mb(200);
+  final comparison = size1.compareTo(size2);
+
+  print('  ${size1.format()} vs ${size2.format()}');
+  print('  compareTo result: $comparison');
+  print(
+      '  Interpretation: ${comparison < 0 ? "first is smaller" : comparison > 0 ? "first is larger" : "equal"}');
+}
+
+/// Demonstrates real-world practical scenarios
+void realWorldScenarios() {
+  print('Scenario 1: Cloud backup pricing');
+  const pricePerGB = 0.023; // $0.023 per GB
+  final dataToBackup = SizedFile.sum([
+    SizedFile.gb(50), // Documents
+    SizedFile.gb(200), // Photos
+    SizedFile.gb(100), // Videos
+  ]);
+
+  final totalGB = dataToBackup.inGB;
+  final monthlyCost = totalGB * pricePerGB;
+
+  print('  Data to backup: ${dataToBackup.format()}');
+  print('  Price per GB: \$${pricePerGB}');
+  print('  Monthly cost: \$${monthlyCost.toStringAsFixed(2)}');
+  print('');
+
+  print('Scenario 2: Download time estimation');
+  final fileToDownload = SizedFile.gb(4.7); // DVD image
+  const downloadSpeed = 10.5; // MB/s
+
+  final timeInSeconds = fileToDownload.inMB / downloadSpeed;
+  final minutes = (timeInSeconds / 60).floor();
+  final seconds = (timeInSeconds % 60).round();
+
+  print('  File size: ${fileToDownload.format()}');
+  print('  Speed: $downloadSpeed MB/s');
+  print('  Estimated time: ${minutes}m ${seconds}s');
+  print('');
+
+  print('Scenario 3: Compression ratio');
+  final originalSize = SizedFile.mb(150);
+  final compressedSize = SizedFile.mb(45);
+  final savedSpace = originalSize - compressedSize;
+  final compressionRatio = compressedSize.ratioTo(originalSize);
+
+  print('  Original: ${originalSize.format()}');
+  print('  Compressed: ${compressedSize.format()}');
+  print('  Saved: ${savedSpace.format()}');
+  print('  Compression ratio: ${(compressionRatio * 100).toStringAsFixed(1)}%');
+  print(
+      '  Space reduction: ${((1 - compressionRatio) * 100).toStringAsFixed(1)}%');
+  print('');
+
+  print('Scenario 4: Multi-tier storage allocation');
+  final totalStorage = SizedFile.tb(1);
+  final hotStorage = totalStorage * 0.2; // 20% hot (SSD)
+  final warmStorage = totalStorage * 0.3; // 30% warm (HDD)
+  final coldStorage = totalStorage * 0.5; // 50% cold (Archive)
+
+  print('  Total capacity: ${totalStorage.format()}');
+  print('  Hot (SSD, 20%): ${hotStorage.format()}');
+  print('  Warm (HDD, 30%): ${warmStorage.format()}');
+  print('  Cold (Archive, 50%): ${coldStorage.format()}');
+  print(
+      '  Verification: ${(hotStorage + warmStorage + coldStorage == totalStorage ? "✓" : "✗")}');
 }
