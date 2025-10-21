@@ -42,7 +42,11 @@ jobs:
         run: dart test --coverage=coverage
 
       - name: Print working directory
-        run: pwd && ls -la
+        run: | 
+          pwd 
+          ls -la
+          cd coverage
+          ls -la
 
       - name: List coverage files (debug)
         run: |
