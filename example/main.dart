@@ -80,9 +80,6 @@ void main() {
   demonstrateEqualityAndComparison();
   print('');
 
-  demonstrateEqualityAndComparison();
-  print('');
-
   // Example 9: File collection management
   print('9. File collection management:');
   demonstrateFileCollections();
