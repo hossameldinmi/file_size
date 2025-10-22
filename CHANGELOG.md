@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-10-22
+
+### Added
+- `SizedFile.values()` factory constructor for creating instances from multiple units
+  - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
+  - Example: `SizedFile.values(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Efficiently ignores zero values
+  - All parameters default to 0
+- Complete documentation for `SizedFile.values` with usage examples in README
+- 8 new unit tests for `SizedFile.values` factory constructor (112 total tests)
+- Practical examples in example/main.dart demonstrating mixed units use cases
+
 ## [1.1.2] - 2025-10-22
 
 ### Added
@@ -68,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully documented code with dartdoc comments
 - Tested and verified with 100% test coverage
 
+[1.2.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.2.0
 [1.1.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.1.2
 [1.0.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.2
 [1.0.1]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.1

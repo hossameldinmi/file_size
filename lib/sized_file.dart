@@ -124,6 +124,60 @@ class SizedFile implements Comparable<SizedFile> {
   /// ```
   SizedFile.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
 
+  /// Creates a [SizedFile] instance by combining multiple unit values.
+  ///
+  /// This factory constructor allows you to specify a file size using a mix
+  /// of different units, which are then summed together. This is useful when
+  /// you have a size expressed in multiple units (e.g., "2 GB and 500 MB").
+  ///
+  /// All parameters are optional and default to 0. Any zero values are
+  /// automatically ignored for efficiency.
+  ///
+  /// Parameters:
+  /// - [bytes]: Size in bytes (default: 0)
+  /// - [kb]: Size in kilobytes (default: 0)
+  /// - [mb]: Size in megabytes (default: 0)
+  /// - [gb]: Size in gigabytes (default: 0)
+  /// - [tb]: Size in terabytes (default: 0)
+  ///
+  /// Example:
+  /// ```dart
+  /// // Create a size of 2 GB + 500 MB + 256 KB
+  /// final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+  /// print(fileSize.format()); // "2.49 GB"
+  /// print(fileSize.inMB); // 2560.25
+  ///
+  /// // Mixed units for precise sizes
+  /// final videoSize = SizedFile.values(gb: 1, mb: 750, kb: 512);
+  /// print(videoSize.format()); // "1.73 GB"
+  ///
+  /// // Works with single unit too
+  /// final smallFile = SizedFile.values(kb: 500);
+  /// print(smallFile.format()); // "500.00 KB"
+  ///
+  /// // Combining bytes with larger units
+  /// final precise = SizedFile.values(mb: 10, bytes: 1024);
+  /// print(precise.inBytes); // 10486272 (10 MB + 1024 bytes)
+  /// ```
+  ///
+  /// Returns a new [SizedFile] instance representing the sum of all provided units.
+  factory SizedFile.values({
+    int bytes = 0,
+    double kb = 0,
+    double mb = 0,
+    double gb = 0,
+    double tb = 0,
+  }) =>
+      SizedFile.sum(
+        [
+          if (bytes != 0) SizedFile.b(bytes),
+          if (kb != 0) SizedFile.kb(kb),
+          if (mb != 0) SizedFile.mb(mb),
+          if (gb != 0) SizedFile.gb(gb),
+          if (tb != 0) SizedFile.tb(tb),
+        ],
+      );
+
   /// Formats the file size as a human-readable string.
   ///
   /// Automatically selects the most appropriate unit based on the size:
@@ -363,9 +417,8 @@ class SizedFile implements Comparable<SizedFile> {
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) {
-    return SizedFile.b((inBytes * factor).round());
-  }
+  SizedFile operator *(covariant num factor) =>
+      SizedFile.b((inBytes * factor).round());
 
   /// Divides this [SizedFile] by a scalar value.
   ///

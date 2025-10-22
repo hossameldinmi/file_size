@@ -57,6 +57,67 @@ void main() {
     test('SizedFile.b throws assertion error for negative bytes', () {
       expect(() => SizedFile.b(-1), throwsA(isA<AssertionError>()));
     });
+
+    test('SizedFile.values creates instance from mixed units', () {
+      final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+      // 2 GB = 2147483648 bytes
+      // 500 MB = 524288000 bytes
+      // 256 KB = 262144 bytes
+      // Total = 2672033792 bytes
+      expect(fileSize.inBytes, 2672033792);
+      expect(fileSize.inGB, closeTo(2.48828125, 0.001));
+    });
+
+    test('SizedFile.values with single unit', () {
+      final fileSize = SizedFile.values(mb: 10);
+      expect(fileSize.inBytes, 10485760);
+      expect(fileSize.inMB, 10.0);
+    });
+
+    test('SizedFile.values with all units', () {
+      final fileSize = SizedFile.values(
+        tb: 1,
+        gb: 2,
+        mb: 500,
+        kb: 256,
+        bytes: 1024,
+      );
+      // 1 TB = 1099511627776 bytes
+      // 2 GB = 2147483648 bytes
+      // 500 MB = 524288000 bytes
+      // 256 KB = 262144 bytes
+      // 1024 bytes = 1024 bytes
+      // Total = 1102183662592 bytes
+      expect(fileSize.inBytes, 1102183662592);
+    });
+
+    test('SizedFile.values with bytes and larger units', () {
+      final fileSize = SizedFile.values(mb: 10, bytes: 1024);
+      expect(fileSize.inBytes, 10486784); // 10 MB + 1024 bytes
+    });
+
+    test('SizedFile.values with all zeros returns zero', () {
+      final fileSize = SizedFile.values();
+      expect(fileSize.inBytes, 0);
+      expect(fileSize == SizedFile.zero, true);
+    });
+
+    test('SizedFile.values with only bytes', () {
+      final fileSize = SizedFile.values(bytes: 2048);
+      expect(fileSize.inBytes, 2048);
+      expect(fileSize.inKB, 2.0);
+    });
+
+    test('SizedFile.values with decimal values', () {
+      final fileSize = SizedFile.values(gb: 1.5, mb: 250.5);
+      expect(fileSize.inGB, closeTo(1.744628906, 0.001));
+    });
+
+    test('SizedFile.values ignores zero values efficiently', () {
+      final fileSize1 = SizedFile.values(gb: 1, mb: 0, kb: 0);
+      final fileSize2 = SizedFile.gb(1);
+      expect(fileSize1 == fileSize2, true);
+    });
   });
 
   group('SizedFile.format', () {

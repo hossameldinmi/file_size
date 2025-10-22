@@ -18,8 +18,13 @@ void main() {
   print('From TB: ${fromTB.format()}');
   print('');
 
-  // Example 2: Accessing different units
-  print('2. Accessing different units:');
+  // Example 2: Creating from mixed units
+  print('2. Creating from mixed units with SizedFile.values:');
+  mixedUnitsExample();
+  print('');
+
+  // Example 3: Accessing different units
+  print('3. Accessing different units:');
   final fileSize = SizedFile.mb(5);
   print('5 MB in different units:');
   print('  Bytes: ${fileSize.inBytes}');
@@ -28,8 +33,8 @@ void main() {
   print('  GB: ${fileSize.inGB}');
   print('');
 
-  // Example 3: Formatting with different fraction digits
-  print('3. Custom fraction digits:');
+  // Example 4: Formatting with different fraction digits
+  print('4. Custom fraction digits:');
   final size = SizedFile.kb(1.5);
   print('1.5 KB formatted:');
   print('  0 digits: ${size.format(fractionDigits: 0)}');
@@ -38,8 +43,8 @@ void main() {
   print('  3 digits: ${size.format(fractionDigits: 3)}');
   print('');
 
-  // Example 4: Custom postfixes for a single format call
-  print('4. Custom postfixes:');
+  // Example 5: Custom postfixes for a single format call
+  print('5. Custom postfixes:');
   final customSize = SizedFile.mb(5);
   final customPostfixes = {
     'B': 'bytes',
@@ -52,8 +57,8 @@ void main() {
   print('Custom:  ${customSize.format(postfixes: customPostfixes)}');
   print('');
 
-  // Example 5: Global postfix generator (for localization)
-  print('5. Global postfix generator:');
+  // Example 6: Global postfix generator (for localization)
+  print('6. Global postfix generator:');
   SizedFile.setPostfixesGenerator(() {
     return {'B': 'B', 'KB': 'Ko', 'MB': 'Mo', 'GB': 'Go', 'TB': 'To'};
   });
@@ -65,44 +70,47 @@ void main() {
   });
   print('');
 
-  // Example 6: Arithmetic operations
-  print('6. Arithmetic operations:');
+  // Example 7: Arithmetic operations
+  print('7. Arithmetic operations:');
   demonstrateArithmeticOperations();
   print('');
 
-  // Example 7: Equality and comparison operations
-  print('7. Equality and comparison operations:');
+  // Example 8: Equality and comparison operations
+  print('8. Equality and comparison operations:');
   demonstrateEqualityAndComparison();
   print('');
 
-  // Example 8: File collection management
-  print('7. File collection management:');
+  demonstrateEqualityAndComparison();
+  print('');
+
+  // Example 9: File collection management
+  print('9. File collection management:');
   demonstrateFileCollections();
   print('');
 
-  // Example 8: File upload progress simulation
-  print('8. File upload progress:');
+  // Example 10: File upload progress simulation
+  print('10. File upload progress:');
   simulateFileUpload(5242880); // 5 MB
   print('');
 
-  // Example 9: Storage summary
-  print('9. Storage summary:');
+  // Example 11: Storage summary
+  print('11. Storage summary:');
   printStorageSummary(107374182400, 268435456000);
   print('');
 
-  // Example 10: File size validation with comparison
-  print('10. File size validation with comparison:');
+  // Example 12: File size validation with comparison
+  print('12. File size validation with comparison:');
   validateSizedFileWithComparison(2097152, 5.0); // 2 MB file, 5 MB limit
   validateSizedFileWithComparison(10485760, 5.0); // 10 MB file, 5 MB limit
   print('');
 
-  // Example 11: Bandwidth calculation
-  print('11. Bandwidth calculation:');
+  // Example 13: Bandwidth calculation
+  print('13. Bandwidth calculation:');
   estimateDownloadTime(52428800, 10.5); // 50 MB file at 10.5 MB/s
   print('');
 
-  // Example 12: Different size thresholds
-  print('10. Automatic unit selection:');
+  // Example 14: Different size thresholds
+  print('14. Automatic unit selection:');
   final sizes = [
     SizedFile.b(500), // Bytes
     SizedFile.b(2048), // Kilobytes
@@ -112,6 +120,39 @@ void main() {
   for (var s in sizes) {
     print('  ${s.inBytes.toString().padLeft(12)} bytes = ${s.format()}');
   }
+}
+
+/// Demonstrates creating SizedFile from mixed units
+void mixedUnitsExample() {
+  // Example 1: Video file with mixed units
+  print('Video file size (2 GB + 500 MB + 256 KB):');
+  final videoFile = SizedFile.values(gb: 2, mb: 500, kb: 256);
+  print('  Total: ${videoFile.format()}');
+  print('  In MB: ${videoFile.inMB}');
+  print('  In Bytes: ${videoFile.inBytes}');
+  print('');
+
+  // Example 2: Precise file size with bytes and larger units
+  print('Database backup (10 MB + 1024 bytes):');
+  final dbBackup = SizedFile.values(mb: 10, bytes: 1024);
+  print('  Total: ${dbBackup.format()}');
+  print('  In Bytes: ${dbBackup.inBytes}');
+  print('');
+
+  // Example 3: Complex media project
+  print('Media project (1 GB + 750 MB + 512 KB + 256 bytes):');
+  final mediaProject = SizedFile.values(gb: 1, mb: 750, kb: 512, bytes: 256);
+  print('  Total: ${mediaProject.format()}');
+  print('  In GB: ${mediaProject.inGB.toStringAsFixed(2)}');
+  print('');
+
+  // Example 4: Using only one unit (same as direct constructor)
+  print('Using values() with single unit:');
+  final singleUnit = SizedFile.values(mb: 500);
+  final directConstructor = SizedFile.mb(500);
+  print('  values(mb: 500): ${singleUnit.format()}');
+  print('  mb(500): ${directConstructor.format()}');
+  print('  Are equal: ${singleUnit == directConstructor}');
 }
 
 /// Simulates a file upload progress display
