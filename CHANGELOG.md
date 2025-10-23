@@ -8,13 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2025-10-22
 
 ### Added
-- `SizedFile.values()` factory constructor for creating instances from multiple units
+`SizedFile.units()` factory constructor for creating instances from multiple units
   - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
-  - Example: `SizedFile.values(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
   - Efficiently ignores zero values
   - All parameters default to 0
-- Complete documentation for `SizedFile.values` with usage examples in README
-- 8 new unit tests for `SizedFile.values` factory constructor (112 total tests)
+- Complete documentation for `SizedFile.units` with usage examples in README
+- 8 new unit tests for `SizedFile.units` factory constructor (112 total tests)
 - Practical examples in example/main.dart demonstrating mixed units use cases
 
 ## [1.1.2] - 2025-10-22

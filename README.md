@@ -28,7 +28,7 @@ A lightweight and intuitive Dart package for handling file size conversions and 
 ## Features
 
 - 🔄 **Easy Conversions**: Convert between different size units (B, KB, MB, GB, TB)
-- 🎯 **Mixed Units Support**: Create file sizes from multiple units with `SizedFile.values`
+- 🎯 **Mixed Units Support**: Create file sizes from multiple units with `SizedFile.units`
 - 📊 **Smart Formatting**: Automatically format sizes with appropriate units
 - 🎨 **Customizable**: Configure fraction digits and custom unit postfixes
 - 🌍 **Localization Support**: Set custom postfix generators for internationalization
@@ -88,7 +88,7 @@ final size4 = SizedFile.gb(2.5);
 final size5 = SizedFile.tb(1);
 
 // From mixed units (combine multiple units)
-final size6 = SizedFile.values(
+final size6 = SizedFile.units(
   gb: 2,
   mb: 500,
   kb: 256,
@@ -97,11 +97,11 @@ final size6 = SizedFile.values(
 
 #### Creating from Mixed Units
 
-When you need to combine multiple units into a single file size, use the `SizedFile.values` factory constructor. This is particularly useful for expressing sizes like "2 GB + 500 MB + 256 KB":
+When you need to combine multiple units into a single file size, use the `SizedFile.units` factory constructor. This is particularly useful for expressing sizes like "2 GB + 500 MB + 256 KB":
 
 ```dart
 // Video file: 2 GB + 500 MB + 256 KB
-final videoFile = SizedFile.values(
+final videoFile = SizedFile.units(
   gb: 2,
   mb: 500,
   kb: 256,
@@ -110,14 +110,14 @@ print(videoFile.format()); // "2.49 GB"
 print(videoFile.inBytes);  // 2672033792
 
 // Database backup: 10 MB + 1024 bytes
-final backup = SizedFile.values(
+final backup = SizedFile.units(
   mb: 10,
   b: 1024,
 );
 print(backup.format()); // "10.00 MB"
 
 // Media project: 1 GB + 750 MB + 512 KB + 256 bytes
-final project = SizedFile.values(
+final project = SizedFile.units(
   gb: 1,
   mb: 750,
   kb: 512,
@@ -126,7 +126,7 @@ final project = SizedFile.values(
 print(project.format()); // "1.73 GB"
 
 // All parameters are optional and default to 0
-final onlyMB = SizedFile.values(mb: 500);
+final onlyMB = SizedFile.units(mb: 500);
 print(onlyMB == SizedFile.mb(500)); // true
 ```
 
@@ -497,7 +497,7 @@ See the [example README](example/README.md) for detailed information about each 
 | `SizedFile.mb(double mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
 | `SizedFile.gb(double gb)` | Creates instance from gigabytes | `SizedFile.gb(2.5)` |
 | `SizedFile.tb(double tb)` | Creates instance from terabytes | `SizedFile.tb(1)`   |
-| `SizedFile.values({...})` | Creates from multiple units     | `SizedFile.values(gb: 2, mb: 500)` |
+| `SizedFile.units({...})` | Creates from multiple units     | `SizedFile.units(gb: 2, mb: 500)` |
 
 ### Properties
 

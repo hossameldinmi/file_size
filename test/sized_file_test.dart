@@ -58,8 +58,8 @@ void main() {
       expect(() => SizedFile.b(-1), throwsA(isA<AssertionError>()));
     });
 
-    test('SizedFile.values creates instance from mixed units', () {
-      final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+    test('SizedFile.units creates instance from mixed units', () {
+      final fileSize = SizedFile.units(gb: 2, mb: 500, kb: 256);
       // 2 GB = 2147483648 bytes
       // 500 MB = 524288000 bytes
       // 256 KB = 262144 bytes
@@ -68,14 +68,14 @@ void main() {
       expect(fileSize.inGB, closeTo(2.48828125, 0.001));
     });
 
-    test('SizedFile.values with single unit', () {
-      final fileSize = SizedFile.values(mb: 10);
+    test('SizedFile.units with single unit', () {
+      final fileSize = SizedFile.units(mb: 10);
       expect(fileSize.inBytes, 10485760);
       expect(fileSize.inMB, 10.0);
     });
 
-    test('SizedFile.values with all units', () {
-      final fileSize = SizedFile.values(
+    test('SizedFile.units with all units', () {
+      final fileSize = SizedFile.units(
         tb: 1,
         gb: 2,
         mb: 500,
@@ -91,30 +91,30 @@ void main() {
       expect(fileSize.inBytes, 1102183662592);
     });
 
-    test('SizedFile.values with bytes and larger units', () {
-      final fileSize = SizedFile.values(mb: 10, bytes: 1024);
+    test('SizedFile.units with bytes and larger units', () {
+      final fileSize = SizedFile.units(mb: 10, bytes: 1024);
       expect(fileSize.inBytes, 10486784); // 10 MB + 1024 bytes
     });
 
-    test('SizedFile.values with all zeros returns zero', () {
-      final fileSize = SizedFile.values();
+    test('SizedFile.units with all zeros returns zero', () {
+      final fileSize = SizedFile.units();
       expect(fileSize.inBytes, 0);
       expect(fileSize == SizedFile.zero, true);
     });
 
-    test('SizedFile.values with only bytes', () {
-      final fileSize = SizedFile.values(bytes: 2048);
+    test('SizedFile.units with only bytes', () {
+      final fileSize = SizedFile.units(bytes: 2048);
       expect(fileSize.inBytes, 2048);
       expect(fileSize.inKB, 2.0);
     });
 
-    test('SizedFile.values with decimal values', () {
-      final fileSize = SizedFile.values(gb: 1.5, mb: 250.5);
+    test('SizedFile.units with decimal values', () {
+      final fileSize = SizedFile.units(gb: 1.5, mb: 250.5);
       expect(fileSize.inGB, closeTo(1.744628906, 0.001));
     });
 
-    test('SizedFile.values ignores zero values efficiently', () {
-      final fileSize1 = SizedFile.values(gb: 1, mb: 0, kb: 0);
+    test('SizedFile.units ignores zero values efficiently', () {
+      final fileSize1 = SizedFile.units(gb: 1, mb: 0, kb: 0);
       final fileSize2 = SizedFile.gb(1);
       expect(fileSize1 == fileSize2, true);
     });
@@ -509,8 +509,7 @@ void main() {
       final result = size1 + size2; // 1560576 bytes
 
       expect(result.inBytes, 1560576);
-      expect(
-          result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
+      expect(result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
     });
 
     test('addition with zero', () {
@@ -607,8 +606,7 @@ void main() {
       final withoutVideos = everything - videos;
 
       expect(totalMedia.inBytes, photos.inBytes + videos.inBytes);
-      expect(everything.inBytes,
-          documents.inBytes + photos.inBytes + videos.inBytes);
+      expect(everything.inBytes, documents.inBytes + photos.inBytes + videos.inBytes);
       expect(withoutVideos.inBytes, documents.inBytes + photos.inBytes);
     });
 

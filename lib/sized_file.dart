@@ -95,7 +95,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  SizedFile.kb(double inKB) : this.b((inKB * _divider).toInt());
+  SizedFile.kb(double inKB) : this.b(_kbToBytes(inKB));
 
   /// Creates a [SizedFile] instance from megabytes.
   ///
@@ -104,7 +104,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  SizedFile.mb(double inMB) : this.b((inMB * pow(_divider, 2)).toInt());
+  SizedFile.mb(double inMB) : this.b(_mbToBytes(inMB));
 
   /// Creates a [SizedFile] instance from gigabytes.
   ///
@@ -113,7 +113,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  SizedFile.gb(double inGB) : this.b((inGB * pow(_divider, 3)).toInt());
+  SizedFile.gb(double inGB) : this.b(_gbToBytes(inGB));
 
   /// Creates a [SizedFile] instance from terabytes.
   ///
@@ -122,7 +122,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  SizedFile.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
+  SizedFile.tb(double inTB) : this.b(_tbToBytes(inTB));
 
   /// Creates a [SizedFile] instance by combining multiple unit values.
   ///
@@ -143,39 +143,39 @@ class SizedFile implements Comparable<SizedFile> {
   /// Example:
   /// ```dart
   /// // Create a size of 2 GB + 500 MB + 256 KB
-  /// final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+  /// final fileSize = SizedFile.units(gb: 2, mb: 500, kb: 256);
   /// print(fileSize.format()); // "2.49 GB"
   /// print(fileSize.inMB); // 2560.25
   ///
   /// // Mixed units for precise sizes
-  /// final videoSize = SizedFile.values(gb: 1, mb: 750, kb: 512);
+  /// final videoSize = SizedFile.units(gb: 1, mb: 750, kb: 512);
   /// print(videoSize.format()); // "1.73 GB"
   ///
   /// // Works with single unit too
-  /// final smallFile = SizedFile.values(kb: 500);
+  /// final smallFile = SizedFile.units(kb: 500);
   /// print(smallFile.format()); // "500.00 KB"
   ///
   /// // Combining bytes with larger units
-  /// final precise = SizedFile.values(mb: 10, bytes: 1024);
+  /// final precise = SizedFile.units(mb: 10, bytes: 1024);
   /// print(precise.inBytes); // 10486272 (10 MB + 1024 bytes)
   /// ```
   ///
   /// Returns a new [SizedFile] instance representing the sum of all provided units.
-  factory SizedFile.values({
+  factory SizedFile.units({
     int bytes = 0,
     double kb = 0,
     double mb = 0,
     double gb = 0,
     double tb = 0,
   }) =>
-      SizedFile.sum(
+      SizedFile.b(
         [
-          if (bytes != 0) SizedFile.b(bytes),
-          if (kb != 0) SizedFile.kb(kb),
-          if (mb != 0) SizedFile.mb(mb),
-          if (gb != 0) SizedFile.gb(gb),
-          if (tb != 0) SizedFile.tb(tb),
-        ],
+          bytes,
+          _kbToBytes(kb),
+          _mbToBytes(mb),
+          _gbToBytes(gb),
+          _tbToBytes(tb),
+        ].reduce((a, b) => a + b),
       );
 
   /// Formats the file size as a human-readable string.
@@ -417,8 +417,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) =>
-      SizedFile.b((inBytes * factor).round());
+  SizedFile operator *(covariant num factor) => SizedFile.b((inBytes * factor).round());
 
   /// Divides this [SizedFile] by a scalar value.
   ///
@@ -526,4 +525,9 @@ class SizedFile implements Comparable<SizedFile> {
     final total = sum(sizes);
     return SizedFile.b((total.inBytes / sizes.length).round());
   }
+
+  static int _kbToBytes(double kb) => (kb * _divider).toInt();
+  static int _mbToBytes(double mb) => (mb * pow(_divider, 2)).toInt();
+  static int _gbToBytes(double gb) => (gb * pow(_divider, 3)).toInt();
+  static int _tbToBytes(double tb) => (tb * pow(_divider, 4)).toInt();
 }
