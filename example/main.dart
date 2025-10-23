@@ -476,16 +476,11 @@ void staticHelpersExample() {
   print('');
 
   print('Using min() and max():');
-  var currentMin = sizes[0];
-  var currentMax = sizes[0];
+  final smallest = SizedFile.min(sizes);
+  final largest = SizedFile.max(sizes);
 
-  for (final size in sizes.skip(1)) {
-    currentMin = SizedFile.min(currentMin, size);
-    currentMax = SizedFile.max(currentMax, size);
-  }
-
-  print('  Smallest file: ${currentMin.format()}');
-  print('  Largest file: ${currentMax.format()}');
+  print('  Smallest file: ${smallest.format()}');
+  print('  Largest file: ${largest.format()}');
   print('');
 
   print('Using sum():');

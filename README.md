@@ -277,10 +277,10 @@ final files = [
 ];
 
 // Find minimum and maximum
-final smallest = SizedFile.min(files[0], files[1]);
-print(smallest.format()); // "10.00 MB"
+final smallest = SizedFile.min(files);
+print(smallest.format()); // "500.00 KB"
 
-final largest = SizedFile.max(files[0], files[1]);
+final largest = SizedFile.max(files);
 print(largest.format()); // "25.00 MB"
 
 // Calculate total size
@@ -568,8 +568,8 @@ Static method to set a global postfix generator for all instances.
 
 | Method                    | Description                  | Example                                    |
 | ------------------------- | ---------------------------- | ------------------------------------------ |
-| `min(a, b)`               | Returns smaller size         | `SizedFile.min(size1, size2)`              |
-| `max(a, b)`               | Returns larger size          | `SizedFile.max(size1, size2)`              |
+| `min(sizes)`              | Returns smallest size from collection | `SizedFile.min([size1, size2, size3])`     |
+| `max(sizes)`              | Returns largest size from collection | `SizedFile.max([size1, size2, size3])`     |
 | `sum(sizes)`              | Sum of all sizes             | `SizedFile.sum([size1, size2, size3])`     |
 | `average(sizes)`          | Average of all sizes         | `SizedFile.average([size1, size2, size3])` |
 | `setPostfixesGenerator()` | Set global postfix generator | `SizedFile.setPostfixesGenerator(fn)`      |

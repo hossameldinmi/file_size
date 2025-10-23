@@ -87,12 +87,8 @@ void staticHelperMethods() {
 
   // Min/Max
   print('\nFinding Min and Max:');
-  var minFile = files[0];
-  var maxFile = files[0];
-  for (final file in files.skip(1)) {
-    minFile = SizedFile.min(minFile, file);
-    maxFile = SizedFile.max(maxFile, file);
-  }
+  final minFile = SizedFile.min(files);
+  final maxFile = SizedFile.max(files);
   print('  Smallest: ${minFile.format()}');
   print('  Largest: ${maxFile.format()}');
 
@@ -207,7 +203,7 @@ void realWorldExamples() {
 
   final totalBackup = SizedFile.sum(backups);
   final avgBackup = SizedFile.average(backups);
-  final maxBackup = backups.reduce((a, b) => SizedFile.max(a, b));
+  final maxBackup = SizedFile.max(backups);
 
   print('  Backups: ${backups.length}');
   print('  Total size: ${totalBackup.format()}');

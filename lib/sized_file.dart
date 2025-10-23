@@ -483,27 +483,43 @@ class SizedFile implements Comparable<SizedFile> {
     return inBytes / other.inBytes;
   }
 
-  /// Returns the smaller of this [SizedFile] and [other].
+  /// Returns the smallest [SizedFile] from a collection.
+  ///
+  /// If the list is empty, returns a [SizedFile] with zero bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(10);
-  /// final size2 = SizedFile.mb(5);
-  /// final smaller = SizedFile.min(size1, size2);
-  /// print(smaller.format()); // "5.00 MB"
+  /// final files = [
+  ///   SizedFile.mb(10),
+  ///   SizedFile.mb(5),
+  ///   SizedFile.mb(15),
+  /// ];
+  /// final smallest = SizedFile.min(files);
+  /// print(smallest.format()); // "5.00 MB"
   /// ```
-  static SizedFile min(SizedFile a, SizedFile b) => a <= b ? a : b;
+  static SizedFile min(Iterable<SizedFile> sizes) {
+    if (sizes.isEmpty) return SizedFile.b(0);
+    return sizes.reduce((a, b) => a <= b ? a : b);
+  }
 
-  /// Returns the larger of this [SizedFile] and [other].
+  /// Returns the largest [SizedFile] from a collection.
+  ///
+  /// If the list is empty, returns a [SizedFile] with zero bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(10);
-  /// final size2 = SizedFile.mb(5);
-  /// final larger = SizedFile.max(size1, size2);
-  /// print(larger.format()); // "10.00 MB"
+  /// final files = [
+  ///   SizedFile.mb(10),
+  ///   SizedFile.mb(5),
+  ///   SizedFile.mb(15),
+  /// ];
+  /// final largest = SizedFile.max(files);
+  /// print(largest.format()); // "15.00 MB"
   /// ```
-  static SizedFile max(SizedFile a, SizedFile b) => a >= b ? a : b;
+  static SizedFile max(Iterable<SizedFile> sizes) {
+    if (sizes.isEmpty) return SizedFile.b(0);
+    return sizes.reduce((a, b) => a >= b ? a : b);
+  }
 
   /// Returns the sum of multiple [SizedFile] instances.
   ///

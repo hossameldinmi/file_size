@@ -521,8 +521,7 @@ void main() {
       final result = size1 + size2; // 1560576 bytes
 
       expect(result.inBytes, 1560576);
-      expect(
-          result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
+      expect(result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
     });
 
     test('addition with zero', () {
@@ -619,8 +618,7 @@ void main() {
       final withoutVideos = everything - videos;
 
       expect(totalMedia.inBytes, photos.inBytes + videos.inBytes);
-      expect(everything.inBytes,
-          documents.inBytes + photos.inBytes + videos.inBytes);
+      expect(everything.inBytes, documents.inBytes + photos.inBytes + videos.inBytes);
       expect(withoutVideos.inBytes, documents.inBytes + photos.inBytes);
     });
 
@@ -851,38 +849,74 @@ void main() {
   });
 
   group('SizedFile static helper methods', () {
-    test('min returns smaller value', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.mb(5);
-      final result = SizedFile.min(size1, size2);
+    test('min returns smallest value from collection', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.mb(5),
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.min(sizes);
 
-      expect(result == size2, true);
       expect(result.inMB, 5.0);
     });
 
-    test('min with equal values returns first', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.b(10485760); // 10 MB
-      final result = SizedFile.min(size1, size2);
+    test('min with equal values returns first occurrence', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.b(10485760), // 10 MB
+        SizedFile.mb(5),
+      ];
+      final result = SizedFile.min(sizes);
 
-      expect(result == size1, true);
+      expect(result.inMB, 5.0);
     });
 
-    test('max returns larger value', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.mb(5);
-      final result = SizedFile.max(size1, size2);
+    test('min with empty list returns zero', () {
+      final result = SizedFile.min([]);
 
-      expect(result == size1, true);
+      expect(result.inBytes, 0);
+    });
+
+    test('min with single element returns that element', () {
+      final sizes = [SizedFile.mb(10)];
+      final result = SizedFile.min(sizes);
+
       expect(result.inMB, 10.0);
     });
 
-    test('max with equal values returns first', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.b(10485760); // 10 MB
-      final result = SizedFile.max(size1, size2);
+    test('max returns largest value from collection', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.mb(5),
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.max(sizes);
 
-      expect(result == size1, true);
+      expect(result.inMB, 15.0);
+    });
+
+    test('max with equal values returns first occurrence', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.b(10485760), // 10 MB
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.max(sizes);
+
+      expect(result.inMB, 15.0);
+    });
+
+    test('max with empty list returns zero', () {
+      final result = SizedFile.max([]);
+
+      expect(result.inBytes, 0);
+    });
+
+    test('max with single element returns that element', () {
+      final sizes = [SizedFile.mb(10)];
+      final result = SizedFile.max(sizes);
+
+      expect(result.inMB, 10.0);
     });
 
     test('sum returns total of all sizes', () {
