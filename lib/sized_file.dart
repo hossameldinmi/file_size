@@ -97,7 +97,7 @@ class SizedFile implements Comparable<SizedFile> {
 
   /// The size in terabytes (TB).
   ///
-  /// Calculated as bytes / (1024^4).
+  /// Calculated as bytes / (1024⁴).
   ///
   /// Example:
   /// ```dart
