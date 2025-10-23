@@ -435,8 +435,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) =>
-      SizedFile.b((inBytes * factor).round());
+  SizedFile operator *(covariant num factor) => SizedFile.b((inBytes * factor).round());
 
   /// Divides this [SizedFile] by a scalar value.
   ///
@@ -545,27 +544,30 @@ class SizedFile implements Comparable<SizedFile> {
     return SizedFile.b((total.inBytes / sizes.length).round());
   }
 
-  static final _kbConverter = ByteConverter(
-    (num kb) => (kb * _divider).toInt(),
+  static final _kbConverter = _ByteConverter(
+    (kb) => (kb * _divider).toInt(),
     (bytes) => bytes / _divider,
   );
-  static final _mbConverter = ByteConverter(
-    (num mb) => (mb * pow(_divider, 2)).toInt(),
+  static final _mbConverter = _ByteConverter(
+    (mb) => (mb * pow(_divider, 2)).toInt(),
     (bytes) => bytes / pow(_divider, 2),
   );
-  static final _gbConverter = ByteConverter(
-    (num gb) => (gb * pow(_divider, 3)).toInt(),
+  static final _gbConverter = _ByteConverter(
+    (gb) => (gb * pow(_divider, 3)).toInt(),
     (bytes) => bytes / pow(_divider, 3),
   );
-  static final _tbConverter = ByteConverter(
-    (num tb) => (tb * pow(_divider, 4)).toInt(),
+  static final _tbConverter = _ByteConverter(
+    (tb) => (tb * pow(_divider, 4)).toInt(),
     (bytes) => bytes / pow(_divider, 4),
   );
 }
 
-class ByteConverter {
+/// A helper class for converting between bytes and other units.
+///
+/// Encapsulates the conversion logic for a specific unit.
+class _ByteConverter {
   final int Function(num value) toBytes;
   final num Function(int bytes) fromBytes;
 
-  ByteConverter(this.toBytes, this.fromBytes);
+  _ByteConverter(this.toBytes, this.fromBytes);
 }
