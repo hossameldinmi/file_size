@@ -9,6 +9,7 @@ void main() {
       expect(fileSize.inKB, 0.0);
       expect(fileSize.inMB, 0.0);
       expect(fileSize.inGB, 0.0);
+      expect(fileSize.inTB, 0.0);
     });
 
     test('SizedFile.b creates instance with bytes', () {
@@ -17,6 +18,7 @@ void main() {
       expect(fileSize.inKB, 1.0);
       expect(fileSize.inMB, closeTo(0.0009765625, 0.0001));
       expect(fileSize.inGB, closeTo(9.5367431640625e-7, 0.0000001));
+      expect(fileSize.inTB, closeTo(9.313225746154785e-10, 0.0000000001));
     });
 
     test('SizedFile.b with zero bytes', () {
@@ -25,33 +27,43 @@ void main() {
       expect(fileSize.inKB, 0.0);
       expect(fileSize.inMB, 0.0);
       expect(fileSize.inGB, 0.0);
+      expect(fileSize.inTB, 0.0);
     });
 
     test('SizedFile.kb creates instance from kilobytes', () {
       final fileSize = SizedFile.kb(1.0);
       expect(fileSize.inBytes, 1024);
       expect(fileSize.inKB, 1.0);
+      expect(fileSize.inMB, 0.0009765625);
+      expect(fileSize.inGB, 0.00000095367431640625);
+      expect(fileSize.inTB, 0.0000000009313225746154785);
     });
 
     test('SizedFile.mb creates instance from megabytes', () {
       final fileSize = SizedFile.mb(1.0);
       expect(fileSize.inBytes, 1048576);
-      expect(fileSize.inMB, 1.0);
       expect(fileSize.inKB, 1024.0);
+      expect(fileSize.inMB, 1.0);
+      expect(fileSize.inGB, 0.0009765625);
+      expect(fileSize.inTB, 0.00000095367431640625);
     });
 
     test('SizedFile.gb creates instance from gigabytes', () {
       final fileSize = SizedFile.gb(1.0);
       expect(fileSize.inBytes, 1073741824);
-      expect(fileSize.inGB, 1.0);
-      expect(fileSize.inMB, 1024.0);
       expect(fileSize.inKB, 1048576.0);
+      expect(fileSize.inMB, 1024.0);
+      expect(fileSize.inGB, 1.0);
+      expect(fileSize.inTB, 0.0009765625);
     });
 
     test('SizedFile.tb creates instance from terabytes', () {
       final fileSize = SizedFile.tb(1.0);
       expect(fileSize.inBytes, 1099511627776);
+      expect(fileSize.inKB, 1073741824.0);
+      expect(fileSize.inMB, 1048576.0);
       expect(fileSize.inGB, 1024.0);
+      expect(fileSize.inTB, 1.0);
     });
 
     test('SizedFile.b throws assertion error for negative bytes', () {

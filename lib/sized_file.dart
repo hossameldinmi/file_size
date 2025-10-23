@@ -435,7 +435,8 @@ class SizedFile implements Comparable<SizedFile> {
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) => SizedFile.b((inBytes * factor).round());
+  SizedFile operator *(covariant num factor) =>
+      SizedFile.b((inBytes * factor).round());
 
   /// Divides this [SizedFile] by a scalar value.
   ///
