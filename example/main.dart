@@ -19,7 +19,7 @@ void main() {
   print('');
 
   // Example 2: Creating from mixed units
-  print('2. Creating from mixed units with SizedFile.values:');
+  print('2. Creating from mixed units with SizedFile.units:');
   mixedUnitsExample();
   print('');
 
@@ -31,6 +31,7 @@ void main() {
   print('  KB: ${fileSize.inKB}');
   print('  MB: ${fileSize.inMB}');
   print('  GB: ${fileSize.inGB}');
+  print('  TB: ${fileSize.inTB}');
   print('');
 
   // Example 4: Formatting with different fraction digits
@@ -123,7 +124,7 @@ void main() {
 void mixedUnitsExample() {
   // Example 1: Video file with mixed units
   print('Video file size (2 GB + 500 MB + 256 KB):');
-  final videoFile = SizedFile.values(gb: 2, mb: 500, kb: 256);
+  final videoFile = SizedFile.units(gb: 2, mb: 500, kb: 256);
   print('  Total: ${videoFile.format()}');
   print('  In MB: ${videoFile.inMB}');
   print('  In Bytes: ${videoFile.inBytes}');
@@ -131,23 +132,23 @@ void mixedUnitsExample() {
 
   // Example 2: Precise file size with bytes and larger units
   print('Database backup (10 MB + 1024 bytes):');
-  final dbBackup = SizedFile.values(mb: 10, bytes: 1024);
+  final dbBackup = SizedFile.units(mb: 10, bytes: 1024);
   print('  Total: ${dbBackup.format()}');
   print('  In Bytes: ${dbBackup.inBytes}');
   print('');
 
   // Example 3: Complex media project
   print('Media project (1 GB + 750 MB + 512 KB + 256 bytes):');
-  final mediaProject = SizedFile.values(gb: 1, mb: 750, kb: 512, bytes: 256);
+  final mediaProject = SizedFile.units(gb: 1, mb: 750, kb: 512, bytes: 256);
   print('  Total: ${mediaProject.format()}');
   print('  In GB: ${mediaProject.inGB.toStringAsFixed(2)}');
   print('');
 
   // Example 4: Using only one unit (same as direct constructor)
-  print('Using values() with single unit:');
-  final singleUnit = SizedFile.values(mb: 500);
+  print('Using units() with single unit:');
+  final singleUnit = SizedFile.units(mb: 500);
   final directConstructor = SizedFile.mb(500);
-  print('  values(mb: 500): ${singleUnit.format()}');
+  print('  units(mb: 500): ${singleUnit.format()}');
   print('  mb(500): ${directConstructor.format()}');
   print('  Are equal: ${singleUnit == directConstructor}');
 }
@@ -475,16 +476,11 @@ void staticHelpersExample() {
   print('');
 
   print('Using min() and max():');
-  var currentMin = sizes[0];
-  var currentMax = sizes[0];
+  final smallest = SizedFile.min(sizes);
+  final largest = SizedFile.max(sizes);
 
-  for (final size in sizes.skip(1)) {
-    currentMin = SizedFile.min(currentMin, size);
-    currentMax = SizedFile.max(currentMax, size);
-  }
-
-  print('  Smallest file: ${currentMin.format()}');
-  print('  Largest file: ${currentMax.format()}');
+  print('  Smallest file: ${smallest.format()}');
+  print('  Largest file: ${largest.format()}');
   print('');
 
   print('Using sum():');

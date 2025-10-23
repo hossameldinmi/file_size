@@ -9,6 +9,7 @@ void main() {
       expect(fileSize.inKB, 0.0);
       expect(fileSize.inMB, 0.0);
       expect(fileSize.inGB, 0.0);
+      expect(fileSize.inTB, 0.0);
     });
 
     test('SizedFile.b creates instance with bytes', () {
@@ -17,6 +18,7 @@ void main() {
       expect(fileSize.inKB, 1.0);
       expect(fileSize.inMB, closeTo(0.0009765625, 0.0001));
       expect(fileSize.inGB, closeTo(9.5367431640625e-7, 0.0000001));
+      expect(fileSize.inTB, closeTo(9.313225746154785e-10, 0.0000000001));
     });
 
     test('SizedFile.b with zero bytes', () {
@@ -25,41 +27,51 @@ void main() {
       expect(fileSize.inKB, 0.0);
       expect(fileSize.inMB, 0.0);
       expect(fileSize.inGB, 0.0);
+      expect(fileSize.inTB, 0.0);
     });
 
     test('SizedFile.kb creates instance from kilobytes', () {
       final fileSize = SizedFile.kb(1.0);
       expect(fileSize.inBytes, 1024);
       expect(fileSize.inKB, 1.0);
+      expect(fileSize.inMB, 0.0009765625);
+      expect(fileSize.inGB, 0.00000095367431640625);
+      expect(fileSize.inTB, 0.0000000009313225746154785);
     });
 
     test('SizedFile.mb creates instance from megabytes', () {
       final fileSize = SizedFile.mb(1.0);
       expect(fileSize.inBytes, 1048576);
-      expect(fileSize.inMB, 1.0);
       expect(fileSize.inKB, 1024.0);
+      expect(fileSize.inMB, 1.0);
+      expect(fileSize.inGB, 0.0009765625);
+      expect(fileSize.inTB, 0.00000095367431640625);
     });
 
     test('SizedFile.gb creates instance from gigabytes', () {
       final fileSize = SizedFile.gb(1.0);
       expect(fileSize.inBytes, 1073741824);
-      expect(fileSize.inGB, 1.0);
-      expect(fileSize.inMB, 1024.0);
       expect(fileSize.inKB, 1048576.0);
+      expect(fileSize.inMB, 1024.0);
+      expect(fileSize.inGB, 1.0);
+      expect(fileSize.inTB, 0.0009765625);
     });
 
     test('SizedFile.tb creates instance from terabytes', () {
       final fileSize = SizedFile.tb(1.0);
       expect(fileSize.inBytes, 1099511627776);
+      expect(fileSize.inKB, 1073741824.0);
+      expect(fileSize.inMB, 1048576.0);
       expect(fileSize.inGB, 1024.0);
+      expect(fileSize.inTB, 1.0);
     });
 
     test('SizedFile.b throws assertion error for negative bytes', () {
       expect(() => SizedFile.b(-1), throwsA(isA<AssertionError>()));
     });
 
-    test('SizedFile.values creates instance from mixed units', () {
-      final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+    test('SizedFile.units creates instance from mixed units', () {
+      final fileSize = SizedFile.units(gb: 2, mb: 500, kb: 256);
       // 2 GB = 2147483648 bytes
       // 500 MB = 524288000 bytes
       // 256 KB = 262144 bytes
@@ -68,14 +80,14 @@ void main() {
       expect(fileSize.inGB, closeTo(2.48828125, 0.001));
     });
 
-    test('SizedFile.values with single unit', () {
-      final fileSize = SizedFile.values(mb: 10);
+    test('SizedFile.units with single unit', () {
+      final fileSize = SizedFile.units(mb: 10);
       expect(fileSize.inBytes, 10485760);
       expect(fileSize.inMB, 10.0);
     });
 
-    test('SizedFile.values with all units', () {
-      final fileSize = SizedFile.values(
+    test('SizedFile.units with all units', () {
+      final fileSize = SizedFile.units(
         tb: 1,
         gb: 2,
         mb: 500,
@@ -91,30 +103,30 @@ void main() {
       expect(fileSize.inBytes, 1102183662592);
     });
 
-    test('SizedFile.values with bytes and larger units', () {
-      final fileSize = SizedFile.values(mb: 10, bytes: 1024);
+    test('SizedFile.units with bytes and larger units', () {
+      final fileSize = SizedFile.units(mb: 10, bytes: 1024);
       expect(fileSize.inBytes, 10486784); // 10 MB + 1024 bytes
     });
 
-    test('SizedFile.values with all zeros returns zero', () {
-      final fileSize = SizedFile.values();
+    test('SizedFile.units with all zeros returns zero', () {
+      final fileSize = SizedFile.units();
       expect(fileSize.inBytes, 0);
       expect(fileSize == SizedFile.zero, true);
     });
 
-    test('SizedFile.values with only bytes', () {
-      final fileSize = SizedFile.values(bytes: 2048);
+    test('SizedFile.units with only bytes', () {
+      final fileSize = SizedFile.units(bytes: 2048);
       expect(fileSize.inBytes, 2048);
       expect(fileSize.inKB, 2.0);
     });
 
-    test('SizedFile.values with decimal values', () {
-      final fileSize = SizedFile.values(gb: 1.5, mb: 250.5);
+    test('SizedFile.units with decimal values', () {
+      final fileSize = SizedFile.units(gb: 1.5, mb: 250.5);
       expect(fileSize.inGB, closeTo(1.744628906, 0.001));
     });
 
-    test('SizedFile.values ignores zero values efficiently', () {
-      final fileSize1 = SizedFile.values(gb: 1, mb: 0, kb: 0);
+    test('SizedFile.units ignores zero values efficiently', () {
+      final fileSize1 = SizedFile.units(gb: 1, mb: 0, kb: 0);
       final fileSize2 = SizedFile.gb(1);
       expect(fileSize1 == fileSize2, true);
     });
@@ -839,38 +851,74 @@ void main() {
   });
 
   group('SizedFile static helper methods', () {
-    test('min returns smaller value', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.mb(5);
-      final result = SizedFile.min(size1, size2);
+    test('min returns smallest value from collection', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.mb(5),
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.min(sizes);
 
-      expect(result == size2, true);
       expect(result.inMB, 5.0);
     });
 
-    test('min with equal values returns first', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.b(10485760); // 10 MB
-      final result = SizedFile.min(size1, size2);
+    test('min with equal values returns first occurrence', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.b(10485760), // 10 MB
+        SizedFile.mb(5),
+      ];
+      final result = SizedFile.min(sizes);
 
-      expect(result == size1, true);
+      expect(result.inMB, 5.0);
     });
 
-    test('max returns larger value', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.mb(5);
-      final result = SizedFile.max(size1, size2);
+    test('min with empty list returns zero', () {
+      final result = SizedFile.min([]);
 
-      expect(result == size1, true);
+      expect(result.inBytes, 0);
+    });
+
+    test('min with single element returns that element', () {
+      final sizes = [SizedFile.mb(10)];
+      final result = SizedFile.min(sizes);
+
       expect(result.inMB, 10.0);
     });
 
-    test('max with equal values returns first', () {
-      final size1 = SizedFile.mb(10);
-      final size2 = SizedFile.b(10485760); // 10 MB
-      final result = SizedFile.max(size1, size2);
+    test('max returns largest value from collection', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.mb(5),
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.max(sizes);
 
-      expect(result == size1, true);
+      expect(result.inMB, 15.0);
+    });
+
+    test('max with equal values returns first occurrence', () {
+      final sizes = [
+        SizedFile.mb(10),
+        SizedFile.b(10485760), // 10 MB
+        SizedFile.mb(15),
+      ];
+      final result = SizedFile.max(sizes);
+
+      expect(result.inMB, 15.0);
+    });
+
+    test('max with empty list returns zero', () {
+      final result = SizedFile.max([]);
+
+      expect(result.inBytes, 0);
+    });
+
+    test('max with single element returns that element', () {
+      final sizes = [SizedFile.mb(10)];
+      final result = SizedFile.max(sizes);
+
+      expect(result.inMB, 10.0);
     });
 
     test('sum returns total of all sizes', () {

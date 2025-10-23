@@ -64,9 +64,10 @@ class SizedFile implements Comparable<SizedFile> {
   /// Throws [AssertionError] if [inBytes] is negative.
   SizedFile.b(this.inBytes)
       : assert(inBytes >= 0, 'File size cannot be negative'),
-        inKB = inBytes / _divider,
-        inMB = inBytes / pow(_divider, 2),
-        inGB = inBytes / pow(_divider, 3);
+        inKB = _kbConverter.fromBytes(inBytes),
+        inMB = _mbConverter.fromBytes(inBytes),
+        inGB = _gbConverter.fromBytes(inBytes),
+        inTB = _tbConverter.fromBytes(inBytes);
 
   /// The size in bytes.
   ///
@@ -86,7 +87,24 @@ class SizedFile implements Comparable<SizedFile> {
   /// The size in gigabytes (GB).
   ///
   /// Calculated as bytes / (1024³).
+  ///
+  /// Example:
+  /// ```dart
+  /// final fileSize = SizedFile.tb(1);
+  /// print(fileSize.inGB); // 1024.0
+  /// ```
   final double inGB;
+
+  /// The size in terabytes (TB).
+  ///
+  /// Calculated as bytes / (1024⁴).
+  ///
+  /// Example:
+  /// ```dart
+  /// final fileSize = SizedFile.gb(5);
+  /// print(fileSize.inTB); // 0.0048828125
+  /// ```
+  final double inTB;
 
   /// Creates a [SizedFile] instance from kilobytes.
   ///
@@ -95,7 +113,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  SizedFile.kb(double inKB) : this.b((inKB * _divider).toInt());
+  SizedFile.kb(num inKB) : this.b(_kbConverter.toBytes(inKB));
 
   /// Creates a [SizedFile] instance from megabytes.
   ///
@@ -104,7 +122,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  SizedFile.mb(double inMB) : this.b((inMB * pow(_divider, 2)).toInt());
+  SizedFile.mb(num inMB) : this.b(_mbConverter.toBytes(inMB));
 
   /// Creates a [SizedFile] instance from gigabytes.
   ///
@@ -113,7 +131,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  SizedFile.gb(double inGB) : this.b((inGB * pow(_divider, 3)).toInt());
+  SizedFile.gb(num inGB) : this.b(_gbConverter.toBytes(inGB));
 
   /// Creates a [SizedFile] instance from terabytes.
   ///
@@ -122,7 +140,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  SizedFile.tb(double inTB) : this.b((inTB * pow(_divider, 4)).toInt());
+  SizedFile.tb(num inTB) : this.b(_tbConverter.toBytes(inTB));
 
   /// Creates a [SizedFile] instance by combining multiple unit values.
   ///
@@ -143,39 +161,39 @@ class SizedFile implements Comparable<SizedFile> {
   /// Example:
   /// ```dart
   /// // Create a size of 2 GB + 500 MB + 256 KB
-  /// final fileSize = SizedFile.values(gb: 2, mb: 500, kb: 256);
+  /// final fileSize = SizedFile.units(gb: 2, mb: 500, kb: 256);
   /// print(fileSize.format()); // "2.49 GB"
   /// print(fileSize.inMB); // 2560.25
   ///
   /// // Mixed units for precise sizes
-  /// final videoSize = SizedFile.values(gb: 1, mb: 750, kb: 512);
+  /// final videoSize = SizedFile.units(gb: 1, mb: 750, kb: 512);
   /// print(videoSize.format()); // "1.73 GB"
   ///
   /// // Works with single unit too
-  /// final smallFile = SizedFile.values(kb: 500);
+  /// final smallFile = SizedFile.units(kb: 500);
   /// print(smallFile.format()); // "500.00 KB"
   ///
   /// // Combining bytes with larger units
-  /// final precise = SizedFile.values(mb: 10, bytes: 1024);
+  /// final precise = SizedFile.units(mb: 10, bytes: 1024);
   /// print(precise.inBytes); // 10486272 (10 MB + 1024 bytes)
   /// ```
   ///
   /// Returns a new [SizedFile] instance representing the sum of all provided units.
-  factory SizedFile.values({
+  factory SizedFile.units({
     int bytes = 0,
-    double kb = 0,
-    double mb = 0,
-    double gb = 0,
-    double tb = 0,
+    num kb = 0,
+    num mb = 0,
+    num gb = 0,
+    num tb = 0,
   }) =>
-      SizedFile.sum(
+      SizedFile.b(
         [
-          if (bytes != 0) SizedFile.b(bytes),
-          if (kb != 0) SizedFile.kb(kb),
-          if (mb != 0) SizedFile.mb(mb),
-          if (gb != 0) SizedFile.gb(gb),
-          if (tb != 0) SizedFile.tb(tb),
-        ],
+          bytes,
+          _kbConverter.toBytes(kb),
+          _mbConverter.toBytes(mb),
+          _gbConverter.toBytes(gb),
+          _tbConverter.toBytes(tb),
+        ].reduce((a, b) => a + b),
       );
 
   /// Formats the file size as a human-readable string.
@@ -466,27 +484,43 @@ class SizedFile implements Comparable<SizedFile> {
     return inBytes / other.inBytes;
   }
 
-  /// Returns the smaller of this [SizedFile] and [other].
+  /// Returns the smallest [SizedFile] from a collection.
+  ///
+  /// If the list is empty, returns a [SizedFile] with zero bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(10);
-  /// final size2 = SizedFile.mb(5);
-  /// final smaller = SizedFile.min(size1, size2);
-  /// print(smaller.format()); // "5.00 MB"
+  /// final files = [
+  ///   SizedFile.mb(10),
+  ///   SizedFile.mb(5),
+  ///   SizedFile.mb(15),
+  /// ];
+  /// final smallest = SizedFile.min(files);
+  /// print(smallest.format()); // "5.00 MB"
   /// ```
-  static SizedFile min(SizedFile a, SizedFile b) => a <= b ? a : b;
+  static SizedFile min(Iterable<SizedFile> sizes) {
+    if (sizes.isEmpty) return SizedFile.b(0);
+    return sizes.reduce((a, b) => a <= b ? a : b);
+  }
 
-  /// Returns the larger of this [SizedFile] and [other].
+  /// Returns the largest [SizedFile] from a collection.
+  ///
+  /// If the list is empty, returns a [SizedFile] with zero bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(10);
-  /// final size2 = SizedFile.mb(5);
-  /// final larger = SizedFile.max(size1, size2);
-  /// print(larger.format()); // "10.00 MB"
+  /// final files = [
+  ///   SizedFile.mb(10),
+  ///   SizedFile.mb(5),
+  ///   SizedFile.mb(15),
+  /// ];
+  /// final largest = SizedFile.max(files);
+  /// print(largest.format()); // "15.00 MB"
   /// ```
-  static SizedFile max(SizedFile a, SizedFile b) => a >= b ? a : b;
+  static SizedFile max(Iterable<SizedFile> sizes) {
+    if (sizes.isEmpty) return SizedFile.b(0);
+    return sizes.reduce((a, b) => a >= b ? a : b);
+  }
 
   /// Returns the sum of multiple [SizedFile] instances.
   ///
@@ -526,4 +560,31 @@ class SizedFile implements Comparable<SizedFile> {
     final total = sum(sizes);
     return SizedFile.b((total.inBytes / sizes.length).round());
   }
+
+  static final _kbConverter = _ByteConverter(
+    (kb) => (kb * _divider).toInt(),
+    (bytes) => bytes / _divider,
+  );
+  static final _mbConverter = _ByteConverter(
+    (mb) => (mb * pow(_divider, 2)).toInt(),
+    (bytes) => bytes / pow(_divider, 2),
+  );
+  static final _gbConverter = _ByteConverter(
+    (gb) => (gb * pow(_divider, 3)).toInt(),
+    (bytes) => bytes / pow(_divider, 3),
+  );
+  static final _tbConverter = _ByteConverter(
+    (tb) => (tb * pow(_divider, 4)).toInt(),
+    (bytes) => bytes / pow(_divider, 4),
+  );
+}
+
+/// A helper class for converting between bytes and other units.
+///
+/// Encapsulates the conversion logic for a specific unit.
+class _ByteConverter {
+  final int Function(num value) toBytes;
+  final double Function(int bytes) fromBytes;
+
+  const _ByteConverter(this.toBytes, this.fromBytes);
 }

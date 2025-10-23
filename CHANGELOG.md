@@ -5,16 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2025-10-23
+
+### Added
+- `inTB` property for accessing file size in terabytes
+- Documentation examples for `inTB` property in code, README, and example files
+- Comprehensive unit tests for `inTB` property conversions
+
+### Changed
+- **BREAKING**: `SizedFile.min()` now accepts `Iterable<SizedFile>` instead of two parameters
+  - Returns the smallest size from a collection
+  - Returns zero if the collection is empty
+  - Example: `SizedFile.min([size1, size2, size3])`
+- **BREAKING**: `SizedFile.max()` now accepts `Iterable<SizedFile>` instead of two parameters
+  - Returns the largest size from a collection
+  - Returns zero if the collection is empty
+  - Example: `SizedFile.max([size1, size2, size3])`
+- **BREAKING** renaming  `SizedFile.values()` to `SizedFile.units()` factory constructor for creating instances from multiple units
+  - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
+  - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Efficiently ignores zero values
+  - All parameters default to 0
+- Updated all examples and documentation to reflect new `min()` and `max()` signatures
+- Improved `_ByteConverter` class with better encapsulation (renamed to private)
+
 ## [1.2.0] - 2025-10-22
 
 ### Added
-- `SizedFile.values()` factory constructor for creating instances from multiple units
+  - `SizedFile.units()` factory constructor for creating instances from multiple units
   - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
-  - Example: `SizedFile.values(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
   - Efficiently ignores zero values
   - All parameters default to 0
-- Complete documentation for `SizedFile.values` with usage examples in README
-- 8 new unit tests for `SizedFile.values` factory constructor (112 total tests)
+- Complete documentation for `SizedFile.units` with usage examples in README
+- 8 new unit tests for `SizedFile.units` factory constructor (112 total tests)
 - Practical examples in example/main.dart demonstrating mixed units use cases
 
 ## [1.1.2] - 2025-10-22
