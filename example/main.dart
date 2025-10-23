@@ -31,6 +31,7 @@ void main() {
   print('  KB: ${fileSize.inKB}');
   print('  MB: ${fileSize.inMB}');
   print('  GB: ${fileSize.inGB}');
+  print('  TB: ${fileSize.inTB}');
   print('');
 
   // Example 4: Formatting with different fraction digits

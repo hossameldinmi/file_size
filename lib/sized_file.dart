@@ -64,9 +64,10 @@ class SizedFile implements Comparable<SizedFile> {
   /// Throws [AssertionError] if [inBytes] is negative.
   SizedFile.b(this.inBytes)
       : assert(inBytes >= 0, 'File size cannot be negative'),
-        inKB = inBytes / _divider,
-        inMB = inBytes / pow(_divider, 2),
-        inGB = inBytes / pow(_divider, 3);
+        inKB = _kbConverter.fromBytes(inBytes),
+        inMB = _mbConverter.fromBytes(inBytes),
+        inGB = _gbConverter.fromBytes(inBytes),
+        inTB = _tbConverter.fromBytes(inBytes);
 
   /// The size in bytes.
   ///
@@ -76,17 +77,34 @@ class SizedFile implements Comparable<SizedFile> {
   /// The size in kilobytes (KB).
   ///
   /// Calculated as bytes / 1024.
-  final double inKB;
+  final num inKB;
 
   /// The size in megabytes (MB).
   ///
   /// Calculated as bytes / (1024²).
-  final double inMB;
+  final num inMB;
 
   /// The size in gigabytes (GB).
   ///
   /// Calculated as bytes / (1024³).
-  final double inGB;
+  ///
+  /// Example:
+  /// ```dart
+  /// final fileSize = SizedFile.tb(1);
+  /// print(fileSize.inGB); // 1024.0
+  /// ```
+  final num inGB;
+
+  /// The size in terabytes (TB).
+  ///
+  /// Calculated as bytes / (1024^4).
+  ///
+  /// Example:
+  /// ```dart
+  /// final fileSize = SizedFile.gb(5);
+  /// print(fileSize.inTB); // 0.0048828125
+  /// ```
+  final num inTB;
 
   /// Creates a [SizedFile] instance from kilobytes.
   ///
@@ -95,7 +113,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  SizedFile.kb(double inKB) : this.b(_kbToBytes(inKB));
+  SizedFile.kb(num inKB) : this.b(_kbConverter.toBytes(inKB));
 
   /// Creates a [SizedFile] instance from megabytes.
   ///
@@ -104,7 +122,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  SizedFile.mb(double inMB) : this.b(_mbToBytes(inMB));
+  SizedFile.mb(num inMB) : this.b(_mbConverter.toBytes(inMB));
 
   /// Creates a [SizedFile] instance from gigabytes.
   ///
@@ -113,7 +131,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  SizedFile.gb(double inGB) : this.b(_gbToBytes(inGB));
+  SizedFile.gb(num inGB) : this.b(_gbConverter.toBytes(inGB));
 
   /// Creates a [SizedFile] instance from terabytes.
   ///
@@ -122,7 +140,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  SizedFile.tb(double inTB) : this.b(_tbToBytes(inTB));
+  SizedFile.tb(num inTB) : this.b(_tbConverter.toBytes(inTB));
 
   /// Creates a [SizedFile] instance by combining multiple unit values.
   ///
@@ -163,18 +181,18 @@ class SizedFile implements Comparable<SizedFile> {
   /// Returns a new [SizedFile] instance representing the sum of all provided units.
   factory SizedFile.units({
     int bytes = 0,
-    double kb = 0,
-    double mb = 0,
-    double gb = 0,
-    double tb = 0,
+    num kb = 0,
+    num mb = 0,
+    num gb = 0,
+    num tb = 0,
   }) =>
       SizedFile.b(
         [
           bytes,
-          _kbToBytes(kb),
-          _mbToBytes(mb),
-          _gbToBytes(gb),
-          _tbToBytes(tb),
+          _kbConverter.toBytes(kb),
+          _mbConverter.toBytes(mb),
+          _gbConverter.toBytes(gb),
+          _tbConverter.toBytes(tb),
         ].reduce((a, b) => a + b),
       );
 
@@ -417,8 +435,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) =>
-      SizedFile.b((inBytes * factor).round());
+  SizedFile operator *(covariant num factor) => SizedFile.b((inBytes * factor).round());
 
   /// Divides this [SizedFile] by a scalar value.
   ///
@@ -442,7 +459,7 @@ class SizedFile implements Comparable<SizedFile> {
 
   /// Calculates the ratio of this [SizedFile] to another [SizedFile].
   ///
-  /// Returns a double representing how many times [other] fits into this size.
+  /// Returns a num representing how many times [other] fits into this size.
   /// Useful for calculating percentages, quotas, and proportions.
   ///
   /// Example:
@@ -459,7 +476,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// ```
   ///
   /// Throws [ArgumentError] if [other] has zero bytes.
-  double ratioTo(SizedFile other) {
+  num ratioTo(SizedFile other) {
     if (other.inBytes == 0) {
       throw ArgumentError('Cannot calculate ratio with zero bytes');
     }
@@ -527,8 +544,27 @@ class SizedFile implements Comparable<SizedFile> {
     return SizedFile.b((total.inBytes / sizes.length).round());
   }
 
-  static int _kbToBytes(double kb) => (kb * _divider).toInt();
-  static int _mbToBytes(double mb) => (mb * pow(_divider, 2)).toInt();
-  static int _gbToBytes(double gb) => (gb * pow(_divider, 3)).toInt();
-  static int _tbToBytes(double tb) => (tb * pow(_divider, 4)).toInt();
+  static final _kbConverter = ByteConverter(
+    (num kb) => (kb * _divider).toInt(),
+    (bytes) => bytes / _divider,
+  );
+  static final _mbConverter = ByteConverter(
+    (num mb) => (mb * pow(_divider, 2)).toInt(),
+    (bytes) => bytes / pow(_divider, 2),
+  );
+  static final _gbConverter = ByteConverter(
+    (num gb) => (gb * pow(_divider, 3)).toInt(),
+    (bytes) => bytes / pow(_divider, 3),
+  );
+  static final _tbConverter = ByteConverter(
+    (num tb) => (tb * pow(_divider, 4)).toInt(),
+    (bytes) => bytes / pow(_divider, 4),
+  );
+}
+
+class ByteConverter {
+  final int Function(num value) toBytes;
+  final num Function(int bytes) fromBytes;
+
+  ByteConverter(this.toBytes, this.fromBytes);
 }

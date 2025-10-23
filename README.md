@@ -141,6 +141,7 @@ print(fileSize.inBytes);  // 5242880
 print(fileSize.inKB);     // 5120.0
 print(fileSize.inMB);     // 5.0
 print(fileSize.inGB);     // 0.0048828125
+print(fileSize.inTB);     // 0.00000476837158203125
 ```
 
 ### Formatting
@@ -493,10 +494,10 @@ See the [example README](example/README.md) for detailed information about each 
 | ------------------------- | ------------------------------- | ------------------- |
 | `SizedFile.zero`          | Static instance with zero bytes | `SizedFile.zero`    |
 | `SizedFile.b(int bytes)`  | Creates instance from bytes     | `SizedFile.b(1024)` |
-| `SizedFile.kb(double kb)` | Creates instance from kilobytes | `SizedFile.kb(1.5)` |
-| `SizedFile.mb(double mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
-| `SizedFile.gb(double gb)` | Creates instance from gigabytes | `SizedFile.gb(2.5)` |
-| `SizedFile.tb(double tb)` | Creates instance from terabytes | `SizedFile.tb(1)`   |
+| `SizedFile.kb(num kb)` | Creates instance from kilobytes | `SizedFile.kb(1.5)` |
+| `SizedFile.mb(num mb)` | Creates instance from megabytes | `SizedFile.mb(100)` |
+| `SizedFile.gb(num gb)` | Creates instance from gigabytes | `SizedFile.gb(2.5)` |
+| `SizedFile.tb(num tb)` | Creates instance from terabytes | `SizedFile.tb(1)`   |
 | `SizedFile.units({...})` | Creates from multiple units     | `SizedFile.units(gb: 2, mb: 500)` |
 
 ### Properties
@@ -504,9 +505,10 @@ See the [example README](example/README.md) for detailed information about each 
 | Property  | Type     | Description       |
 | --------- | -------- | ----------------- |
 | `inBytes` | `int`    | Size in bytes     |
-| `inKB`    | `double` | Size in kilobytes |
-| `inMB`    | `double` | Size in megabytes |
-| `inGB`    | `double` | Size in gigabytes |
+| `inKB`    | `num` | Size in kilobytes |
+| `inMB`    | `num` | Size in megabytes |
+| `inGB`    | `num` | Size in gigabytes |
+| `inTB`    | `num` | Size in terabytes |
 
 ### Methods
 
@@ -560,7 +562,7 @@ Static method to set a global postfix generator for all instances.
 | ------------- | ------------------------------- | -------------------------------------------------- |
 | `toString()`  | String representation           | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
 | `compareTo()` | Comparable implementation       | `size1.compareTo(size2)` returns int               |
-| `ratioTo()`   | Calculate ratio to another size | `used.ratioTo(total)` returns double               |
+| `ratioTo()`   | Calculate ratio to another size | `used.ratioTo(total)` returns num               |
 
 ### Static Methods
 
