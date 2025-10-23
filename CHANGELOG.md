@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2025-10-22
 
 ### Added
-`SizedFile.units()` factory constructor for creating instances from multiple units
+  - `SizedFile.units()` factory constructor for creating instances from multiple units
   - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
   - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
   - Efficiently ignores zero values
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Comparable<SizedFile>` interface implementation with `compareTo()` method
 - Static helper methods: `min()`, `max()`, `sum()`, `average()`
 - New `ratioTo()` method for calculating ratios between two `SizedFile` instances
-  - Returns `double` representing the ratio
+  - Returns `num` representing the ratio
   - Example: `used.ratioTo(total)` returns 0.244 for 250 MB / 1 GB
 - `SizedFile.zero` static constant for zero-byte instances
 - Comprehensive test suite expanded to 104 tests
