@@ -77,12 +77,12 @@ class SizedFile implements Comparable<SizedFile> {
   /// The size in kilobytes (KB).
   ///
   /// Calculated as bytes / 1024.
-  final num inKB;
+  final double inKB;
 
   /// The size in megabytes (MB).
   ///
   /// Calculated as bytes / (1024²).
-  final num inMB;
+  final double inMB;
 
   /// The size in gigabytes (GB).
   ///
@@ -93,7 +93,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  final num inGB;
+  final double inGB;
 
   /// The size in terabytes (TB).
   ///
@@ -104,7 +104,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.gb(5);
   /// print(fileSize.inTB); // 0.0048828125
   /// ```
-  final num inTB;
+  final double inTB;
 
   /// Creates a [SizedFile] instance from kilobytes.
   ///
@@ -460,7 +460,7 @@ class SizedFile implements Comparable<SizedFile> {
 
   /// Calculates the ratio of this [SizedFile] to another [SizedFile].
   ///
-  /// Returns a num representing how many times [other] fits into this size.
+  /// Returns a double representing how many times [other] fits into this size.
   /// Useful for calculating percentages, quotas, and proportions.
   ///
   /// Example:
@@ -477,7 +477,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// ```
   ///
   /// Throws [ArgumentError] if [other] has zero bytes.
-  num ratioTo(SizedFile other) {
+  double ratioTo(SizedFile other) {
     if (other.inBytes == 0) {
       throw ArgumentError('Cannot calculate ratio with zero bytes');
     }
@@ -584,7 +584,7 @@ class SizedFile implements Comparable<SizedFile> {
 /// Encapsulates the conversion logic for a specific unit.
 class _ByteConverter {
   final int Function(num value) toBytes;
-  final num Function(int bytes) fromBytes;
+  final double Function(int bytes) fromBytes;
 
   const _ByteConverter(this.toBytes, this.fromBytes);
 }

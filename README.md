@@ -505,10 +505,10 @@ See the [example README](example/README.md) for detailed information about each 
 | Property  | Type     | Description       |
 | --------- | -------- | ----------------- |
 | `inBytes` | `int`    | Size in bytes     |
-| `inKB`    | `num` | Size in kilobytes |
-| `inMB`    | `num` | Size in megabytes |
-| `inGB`    | `num` | Size in gigabytes |
-| `inTB`    | `num` | Size in terabytes |
+| `inKB`    | `double` | Size in kilobytes |
+| `inMB`    | `double` | Size in megabytes |
+| `inGB`    | `double` | Size in gigabytes |
+| `inTB`    | `double` | Size in terabytes |
 
 ### Methods
 
@@ -562,7 +562,7 @@ Static method to set a global postfix generator for all instances.
 | ------------- | ------------------------------- | -------------------------------------------------- |
 | `toString()`  | String representation           | `SizedFile.mb(1.5).toString()` returns `"1.50 MB"` |
 | `compareTo()` | Comparable implementation       | `size1.compareTo(size2)` returns int               |
-| `ratioTo()`   | Calculate ratio to another size | `used.ratioTo(total)` returns num               |
+| `ratioTo()`   | Calculate ratio to another size | `used.ratioTo(total)` returns double               |
 
 ### Static Methods
 

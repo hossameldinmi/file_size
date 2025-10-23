@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Comparable<SizedFile>` interface implementation with `compareTo()` method
 - Static helper methods: `min()`, `max()`, `sum()`, `average()`
 - New `ratioTo()` method for calculating ratios between two `SizedFile` instances
-  - Returns `num` representing the ratio
+  - Returns `double` representing the ratio
   - Example: `used.ratioTo(total)` returns 0.244 for 250 MB / 1 GB
 - `SizedFile.zero` static constant for zero-byte instances
 - Comprehensive test suite expanded to 104 tests
