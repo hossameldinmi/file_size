@@ -377,8 +377,8 @@ bool isValidFileSize(SizedFile fileSize, SizedFile maxSize) {
 // Storage management
 void manageStorage(List<SizedFile> files, SizedFile availableSpace) {
   final totalSize = files.fold<SizedFile>(
-    SizedFile.b(0),
-    (sum, file) => SizedFile.b(sum.inBytes + file.inBytes),
+    SizedFile.zero,
+    (sum, file) => sum + file,
   );
   
   if (totalSize > availableSpace) {

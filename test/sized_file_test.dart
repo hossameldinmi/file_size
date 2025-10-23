@@ -509,7 +509,8 @@ void main() {
       final result = size1 + size2; // 1560576 bytes
 
       expect(result.inBytes, 1560576);
-      expect(result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
+      expect(
+          result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
     });
 
     test('addition with zero', () {
@@ -606,7 +607,8 @@ void main() {
       final withoutVideos = everything - videos;
 
       expect(totalMedia.inBytes, photos.inBytes + videos.inBytes);
-      expect(everything.inBytes, documents.inBytes + photos.inBytes + videos.inBytes);
+      expect(everything.inBytes,
+          documents.inBytes + photos.inBytes + videos.inBytes);
       expect(withoutVideos.inBytes, documents.inBytes + photos.inBytes);
     });
 
