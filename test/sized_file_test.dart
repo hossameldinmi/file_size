@@ -197,7 +197,7 @@ void main() {
 
     test('formats large GB values', () {
       final fileSize = SizedFile.gb(1500.5);
-      expect(fileSize.format(), '1500.50 GB');
+      expect(fileSize.format(), '1.47 TB');
     });
   });
 
@@ -521,8 +521,7 @@ void main() {
       final result = size1 + size2; // 1560576 bytes
 
       expect(result.inBytes, 1560576);
-      expect(
-          result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
+      expect(result.inMB, closeTo(1.48828125, 0.001)); // More tolerant precision
     });
 
     test('addition with zero', () {
@@ -619,8 +618,7 @@ void main() {
       final withoutVideos = everything - videos;
 
       expect(totalMedia.inBytes, photos.inBytes + videos.inBytes);
-      expect(everything.inBytes,
-          documents.inBytes + photos.inBytes + videos.inBytes);
+      expect(everything.inBytes, documents.inBytes + photos.inBytes + videos.inBytes);
       expect(withoutVideos.inBytes, documents.inBytes + photos.inBytes);
     });
 
@@ -1004,6 +1002,80 @@ void main() {
       final result = SizedFile.average(sizes);
 
       expect(result.inKB, closeTo(408.0, 1.0));
+    });
+  });
+
+  group('Numeric extensions', () {
+    test('.b extension creates SizedFile in bytes', () {
+      expect(1024.b, SizedFile.b(1024));
+      expect(0.b, SizedFile.b(0));
+      expect(100.b.inBytes, 100);
+      expect(1024.b.inKB, 1.0);
+    });
+
+    test('.kb extension creates SizedFile in kilobytes', () {
+      expect(1.kb, SizedFile.kb(1));
+      expect(1.5.kb, SizedFile.kb(1.5));
+      expect(10.kb.inBytes, 10240);
+      expect(10.kb.inKB, 10.0);
+    });
+
+    test('.mb extension creates SizedFile in megabytes', () {
+      expect(1.mb, SizedFile.mb(1));
+      expect(2.5.mb, SizedFile.mb(2.5));
+      expect(5.mb.inBytes, 5242880);
+      expect(5.mb.inMB, 5.0);
+    });
+
+    test('.gb extension creates SizedFile in gigabytes', () {
+      expect(1.gb, SizedFile.gb(1));
+      expect(0.5.gb, SizedFile.gb(0.5));
+      expect(2.gb.inBytes, 2147483648);
+      expect(2.gb.inGB, 2.0);
+    });
+
+    test('.tb extension creates SizedFile in terabytes', () {
+      expect(1.tb, SizedFile.tb(1));
+      expect(0.1.tb, SizedFile.tb(0.1));
+      expect(1.tb.inBytes, 1099511627776);
+      expect(1.tb.inTB, 1.0);
+    });
+
+    test('extensions work with integer values', () {
+      expect(10.b.inBytes, 10);
+      expect(5.kb.inKB, 5.0);
+      expect(3.mb.inMB, 3.0);
+      expect(2.gb.inGB, 2.0);
+      expect(1.tb.inTB, 1.0);
+    });
+
+    test('extensions work with double values', () {
+      expect(10.5.kb.inKB, 10.5);
+      expect(2.5.mb.inMB, 2.5);
+      expect(1.5.gb.inGB, 1.5);
+      expect(0.5.tb.inTB, 0.5);
+    });
+
+    test('extensions can be used in arithmetic operations', () {
+      final result = 1.mb + 512.kb;
+      expect(result.inBytes, 1572864);
+
+      final diff = 2.gb - 1.gb;
+      expect(diff.inGB, 1.0);
+    });
+
+    test('extensions maintain precision', () {
+      expect(1.kb.inBytes, 1024);
+      expect(1.mb.inBytes, 1048576);
+      expect(1.gb.inBytes, 1073741824);
+      expect(1.tb.inBytes, 1099511627776);
+    });
+
+    test('byte extension converts to int', () {
+      // The .b extension should convert to int
+      expect(1024.5.b.inBytes, 1024); // Should truncate decimal
+      expect(999.9.b.inBytes, 999);
+      expect(1000.1.b.inBytes, 1000);
     });
   });
 }
