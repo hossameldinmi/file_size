@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'package:sized_file/src/converter_strategy.dart';
 
 /// A utility class for handling file size conversions and formatting.
 ///
@@ -13,11 +13,12 @@ import 'dart:math';
 /// print(fileSize.inBytes);  // 5242880
 /// ```
 class SizedFile implements Comparable<SizedFile> {
-  /// The divider used for unit conversions (1024 for binary).
+  /// The conversion strategy used for all unit conversions.
   ///
-  /// This aligns with how most operating systems and storage devices
-  /// report file sizes (KiB, MiB, GiB rather than KB, MB, GB).
-  static const int _divider = 1024;
+  /// This static instance manages the conversion logic between different
+  /// file size units (bytes, KB, MB, GB, TB) using a consistent divider
+  /// of 1024 (binary units).
+  static final _strategy = ConverterStrategy();
 
   /// Creates a [SizedFile] instance with zero bytes.
   ///
@@ -46,10 +47,10 @@ class SizedFile implements Comparable<SizedFile> {
   /// Throws [AssertionError] if [inBytes] is negative.
   SizedFile.b(this.inBytes)
       : assert(inBytes >= 0, 'File size cannot be negative'),
-        inKB = _kbConverter.fromBytes(inBytes),
-        inMB = _mbConverter.fromBytes(inBytes),
-        inGB = _gbConverter.fromBytes(inBytes),
-        inTB = _tbConverter.fromBytes(inBytes);
+        inKB = _strategy.kb.fromBytes(inBytes),
+        inMB = _strategy.mb.fromBytes(inBytes),
+        inGB = _strategy.gb.fromBytes(inBytes),
+        inTB = _strategy.tb.fromBytes(inBytes);
 
   /// The size in bytes.
   ///
@@ -95,7 +96,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  SizedFile.kb(num inKB) : this.b(_kbConverter.toBytes(inKB));
+  SizedFile.kb(num inKB) : this.b(_strategy.kb.toBytes(inKB));
 
   /// Creates a [SizedFile] instance from megabytes.
   ///
@@ -104,7 +105,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  SizedFile.mb(num inMB) : this.b(_mbConverter.toBytes(inMB));
+  SizedFile.mb(num inMB) : this.b(_strategy.mb.toBytes(inMB));
 
   /// Creates a [SizedFile] instance from gigabytes.
   ///
@@ -113,7 +114,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  SizedFile.gb(num inGB) : this.b(_gbConverter.toBytes(inGB));
+  SizedFile.gb(num inGB) : this.b(_strategy.gb.toBytes(inGB));
 
   /// Creates a [SizedFile] instance from terabytes.
   ///
@@ -122,7 +123,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// final fileSize = SizedFile.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  SizedFile.tb(num inTB) : this.b(_tbConverter.toBytes(inTB));
+  SizedFile.tb(num inTB) : this.b(_strategy.tb.toBytes(inTB));
 
   /// Creates a [SizedFile] instance by combining multiple unit values.
   ///
@@ -171,20 +172,24 @@ class SizedFile implements Comparable<SizedFile> {
       SizedFile.b(
         [
           bytes,
-          _kbConverter.toBytes(kb),
-          _mbConverter.toBytes(mb),
-          _gbConverter.toBytes(gb),
-          _tbConverter.toBytes(tb),
+          _strategy.kb.toBytes(kb),
+          _strategy.mb.toBytes(mb),
+          _strategy.gb.toBytes(gb),
+          _strategy.tb.toBytes(tb),
         ].reduce((a, b) => a + b),
       );
 
   /// Formats the file size as a human-readable string.
   ///
-  /// Automatically selects the most appropriate unit based on the size:
-  /// - Less than 1 KB: displays in bytes (B)
-  /// - Less than 1 MB: displays in kilobytes (KB)
-  /// - Less than 1 GB: displays in megabytes (MB)
-  /// - 1 GB or more: displays in gigabytes (GB)
+  /// Automatically selects the most appropriate unit based on the size magnitude:
+  /// - Less than 1 KB (< 1024 bytes): displays in bytes (B)
+  /// - Less than 1 MB (< 1024 KB): displays in kilobytes (KB)
+  /// - Less than 1 GB (< 1024 MB): displays in megabytes (MB)
+  /// - Less than 1 TB (< 1024 GB): displays in gigabytes (GB)
+  /// - 1 TB or more (≥ 1024 GB): displays in terabytes (TB)
+  ///
+  /// This smart selection ensures the output is always readable and uses
+  /// the most meaningful unit for the given size.
   ///
   /// Parameters:
   /// - [fractionDigits]: Number of decimal places to show (default: 2).
@@ -198,7 +203,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// print(fileSize.format());                    // "1.50 KB"
   /// print(fileSize.format(fractionDigits: 0));   // "2 KB"
   ///
-  /// final custom = {'B': 'bytes', 'KB': 'kilobytes', 'MB': 'megabytes', 'GB': 'gigabytes'};
+  /// final custom = {'B': 'bytes', 'KB': 'kilobytes', 'MB': 'megabytes', 'GB': 'gigabytes', 'TB': 'terabytes'};
   /// print(fileSize.format(postfixes: custom));   // "1.50 kilobytes"
   /// ```
   ///
@@ -208,16 +213,16 @@ class SizedFile implements Comparable<SizedFile> {
     postfixes ??= _postfixesGenerator();
 
     // Select the most appropriate unit based on size
-    if (inBytes < _divider) {
+    if (inBytes < _strategy.divider) {
       // Display in bytes (no decimals for byte values)
       return '$inBytes ${postfixes['B']}';
-    } else if (inKB < _divider) {
+    } else if (inKB < _strategy.divider) {
       // Display in kilobytes
       return '${inKB.toStringAsFixed(fractionDigits)} ${postfixes['KB']}';
-    } else if (inMB < _divider) {
+    } else if (inMB < _strategy.divider) {
       // Display in megabytes
       return '${inMB.toStringAsFixed(fractionDigits)} ${postfixes['MB']}';
-    } else if (inGB < _divider) {
+    } else if (inGB < _strategy.divider) {
       // Display in gigabytes
       return '${inGB.toStringAsFixed(fractionDigits)} ${postfixes['GB']}';
     } else {
@@ -228,13 +233,22 @@ class SizedFile implements Comparable<SizedFile> {
 
   /// Sets a global postfix generator for all [SizedFile] instances.
   ///
-  /// This is useful for internationalization or custom unit labeling.
-  /// The generator function will be called whenever [format] needs
-  /// default postfixes.
+  /// This method allows you to customize the unit labels used when formatting
+  /// file sizes across your entire application. It's particularly useful for:
+  /// - **Internationalization**: Translating unit labels to different languages
+  /// - **Custom branding**: Using company-specific terminology
+  /// - **Alternative formats**: Using full names ("bytes") instead of abbreviations ("B")
+  ///
+  /// Once set, the generator function will be called by [format] whenever
+  /// it needs default postfixes (i.e., when no custom postfixes are provided
+  /// as a parameter).
+  ///
+  /// The generator function must return a map containing all five unit keys:
+  /// 'B', 'KB', 'MB', 'GB', and 'TB'.
   ///
   /// Example:
   /// ```dart
-  /// // Set custom postfixes
+  /// // Set custom postfixes for internationalization (Spanish)
   /// SizedFile.setPostfixesGenerator(() {
   ///   return {
   ///     'B': 'B',
@@ -245,21 +259,40 @@ class SizedFile implements Comparable<SizedFile> {
   ///   };
   /// });
   ///
+  /// // Use full unit names instead of abbreviations
+  /// SizedFile.setPostfixesGenerator(() {
+  ///   return {
+  ///     'B': 'bytes',
+  ///     'KB': 'kilobytes',
+  ///     'MB': 'megabytes',
+  ///     'GB': 'gigabytes',
+  ///     'TB': 'terabytes',
+  ///   };
+  /// });
+  ///
   /// final fileSize = SizedFile.mb(5);
-  /// print(fileSize.format()); // Uses custom postfixes
+  /// print(fileSize.format()); // "5.00 megabytes" (uses custom postfixes)
   /// ```
   ///
   /// Parameters:
   /// - [generator]: A function that returns a map of unit postfixes.
-  ///   The map should contain keys: 'B', 'KB', 'MB', 'GB', 'TB'.
+  ///   The map must contain keys: 'B', 'KB', 'MB', 'GB', 'TB'.
   static void setPostfixesGenerator(Map<String, String> Function() generator) {
     _postfixesGenerator = generator;
   }
 
-  /// The global postfix generator function.
+  /// The global postfix generator function used for formatting output.
   ///
-  /// Returns a map of default English unit labels.
-  /// Can be overridden using [setPostfixesGenerator].
+  /// This function returns a map containing unit label postfixes that are
+  /// appended to numerical values when formatting file sizes. By default,
+  /// it returns standard English unit labels ('B', 'KB', 'MB', 'GB', 'TB').
+  ///
+  /// The generator can be customized globally using [setPostfixesGenerator]
+  /// to support internationalization, custom branding, or alternative naming
+  /// conventions (e.g., "bytes", "kilobytes" instead of "B", "KB").
+  ///
+  /// Each [format] call uses this generator unless custom postfixes are
+  /// explicitly provided as a parameter.
   static Map<String, String> Function() _postfixesGenerator = () {
     return <String, String>{
       'B': 'B',
@@ -351,9 +384,8 @@ class SizedFile implements Comparable<SizedFile> {
   /// final total = size1 + size2;
   /// print(total.format()); // "1.49 MB"
   /// ```
-  SizedFile operator +(covariant SizedFile other) {
-    return SizedFile.b(inBytes + other.inBytes);
-  }
+  SizedFile operator +(covariant SizedFile other) =>
+      SizedFile.b(inBytes + other.inBytes);
 
   /// Subtracts another [SizedFile] from this one and returns a new [SizedFile].
   ///
@@ -545,31 +577,4 @@ class SizedFile implements Comparable<SizedFile> {
     final total = sum(sizes);
     return SizedFile.b((total.inBytes / sizes.length).round());
   }
-
-  static final _kbConverter = _ByteConverter(
-    (kb) => (kb * _divider).toInt(),
-    (bytes) => bytes / _divider,
-  );
-  static final _mbConverter = _ByteConverter(
-    (mb) => (mb * pow(_divider, 2)).toInt(),
-    (bytes) => bytes / pow(_divider, 2),
-  );
-  static final _gbConverter = _ByteConverter(
-    (gb) => (gb * pow(_divider, 3)).toInt(),
-    (bytes) => bytes / pow(_divider, 3),
-  );
-  static final _tbConverter = _ByteConverter(
-    (tb) => (tb * pow(_divider, 4)).toInt(),
-    (bytes) => bytes / pow(_divider, 4),
-  );
-}
-
-/// A helper class for converting between bytes and other units.
-///
-/// Encapsulates the conversion logic for a specific unit.
-class _ByteConverter {
-  final int Function(num value) toBytes;
-  final double Function(int bytes) fromBytes;
-
-  const _ByteConverter(this.toBytes, this.fromBytes);
 }
