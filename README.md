@@ -28,6 +28,7 @@ A lightweight and intuitive Dart package for handling file size conversions and 
 ## Features
 
 - 🔄 **Easy Conversions**: Convert between different size units (B, KB, MB, GB, TB)
+- ✨ **Extension Methods**: Create file sizes using intuitive syntax like `5.mb` or `1.gb`
 - 🎯 **Mixed Units Support**: Create file sizes from multiple units with `SizedFile.units`
 - 📊 **Smart Formatting**: Automatically format sizes with appropriate units
 - 🎨 **Customizable**: Configure fraction digits and custom unit postfixes
@@ -46,7 +47,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  sized_file: ^1.2.2
+  sized_file: ^1.3.0
 ```
 
 Then run:
@@ -207,6 +208,45 @@ SizedFile.setPostfixesGenerator(() {
 final fileSize = SizedFile.mb(5);
 print(fileSize.format());  // Uses custom postfixes
 ```
+
+### Extension Methods
+
+The package provides convenient extension methods on `num` (both `int` and `double`) for creating `SizedFile` instances with a more readable syntax:
+
+```dart
+import 'package:sized_file/sized_file.dart';
+
+// Create file sizes using extension methods
+final document = 500.kb;        // 500 kilobytes
+final photo = 2.5.mb;           // 2.5 megabytes
+final video = 1.5.gb;           // 1.5 gigabytes
+final backup = 2.tb;            // 2 terabytes
+final small = 1024.b;           // 1024 bytes
+
+// Use in expressions
+final total = 1.gb + 500.mb + 256.kb;
+print(total.format()); // "1.49 GB"
+
+// Works with arithmetic
+final doubled = 5.mb * 2;
+print(doubled.format()); // "10.00 MB"
+
+// Chain operations
+final result = 10.gb - 2.gb + 500.mb;
+print(result.format()); // "8.49 GB"
+```
+
+#### Available Extensions
+
+| Extension | Description | Example | Equivalent To |
+|-----------|-------------|---------|---------------|
+| `.b` | Bytes | `1024.b` | `SizedFile.b(1024)` |
+| `.kb` | Kilobytes | `1.5.kb` | `SizedFile.kb(1.5)` |
+| `.mb` | Megabytes | `100.mb` | `SizedFile.mb(100)` |
+| `.gb` | Gigabytes | `2.5.gb` | `SizedFile.gb(2.5)` |
+| `.tb` | Terabytes | `1.tb` | `SizedFile.tb(1)` |
+
+**Note:** The `.b` extension automatically converts to integer (truncates decimals) since bytes must be whole numbers.
 
 ### Arithmetic Operations
 

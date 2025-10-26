@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-10-26
+
+### Added
+- Extension methods on `num` for convenient `SizedFile` creation
+  - `.b` extension: Creates `SizedFile` from bytes (converts to integer)
+  - `.kb` extension: Creates `SizedFile` from kilobytes
+  - `.mb` extension: Creates `SizedFile` from megabytes
+  - `.gb` extension: Creates `SizedFile` from gigabytes
+  - `.tb` extension: Creates `SizedFile` from terabytes
+  - Example: `5.mb` is equivalent to `SizedFile.mb(5)`
+- Comprehensive test coverage for all extension methods (10 new tests, 126 total)
+- Extension methods documentation in README with usage examples and comparison table
+
+### Changed
+- Enhanced documentation across all source files:
+  - `ByteConverter`: Added comprehensive class and method documentation
+  - `UnitConverter` (formerly `ConverterStrategy`): Enhanced documentation with detailed explanations
+  - `numericExtensions`: Added detailed documentation for each extension method
+  - `SizedFile`: Improved documentation for `_strategy`, `_postfixesGenerator`, `format()`, and `setPostfixesGenerator()`
+- Improved `format()` method documentation with clearer unit selection criteria including TB range
+- Updated README Features section to highlight extension methods
+
+### Improved
+- Better code readability with expressive extension syntax
+- More intuitive API for creating file size instances
+- Clearer documentation throughout the codebase
+
 ## [1.2.2] - 2025-10-23
 
 ### Added
@@ -104,6 +131,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully documented code with dartdoc comments
 - Tested and verified with 100% test coverage
 
+[1.3.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.3.0
 [1.2.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.2.2
 [1.2.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.2.0
 [1.1.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.1.2
