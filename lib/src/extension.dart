@@ -16,7 +16,7 @@ import 'package:sized_file/sized_file.dart';
 /// final total = 2.mb + 512.kb;    // 2.5 megabytes
 /// final small = 1024.b;           // 1024 bytes
 /// ```
-extension numericExtensions on num {
+extension NumericExtensions on num {
   /// Converts the number to a [SizedFile] representing bytes.
   ///
   /// The value is automatically converted to an integer, truncating any

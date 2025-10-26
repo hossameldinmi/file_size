@@ -23,6 +23,11 @@ void main() {
   mixedUnitsExample();
   print('');
 
+  // Example 2.5: Using extension methods
+  print('2.5. Using extension methods for convenient creation:');
+  extensionMethodsExample();
+  print('');
+
   // Example 3: Accessing different units
   print('3. Accessing different units:');
   final fileSize = SizedFile.mb(5);
@@ -151,6 +156,61 @@ void mixedUnitsExample() {
   print('  units(mb: 500): ${singleUnit.format()}');
   print('  mb(500): ${directConstructor.format()}');
   print('  Are equal: ${singleUnit == directConstructor}');
+}
+
+/// Demonstrates using extension methods for creating SizedFile instances
+void extensionMethodsExample() {
+  print('Creating SizedFile instances with extension methods:');
+
+  // Basic extension usage
+  final document = 500.kb;
+  final photo = 2.5.mb;
+  final video = 1.5.gb;
+  final backup = 2.tb;
+  final small = 1024.b;
+
+  print('  Document: ${document.format()} (using 500.kb)');
+  print('  Photo: ${photo.format()} (using 2.5.mb)');
+  print('  Video: ${video.format()} (using 1.5.gb)');
+  print('  Backup: ${backup.format()} (using 2.tb)');
+  print('  Small file: ${small.format()} (using 1024.b)');
+  print('');
+
+  print('Using extensions in expressions:');
+  final total = 1.gb + 500.mb + 256.kb;
+  print('  1.gb + 500.mb + 256.kb = ${total.format()}');
+
+  final difference = 10.gb - 2.5.gb;
+  print('  10.gb - 2.5.gb = ${difference.format()}');
+
+  final doubled = 5.mb * 2;
+  print('  5.mb * 2 = ${doubled.format()}');
+
+  final half = 1.gb / 2;
+  print('  1.gb / 2 = ${half.format()}');
+  print('');
+
+  print('Comparing extension vs constructor:');
+  final ext1 = 100.mb;
+  final cons1 = SizedFile.mb(100);
+  print('  100.mb == SizedFile.mb(100): ${ext1 == cons1}');
+
+  final ext2 = 1024.b;
+  final cons2 = SizedFile.b(1024);
+  print('  1024.b == SizedFile.b(1024): ${ext2 == cons2}');
+  print('');
+
+  print('Complex calculations with extensions:');
+  final project = 2.gb + 750.mb + 512.kb + 256.b;
+  print('  Project size (2.gb + 750.mb + 512.kb + 256.b): ${project.format()}');
+
+  final diskSpace = 1.tb;
+  final used = 650.gb;
+  final available = diskSpace - used;
+  print('  Disk space: ${diskSpace.format()}');
+  print('  Used: ${used.format()}');
+  print('  Available: ${available.format()}');
+  print('');
 }
 
 /// Simulates a file upload progress display

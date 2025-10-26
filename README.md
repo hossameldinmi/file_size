@@ -47,7 +47,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  sized_file: ^1.3.0
+  sized_file: ^1.3.1
 ```
 
 Then run:
