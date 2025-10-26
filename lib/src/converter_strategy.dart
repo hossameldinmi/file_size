@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:sized_file/src/converter.dart';
+import 'package:sized_file/src/byte_converter.dart';
 
 /// A strategy class for managing file size unit conversions.
 ///
