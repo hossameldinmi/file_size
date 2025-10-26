@@ -101,8 +101,7 @@ void comparisonExample() {
   print('');
 
   print('Less than or equal:');
-  print(
-      '  ${medium.format()} <= ${SizedFile.kb(1).format()}: ${medium <= SizedFile.kb(1)}');
+  print('  ${medium.format()} <= ${SizedFile.kb(1).format()}: ${medium <= SizedFile.kb(1)}');
   print('  ${small.format()} <= ${medium.format()}: ${small <= medium}');
   print('');
 
@@ -148,10 +147,8 @@ void collectionsExample() {
   print('Checking if specific sizes exist:');
   final searchSize1 = SizedFile.kb(10);
   final searchSize2 = SizedFile.mb(100);
-  print(
-      '  Contains ${searchSize1.format()}: ${fileTypeMap.containsKey(searchSize1)}');
-  print(
-      '  Contains ${searchSize2.format()}: ${fileTypeMap.containsKey(searchSize2)}');
+  print('  Contains ${searchSize1.format()}: ${fileTypeMap.containsKey(searchSize1)}');
+  print('  Contains ${searchSize2.format()}: ${fileTypeMap.containsKey(searchSize2)}');
 }
 
 /// Demonstrates sorting and ordering
@@ -221,19 +218,13 @@ void practicalUseCases() {
   // Storage capacity planning
   print('Storage capacity planning:');
   final documents = [SizedFile.mb(2), SizedFile.mb(1.5), SizedFile.mb(3)];
-  final photos = [
-    SizedFile.mb(5),
-    SizedFile.mb(4),
-    SizedFile.mb(6),
-    SizedFile.mb(3)
-  ];
+  final photos = [SizedFile.mb(5), SizedFile.mb(4), SizedFile.mb(6), SizedFile.mb(3)];
   final videos = [SizedFile.gb(1), SizedFile.mb(800), SizedFile.gb(1.2)];
 
   final totalDocs = sumSizes(documents);
   final totalPhotos = sumSizes(photos);
   final totalVideos = sumSizes(videos);
-  final grandTotal = SizedFile.b(
-      totalDocs.inBytes + totalPhotos.inBytes + totalVideos.inBytes);
+  final grandTotal = SizedFile.b(totalDocs.inBytes + totalPhotos.inBytes + totalVideos.inBytes);
 
   print('  Documents: ${totalDocs.format()} (${documents.length} files)');
   print('  Photos:    ${totalPhotos.format()} (${photos.length} files)');
@@ -272,33 +263,25 @@ void advancedScenarios() {
   final largeThreshold = SizedFile.mb(100);
 
   final tiny = allFiles.where((f) => f <= tinyThreshold).toList();
-  final small =
-      allFiles.where((f) => f > tinyThreshold && f <= smallThreshold).toList();
-  final medium = allFiles
-      .where((f) => f > smallThreshold && f <= mediumThreshold)
-      .toList();
-  final large = allFiles
-      .where((f) => f > mediumThreshold && f <= largeThreshold)
-      .toList();
+  final small = allFiles.where((f) => f > tinyThreshold && f <= smallThreshold).toList();
+  final medium = allFiles.where((f) => f > smallThreshold && f <= mediumThreshold).toList();
+  final large = allFiles.where((f) => f > mediumThreshold && f <= largeThreshold).toList();
   final huge = allFiles.where((f) => f > largeThreshold).toList();
 
-  print(
-      '  Tiny    (<= ${tinyThreshold.format()}):   ${tiny.length} files - ${tiny.map((f) => f.format()).join(', ')}');
+  print('  Tiny    (<= ${tinyThreshold.format()}):   ${tiny.length} files - ${tiny.map((f) => f.format()).join(', ')}');
   print(
       '  Small   (<= ${smallThreshold.format()}):    ${small.length} files - ${small.map((f) => f.format()).join(', ')}');
   print(
       '  Medium  (<= ${mediumThreshold.format()}):   ${medium.length} files - ${medium.map((f) => f.format()).join(', ')}');
   print(
       '  Large   (<= ${largeThreshold.format()}):  ${large.length} files - ${large.map((f) => f.format()).join(', ')}');
-  print(
-      '  Huge    (> ${largeThreshold.format()}):   ${huge.length} files - ${huge.map((f) => f.format()).join(', ')}');
+  print('  Huge    (> ${largeThreshold.format()}):   ${huge.length} files - ${huge.map((f) => f.format()).join(', ')}');
   print('');
 
   // Priority queue simulation (largest files first)
   print('Priority processing (largest files first):');
   final processingQueue = List<SizedFile>.from(allFiles);
-  processingQueue
-      .sort((a, b) => b.inBytes.compareTo(a.inBytes)); // Descending order
+  processingQueue.sort((a, b) => b.inBytes.compareTo(a.inBytes)); // Descending order
 
   print('  Processing order:');
   for (int i = 0; i < processingQueue.length; i++) {
@@ -342,8 +325,7 @@ void arithmeticOperations() {
   final newFile1 = SizedFile.mb(25);
   final newFile2 = SizedFile.mb(75);
   currentUsage = currentUsage + newFile1 + newFile2;
-  print(
-      '  After adding ${newFile1.format()} + ${newFile2.format()}: ${currentUsage.format()}');
+  print('  After adding ${newFile1.format()} + ${newFile2.format()}: ${currentUsage.format()}');
 
   // Remove a file
   final deletedFile = SizedFile.mb(30);
@@ -353,8 +335,7 @@ void arithmeticOperations() {
   // Try to subtract more than available (should clamp to 0)
   final hugeFile = SizedFile.gb(10);
   final result = currentUsage - hugeFile;
-  print(
-      '  Trying to delete ${hugeFile.format()} (larger than current): ${result.format()}');
+  print('  Trying to delete ${hugeFile.format()} (larger than current): ${result.format()}');
   print('');
 
   // Batch operations
@@ -386,10 +367,8 @@ void arithmeticOperations() {
 
   final grandTotal = docTotal + imageTotal;
 
-  print(
-      '  Documents total: ${docTotal.format()} (${documentFiles.length} files)');
-  print(
-      '  Images total:    ${imageTotal.format()} (${imageFiles.length} files)');
+  print('  Documents total: ${docTotal.format()} (${documentFiles.length} files)');
+  print('  Images total:    ${imageTotal.format()} (${imageFiles.length} files)');
   print('  Grand total:     ${grandTotal.format()}');
   print('');
 

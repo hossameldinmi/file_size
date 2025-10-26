@@ -224,8 +224,7 @@ void demonstrateEqualityAndComparison() {
   print('  ${small.format()} < ${medium.format()}: ${small < medium}');
   print('  ${medium.format()} < ${large.format()}: ${medium < large}');
   print('  ${large.format()} > ${small.format()}: ${large > small}');
-  print(
-      '  ${small.format()} <= ${SizedFile.kb(500).format()}: ${small <= SizedFile.kb(500)}');
+  print('  ${small.format()} <= ${SizedFile.kb(500).format()}: ${small <= SizedFile.kb(500)}');
   print('  ${large.format()} >= ${medium.format()}: ${large >= medium}');
 
   print('');
@@ -305,10 +304,8 @@ void demonstrateFileCollections() {
   final smallFiles = allFiles.where((file) => file <= threshold).toList();
 
   print('  All files: ${allFiles.map((f) => f.format()).join(', ')}');
-  print(
-      '  Large files (> ${threshold.format()}): ${largeFiles.map((f) => f.format()).join(', ')}');
-  print(
-      '  Small files (<= ${threshold.format()}): ${smallFiles.map((f) => f.format()).join(', ')}');
+  print('  Large files (> ${threshold.format()}): ${largeFiles.map((f) => f.format()).join(', ')}');
+  print('  Small files (<= ${threshold.format()}): ${smallFiles.map((f) => f.format()).join(', ')}');
 
   print('');
   print('Storage capacity check:');
@@ -320,8 +317,7 @@ void demonstrateFileCollections() {
 
   print('  Total files size: ${totalStorage.format()}');
   print('  Available space: ${availableSpace.format()}');
-  print(
-      '  Fits in storage: ${totalStorage <= availableSpace ? "✓ Yes" : "✗ No"}');
+  print('  Fits in storage: ${totalStorage <= availableSpace ? "✓ Yes" : "✗ No"}');
 }
 
 /// Demonstrates arithmetic operations with SizedFile objects
@@ -380,16 +376,14 @@ void demonstrateArithmeticOperations() {
   print('  Building total from individual files:');
   for (int i = 0; i < files.length; i++) {
     runningTotal = runningTotal + files[i];
-    print(
-        '    Adding ${files[i].format()}: Running total = ${runningTotal.format()}');
+    print('    Adding ${files[i].format()}: Running total = ${runningTotal.format()}');
   }
 
   final deviceCapacity = SizedFile.gb(2);
   final remainingSpace = deviceCapacity - runningTotal;
   print('  Device capacity: ${deviceCapacity.format()}');
   print('  Remaining space: ${remainingSpace.format()}');
-  print(
-      '  Can fit more files: ${remainingSpace > SizedFile.mb(100) ? "✓ Yes" : "✗ No"}');
+  print('  Can fit more files: ${remainingSpace > SizedFile.mb(100) ? "✓ Yes" : "✗ No"}');
   print('');
 
   // Example 8: Multiplication and Division operations
@@ -499,11 +493,9 @@ void staticHelpersExample() {
   final largeSizes = sizes.where((s) => s > SizedFile.mb(100)).toList();
   final smallSizes = sizes.where((s) => s <= SizedFile.mb(100)).toList();
 
-  print(
-      '  Large files (> 100 MB): ${largeSizes.map((s) => s.format()).join(", ")}');
+  print('  Large files (> 100 MB): ${largeSizes.map((s) => s.format()).join(", ")}');
   print('  Large files total: ${SizedFile.sum(largeSizes).format()}');
-  print(
-      '  Small files (≤ 100 MB): ${smallSizes.map((s) => s.format()).join(", ")}');
+  print('  Small files (≤ 100 MB): ${smallSizes.map((s) => s.format()).join(", ")}');
   print('  Small files total: ${SizedFile.sum(smallSizes).format()}');
 }
 
@@ -547,8 +539,7 @@ void comparableExample() {
 
   print('  ${size1.format()} vs ${size2.format()}');
   print('  compareTo result: $comparison');
-  print(
-      '  Interpretation: ${comparison < 0 ? "first is smaller" : comparison > 0 ? "first is larger" : "equal"}');
+  print('  Interpretation: ${comparison < 0 ? "first is smaller" : comparison > 0 ? "first is larger" : "equal"}');
 }
 
 /// Demonstrates real-world practical scenarios
@@ -592,8 +583,7 @@ void realWorldScenarios() {
   print('  Compressed: ${compressedSize.format()}');
   print('  Saved: ${savedSpace.format()}');
   print('  Compression ratio: ${(compressionRatio * 100).toStringAsFixed(1)}%');
-  print(
-      '  Space reduction: ${((1 - compressionRatio) * 100).toStringAsFixed(1)}%');
+  print('  Space reduction: ${((1 - compressionRatio) * 100).toStringAsFixed(1)}%');
   print('');
 
   print('Scenario 4: Multi-tier storage allocation');
@@ -606,6 +596,5 @@ void realWorldScenarios() {
   print('  Hot (SSD, 20%): ${hotStorage.format()}');
   print('  Warm (HDD, 30%): ${warmStorage.format()}');
   print('  Cold (Archive, 50%): ${coldStorage.format()}');
-  print(
-      '  Verification: ${(hotStorage + warmStorage + coldStorage == totalStorage ? "✓" : "✗")}');
+  print('  Verification: ${(hotStorage + warmStorage + coldStorage == totalStorage ? "✓" : "✗")}');
 }

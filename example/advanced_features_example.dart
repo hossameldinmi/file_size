@@ -186,11 +186,9 @@ void realWorldExamples() {
 
   print('\n  User Storage Quota:');
   print('  Quota: ${userQuota.format()}');
-  print(
-      '  Used: ${currentUsage.format()} (${(usagePercent * 100).toStringAsFixed(1)}%)');
+  print('  Used: ${currentUsage.format()} (${(usagePercent * 100).toStringAsFixed(1)}%)');
   print('  Remaining: ${remaining.format()}');
-  print(
-      '  Status: ${usagePercent > 0.9 ? "⚠️ Critical" : usagePercent > 0.75 ? "⚠️ Warning" : "✓ OK"}');
+  print('  Status: ${usagePercent > 0.9 ? "⚠️ Critical" : usagePercent > 0.75 ? "⚠️ Warning" : "✓ OK"}');
 
   // Example 2: Backup rotation
   print('\nExample 2: Backup Rotation Strategy');
