@@ -11,7 +11,7 @@ repository: https://github.com/hossameldinmi/sized_file
 
 topics:
   - bytes
-  - file-size
+  - files
   - binary
   - storage
   - format
