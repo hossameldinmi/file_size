@@ -11,15 +11,10 @@ repository: https://github.com/hossameldinmi/sized_file
 
 topics:
   - bytes
-  - file
   - file-size
   - binary
   - storage
-  - data-size
   - format
-  - human-readable
-  - conversion
-  - size
 
 environment:
   sdk: ">=2.12.0 <4.0.0"
