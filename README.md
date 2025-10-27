@@ -23,7 +23,7 @@
 
 ---
 
-A lightweight and intuitive Dart package for handling file size conversions and formatting. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes with ease, and format them for human-readable display.
+A lightweight and intuitive Dart package for file size conversions and formatting them for human-readable display. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes using constructors or convenient extension methods. Supports arithmetic operations, comparisons, and localization for a complete file size handling solution.
 
 ## Features
 
@@ -47,7 +47,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  sized_file: ^1.3.1
+  sized_file: ^1.3.2
 ```
 
 Then run:
