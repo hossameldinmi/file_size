@@ -1,11 +1,7 @@
 name: sized_file
-version: 1.3.2
+version: 1.3.3
 
-description: A lightweight and intuitive Dart package for file size conversions and
-  formatting them for human-readable display.
-  Convert between bytes, kilobytes, megabytes, gigabytes, 
-  and terabytes using constructors or convenient extension methods.
-  Supports arithmetic operations, comparisons, and localization for a complete file size handling solution.
+description: Lightweight and intuitive package for file size conversions and human-readable formatting. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes. Easy to use utils.
 
 repository: https://github.com/hossameldinmi/sized_file
 
