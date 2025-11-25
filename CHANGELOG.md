@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-11-26
+### Changed
+- **BREAKING**: Renamed package from `sized_file` to `file_sized`
+  - Update your imports from `package:sized_file/sized_file.dart` to `package:file_sized/file_sized.dart`
+  - All functionality remains the same, only the package name has changed
+- **BREAKING**: Renamed class from `SizedFile` to `FileSize`
+- **BREAKING**: Renamed main library file from `sized_file.dart` to `file_sized.dart`
+- Updated repository URL to reflect new package name
+- Updated all documentation and examples with new package and class names
+
+### Migration Guide
+To migrate from `sized_file` to `file_sized`:
+1. Update your `pubspec.yaml`:
+   ```yaml
+   dependencies:
+     file_sized: ^2.0.0  # was: sized_file: ^1.3.4
+   ```
+2. Update your imports:
+   ```dart
+   import 'package:file_sized/file_sized.dart';  // was: package:sized_file/sized_file.dart
+   ```
+3. Update class references:
+   ```dart
+   final size = FileSize.mb(5);  // was: SizedFile.mb(5)
+   ```
+
+
+  
 ## [1.3.3] - 2025-10-26
 ### Changed
 - edit package description (Max Length:180 characters)
@@ -149,6 +177,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type-safe API with proper error handling
 - Fully documented code with dartdoc comments
 - Tested and verified with 100% test coverage
+
+[2.0.0]: https://github.com/hossameldinmi/file_sized/releases/tag/v2.0.0
 
 [1.3.1]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.3.1
 [1.3.0]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.3.0

@@ -1,5 +1,5 @@
 name: file_sized
-version: 0.0.3-alpha.1
+version: 2.0.0
 
 description: Lightweight and intuitive package for file size conversions and human-readable formatting. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes. Easy to use utils.
 
