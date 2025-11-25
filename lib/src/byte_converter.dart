@@ -7,7 +7,7 @@
 /// - [fromBytes]: Converts from bytes to the unit
 ///
 /// This class is used internally by [ConverterStrategy] to handle all
-/// unit conversion operations consistently across the sized_file library.
+/// unit conversion operations consistently across the file_sized library.
 ///
 /// Example usage (internal):
 /// ```dart

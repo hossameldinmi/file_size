@@ -1,6 +1,6 @@
-import 'package:sized_file/sized_file.dart';
+import 'package:file_sized/file_sized.dart';
 
-/// Convenient extension methods on [num] for creating [SizedFile] instances.
+/// Convenient extension methods on [num] for creating [FileSize] instances.
 ///
 /// These extensions provide syntactic sugar for creating file size objects
 /// using intuitive notation like `5.mb` or `1.gb`, making code more readable
@@ -17,7 +17,7 @@ import 'package:sized_file/sized_file.dart';
 /// final small = 1024.b;           // 1024 bytes
 /// ```
 extension NumericExtensions on num {
-  /// Converts the number to a [SizedFile] representing bytes.
+  /// Converts the number to a [FileSize] representing bytes.
   ///
   /// The value is automatically converted to an integer, truncating any
   /// decimal places. This ensures byte counts are always whole numbers.
@@ -28,9 +28,9 @@ extension NumericExtensions on num {
   /// final size2 = 1500.5.b;    // 1500 bytes (truncated)
   /// print(size1.inKB);         // 1.0
   /// ```
-  SizedFile get b => SizedFile.b(this.toInt());
+  FileSize get b => FileSize.b(this.toInt());
 
-  /// Converts the number to a [SizedFile] representing kilobytes.
+  /// Converts the number to a [FileSize] representing kilobytes.
   ///
   /// Supports both integer and decimal values for precise size specification.
   ///
@@ -40,9 +40,9 @@ extension NumericExtensions on num {
   /// final size2 = 1.5.kb;      // 1.5 KB = 1,536 bytes
   /// print(size1.inBytes);      // 10240
   /// ```
-  SizedFile get kb => SizedFile.kb(this);
+  FileSize get kb => FileSize.kb(this);
 
-  /// Converts the number to a [SizedFile] representing megabytes.
+  /// Converts the number to a [FileSize] representing megabytes.
   ///
   /// Supports both integer and decimal values for precise size specification.
   ///
@@ -52,9 +52,9 @@ extension NumericExtensions on num {
   /// final document = 5.mb;     // 5 MB = 5,242,880 bytes
   /// print(image.inKB);         // 2560.0
   /// ```
-  SizedFile get mb => SizedFile.mb(this);
+  FileSize get mb => FileSize.mb(this);
 
-  /// Converts the number to a [SizedFile] representing gigabytes.
+  /// Converts the number to a [FileSize] representing gigabytes.
   ///
   /// Supports both integer and decimal values for precise size specification.
   ///
@@ -64,9 +64,9 @@ extension NumericExtensions on num {
   /// final game = 50.gb;        // 50 GB
   /// print(video.inMB);         // 1536.0
   /// ```
-  SizedFile get gb => SizedFile.gb(this);
+  FileSize get gb => FileSize.gb(this);
 
-  /// Converts the number to a [SizedFile] representing terabytes.
+  /// Converts the number to a [FileSize] representing terabytes.
   ///
   /// Supports both integer and decimal values for precise size specification.
   ///
@@ -76,5 +76,5 @@ extension NumericExtensions on num {
   /// final archive = 0.5.tb;    // 0.5 TB = 512 GB
   /// print(backup.inGB);        // 2048.0
   /// ```
-  SizedFile get tb => SizedFile.tb(this);
+  FileSize get tb => FileSize.tb(this);
 }

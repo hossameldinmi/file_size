@@ -1,6 +1,6 @@
 # File Size Examples
 
-This folder contains example code demonstrating how to use the `sized_file` package with all its features.
+This folder contains example code demonstrating how to use the `file_sized` package with all its features.
 
 ## Running the Examples
 
@@ -28,7 +28,7 @@ dart run advanced_features_example.dart
 ### `main.dart` - Comprehensive Overview
 The main example demonstrates core features and basic usage:
 
-1. **Creating SizedFile instances** from different units (B, KB, MB, GB, TB)
+1. **Creating FileSize instances** from different units (B, KB, MB, GB, TB)
 2. **Accessing values** in different units
 3. **Formatting** with custom fraction digits
 4. **Custom postfixes** for individual format calls
@@ -45,7 +45,7 @@ A dedicated example focusing on equality and comparison features:
 
 1. **Basic Equality Operations** - Same size in different units, hash codes
 2. **Comparison Operations** - All comparison operators (<, <=, >, >=)
-3. **Collections** - Using SizedFile with Set, Map, and other data structures
+3. **Collections** - Using FileSize with Set, Map, and other data structures
 4. **Sorting and Ordering** - Sorting files by size, finding min/max
 5. **Practical Use Cases** - File validation, storage planning
 6. **Arithmetic Operations** - Addition and subtraction examples
@@ -84,11 +84,11 @@ A comprehensive example showcasing all advanced features:
 ### Basic Usage
 
 ```dart
-import 'package:sized_file/sized_file.dart';
+import 'package:file_sized/file_sized.dart';
 
 void main() {
   // Create from megabytes
-  final fileSize = SizedFile.mb(5);
+  final fileSize = FileSize.mb(5);
   
   // Format for display
   print(fileSize.format()); // "5.00 MB"
@@ -102,7 +102,7 @@ void main() {
 ### Custom Formatting
 
 ```dart
-final size = SizedFile.kb(1.5);
+final size = FileSize.kb(1.5);
 
 // Different fraction digits
 print(size.format(fractionDigits: 0)); // "2 KB"

@@ -1,9 +1,13 @@
-name: sized_file
-version: 1.3.3
+name: file_sized
+version: 0.0.3-alpha.1
 
 description: Lightweight and intuitive package for file size conversions and human-readable formatting. Convert between bytes, kilobytes, megabytes, gigabytes, and terabytes. Easy to use utils.
 
-repository: https://github.com/hossameldinmi/sized_file
+repository: https://github.com/hossameldinmi/file_sized
+
+screenshots:
+  - description: The file_sized package logo.
+    path: "assets/icon.png"
 
 topics:
   - bytes
@@ -14,8 +18,6 @@ topics:
 
 environment:
   sdk: ">=2.12.0 <4.0.0"
-
-dependencies: null
 
 dev_dependencies:
   test: ^1.26.3

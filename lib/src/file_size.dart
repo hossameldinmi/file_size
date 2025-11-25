@@ -1,18 +1,18 @@
-import 'package:sized_file/src/converter_strategy.dart';
+import 'package:file_sized/src/converter_strategy.dart';
 
 /// A utility class for handling file size conversions and formatting.
 ///
-/// The [SizedFile] class provides an easy way to work with file sizes across
+/// The [FileSize] class provides an easy way to work with file sizes across
 /// different units (bytes, kilobytes, megabytes, gigabytes, terabytes).
 /// It uses 1024 as the divider (binary) for accurate storage size calculations.
 ///
 /// Example:
 /// ```dart
-/// final fileSize = SizedFile.mb(5);
+/// final fileSize = FileSize.mb(5);
 /// print(fileSize.format()); // "5.00 MB"
 /// print(fileSize.inBytes);  // 5242880
 /// ```
-class SizedFile implements Comparable<SizedFile> {
+class FileSize implements Comparable<FileSize> {
   /// The conversion strategy used for all unit conversions.
   ///
   /// This static instance manages the conversion logic between different
@@ -20,32 +20,32 @@ class SizedFile implements Comparable<SizedFile> {
   /// of 1024 (binary units).
   static final _strategy = ConverterStrategy();
 
-  /// Creates a [SizedFile] instance with zero bytes.
+  /// Creates a [FileSize] instance with zero bytes.
   ///
   /// This is a convenience factory for creating empty file sizes,
   /// useful as initial values in calculations.
   ///
   /// Example:
   /// ```dart
-  /// final total = SizedFile.zero;
+  /// final total = FileSize.zero;
   /// // Use in calculations
-  /// final result = total + SizedFile.mb(10);
+  /// final result = total + FileSize.mb(10);
   /// ```
-  static final zero = SizedFile.b(0);
+  static final zero = FileSize.b(0);
 
-  /// Creates a [SizedFile] instance from bytes.
+  /// Creates a [FileSize] instance from bytes.
   ///
   /// The byte value must be non-negative. All other unit values
   /// (KB, MB, GB) are automatically calculated.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.b(1024);
+  /// final fileSize = FileSize.b(1024);
   /// print(fileSize.inKB); // 1.0
   /// ```
   ///
   /// Throws [AssertionError] if [inBytes] is negative.
-  SizedFile.b(this.inBytes)
+  FileSize.b(this.inBytes)
       : assert(inBytes >= 0, 'File size cannot be negative'),
         inKB = _strategy.kb.fromBytes(inBytes),
         inMB = _strategy.mb.fromBytes(inBytes),
@@ -73,7 +73,7 @@ class SizedFile implements Comparable<SizedFile> {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.tb(1);
+  /// final fileSize = FileSize.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
   final double inGB;
@@ -84,48 +84,48 @@ class SizedFile implements Comparable<SizedFile> {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.gb(5);
+  /// final fileSize = FileSize.gb(5);
   /// print(fileSize.inTB); // 0.0048828125
   /// ```
   final double inTB;
 
-  /// Creates a [SizedFile] instance from kilobytes.
+  /// Creates a [FileSize] instance from kilobytes.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.kb(1.5);
+  /// final fileSize = FileSize.kb(1.5);
   /// print(fileSize.inBytes); // 1536
   /// ```
-  SizedFile.kb(num inKB) : this.b(_strategy.kb.toBytes(inKB));
+  FileSize.kb(num inKB) : this.b(_strategy.kb.toBytes(inKB));
 
-  /// Creates a [SizedFile] instance from megabytes.
+  /// Creates a [FileSize] instance from megabytes.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.mb(100);
+  /// final fileSize = FileSize.mb(100);
   /// print(fileSize.inBytes); // 104857600
   /// ```
-  SizedFile.mb(num inMB) : this.b(_strategy.mb.toBytes(inMB));
+  FileSize.mb(num inMB) : this.b(_strategy.mb.toBytes(inMB));
 
-  /// Creates a [SizedFile] instance from gigabytes.
+  /// Creates a [FileSize] instance from gigabytes.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.gb(2.5);
+  /// final fileSize = FileSize.gb(2.5);
   /// print(fileSize.inMB); // 2560.0
   /// ```
-  SizedFile.gb(num inGB) : this.b(_strategy.gb.toBytes(inGB));
+  FileSize.gb(num inGB) : this.b(_strategy.gb.toBytes(inGB));
 
-  /// Creates a [SizedFile] instance from terabytes.
+  /// Creates a [FileSize] instance from terabytes.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.tb(1);
+  /// final fileSize = FileSize.tb(1);
   /// print(fileSize.inGB); // 1024.0
   /// ```
-  SizedFile.tb(num inTB) : this.b(_strategy.tb.toBytes(inTB));
+  FileSize.tb(num inTB) : this.b(_strategy.tb.toBytes(inTB));
 
-  /// Creates a [SizedFile] instance by combining multiple unit values.
+  /// Creates a [FileSize] instance by combining multiple unit values.
   ///
   /// This factory constructor allows you to specify a file size using a mix
   /// of different units, which are then summed together. This is useful when
@@ -144,32 +144,32 @@ class SizedFile implements Comparable<SizedFile> {
   /// Example:
   /// ```dart
   /// // Create a size of 2 GB + 500 MB + 256 KB
-  /// final fileSize = SizedFile.units(gb: 2, mb: 500, kb: 256);
+  /// final fileSize = FileSize.units(gb: 2, mb: 500, kb: 256);
   /// print(fileSize.format()); // "2.49 GB"
   /// print(fileSize.inMB); // 2560.25
   ///
   /// // Mixed units for precise sizes
-  /// final videoSize = SizedFile.units(gb: 1, mb: 750, kb: 512);
+  /// final videoSize = FileSize.units(gb: 1, mb: 750, kb: 512);
   /// print(videoSize.format()); // "1.73 GB"
   ///
   /// // Works with single unit too
-  /// final smallFile = SizedFile.units(kb: 500);
+  /// final smallFile = FileSize.units(kb: 500);
   /// print(smallFile.format()); // "500.00 KB"
   ///
   /// // Combining bytes with larger units
-  /// final precise = SizedFile.units(mb: 10, bytes: 1024);
+  /// final precise = FileSize.units(mb: 10, bytes: 1024);
   /// print(precise.inBytes); // 10486272 (10 MB + 1024 bytes)
   /// ```
   ///
-  /// Returns a new [SizedFile] instance representing the sum of all provided units.
-  factory SizedFile.units({
+  /// Returns a new [FileSize] instance representing the sum of all provided units.
+  factory FileSize.units({
     int bytes = 0,
     num kb = 0,
     num mb = 0,
     num gb = 0,
     num tb = 0,
   }) =>
-      SizedFile.b(
+      FileSize.b(
         [
           bytes,
           _strategy.kb.toBytes(kb),
@@ -199,7 +199,7 @@ class SizedFile implements Comparable<SizedFile> {
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.kb(1.5);
+  /// final fileSize = FileSize.kb(1.5);
   /// print(fileSize.format());                    // "1.50 KB"
   /// print(fileSize.format(fractionDigits: 0));   // "2 KB"
   ///
@@ -231,7 +231,7 @@ class SizedFile implements Comparable<SizedFile> {
     }
   }
 
-  /// Sets a global postfix generator for all [SizedFile] instances.
+  /// Sets a global postfix generator for all [FileSize] instances.
   ///
   /// This method allows you to customize the unit labels used when formatting
   /// file sizes across your entire application. It's particularly useful for:
@@ -249,7 +249,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// Example:
   /// ```dart
   /// // Set custom postfixes for internationalization (Spanish)
-  /// SizedFile.setPostfixesGenerator(() {
+  /// FileSize.setPostfixesGenerator(() {
   ///   return {
   ///     'B': 'B',
   ///     'KB': 'KB',
@@ -260,7 +260,7 @@ class SizedFile implements Comparable<SizedFile> {
   /// });
   ///
   /// // Use full unit names instead of abbreviations
-  /// SizedFile.setPostfixesGenerator(() {
+  /// FileSize.setPostfixesGenerator(() {
   ///   return {
   ///     'B': 'bytes',
   ///     'KB': 'kilobytes',
@@ -270,7 +270,7 @@ class SizedFile implements Comparable<SizedFile> {
   ///   };
   /// });
   ///
-  /// final fileSize = SizedFile.mb(5);
+  /// final fileSize = FileSize.mb(5);
   /// print(fileSize.format()); // "5.00 megabytes" (uses custom postfixes)
   /// ```
   ///
@@ -303,121 +303,121 @@ class SizedFile implements Comparable<SizedFile> {
     };
   };
 
-  /// Compares this [SizedFile] with another for equality.
+  /// Compares this [FileSize] with another for equality.
   ///
-  /// Two [SizedFile] instances are equal if they have the same size in bytes.
+  /// Two [FileSize] instances are equal if they have the same size in bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.kb(1);
-  /// final size2 = SizedFile.b(1024);
+  /// final size1 = FileSize.kb(1);
+  /// final size2 = FileSize.b(1024);
   /// print(size1 == size2); // true
   /// ```
   @override
-  bool operator ==(covariant SizedFile other) {
+  bool operator ==(covariant FileSize other) {
     if (identical(this, other)) return true;
     return other.inBytes == inBytes;
   }
 
-  /// Returns a hash code for this [SizedFile].
+  /// Returns a hash code for this [FileSize].
   ///
   /// The hash code is based on the size in bytes.
   @override
   int get hashCode => inBytes.hashCode;
 
-  /// Compares this [SizedFile] with another to determine if it's smaller.
+  /// Compares this [FileSize] with another to determine if it's smaller.
   ///
   /// Returns `true` if this file size is smaller than [other].
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.kb(1);
-  /// final size2 = SizedFile.mb(1);
+  /// final size1 = FileSize.kb(1);
+  /// final size2 = FileSize.mb(1);
   /// print(size1 < size2); // true
   /// ```
-  bool operator <(covariant SizedFile other) => inBytes < other.inBytes;
+  bool operator <(covariant FileSize other) => inBytes < other.inBytes;
 
-  /// Compares this [SizedFile] with another to determine if it's smaller or equal.
+  /// Compares this [FileSize] with another to determine if it's smaller or equal.
   ///
   /// Returns `true` if this file size is smaller than or equal to [other].
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.kb(1);
-  /// final size2 = SizedFile.b(1024);
+  /// final size1 = FileSize.kb(1);
+  /// final size2 = FileSize.b(1024);
   /// print(size1 <= size2); // true
   /// ```
-  bool operator <=(covariant SizedFile other) => inBytes <= other.inBytes;
+  bool operator <=(covariant FileSize other) => inBytes <= other.inBytes;
 
-  /// Compares this [SizedFile] with another to determine if it's larger.
+  /// Compares this [FileSize] with another to determine if it's larger.
   ///
   /// Returns `true` if this file size is larger than [other].
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(1);
-  /// final size2 = SizedFile.kb(1);
+  /// final size1 = FileSize.mb(1);
+  /// final size2 = FileSize.kb(1);
   /// print(size1 > size2); // true
   /// ```
-  bool operator >(covariant SizedFile other) => inBytes > other.inBytes;
+  bool operator >(covariant FileSize other) => inBytes > other.inBytes;
 
-  /// Compares this [SizedFile] with another to determine if it's larger or equal.
+  /// Compares this [FileSize] with another to determine if it's larger or equal.
   ///
   /// Returns `true` if this file size is larger than or equal to [other].
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(1);
-  /// final size2 = SizedFile.b(1048576);
+  /// final size1 = FileSize.mb(1);
+  /// final size2 = FileSize.b(1048576);
   /// print(size1 >= size2); // true
   /// ```
-  bool operator >=(covariant SizedFile other) => inBytes >= other.inBytes;
+  bool operator >=(covariant FileSize other) => inBytes >= other.inBytes;
 
-  /// Adds this [SizedFile] with another and returns a new [SizedFile].
+  /// Adds this [FileSize] with another and returns a new [FileSize].
   ///
   /// The result represents the sum of both file sizes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(1);
-  /// final size2 = SizedFile.kb(500);
+  /// final size1 = FileSize.mb(1);
+  /// final size2 = FileSize.kb(500);
   /// final total = size1 + size2;
   /// print(total.format()); // "1.49 MB"
   /// ```
-  SizedFile operator +(covariant SizedFile other) => SizedFile.b(inBytes + other.inBytes);
+  FileSize operator +(covariant FileSize other) => FileSize.b(inBytes + other.inBytes);
 
-  /// Subtracts another [SizedFile] from this one and returns a new [SizedFile].
+  /// Subtracts another [FileSize] from this one and returns a new [FileSize].
   ///
   /// The result represents the difference between the file sizes.
   /// The result will be clamped to 0 if the subtraction would result in negative bytes.
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.mb(2);
-  /// final size2 = SizedFile.kb(500);
+  /// final size1 = FileSize.mb(2);
+  /// final size2 = FileSize.kb(500);
   /// final difference = size1 - size2;
   /// print(difference.format()); // "1.51 MB"
   /// ```
   ///
-  /// If the second size is larger than the first, returns [SizedFile.b(0)].
-  SizedFile operator -(covariant SizedFile other) {
+  /// If the second size is larger than the first, returns [FileSize.b(0)].
+  FileSize operator -(covariant FileSize other) {
     final result = inBytes - other.inBytes;
-    return SizedFile.b(result < 0 ? 0 : result);
+    return FileSize.b(result < 0 ? 0 : result);
   }
 
-  /// Returns a string representation of this [SizedFile].
+  /// Returns a string representation of this [FileSize].
   ///
   /// Uses the default formatting with 2 decimal places.
   ///
   /// Example:
   /// ```dart
-  /// final size = SizedFile.mb(1.5);
+  /// final size = FileSize.mb(1.5);
   /// print(size.toString()); // "1.50 MB"
   /// ```
   @override
   String toString() => format();
 
-  /// Compares this [SizedFile] with another for ordering.
+  /// Compares this [FileSize] with another for ordering.
   ///
   /// Returns a negative integer if this is smaller than [other],
   /// zero if they are equal, and a positive integer if this is larger.
@@ -427,152 +427,152 @@ class SizedFile implements Comparable<SizedFile> {
   ///
   /// Example:
   /// ```dart
-  /// final size1 = SizedFile.kb(500);
-  /// final size2 = SizedFile.mb(1);
+  /// final size1 = FileSize.kb(500);
+  /// final size2 = FileSize.mb(1);
   /// print(size1.compareTo(size2)); // Negative (size1 < size2)
   ///
-  /// final sizes = [SizedFile.gb(1), SizedFile.kb(100), SizedFile.mb(50)];
+  /// final sizes = [FileSize.gb(1), FileSize.kb(100), FileSize.mb(50)];
   /// sizes.sort(); // Works automatically with Comparable
   /// ```
   @override
-  int compareTo(SizedFile other) => inBytes.compareTo(other.inBytes);
+  int compareTo(FileSize other) => inBytes.compareTo(other.inBytes);
 
-  /// Multiplies this [SizedFile] by a scalar value.
+  /// Multiplies this [FileSize] by a scalar value.
   ///
-  /// Returns a new [SizedFile] representing the scaled size.
+  /// Returns a new [FileSize] representing the scaled size.
   /// Useful for calculating totals, quotas, or proportions.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.mb(10);
+  /// final fileSize = FileSize.mb(10);
   /// final tripled = fileSize * 3;
   /// print(tripled.format()); // "30.00 MB"
   ///
   /// final half = fileSize * 0.5;
   /// print(half.format()); // "5.00 MB"
   /// ```
-  SizedFile operator *(covariant num factor) => SizedFile.b((inBytes * factor).round());
+  FileSize operator *(covariant num factor) => FileSize.b((inBytes * factor).round());
 
-  /// Divides this [SizedFile] by a scalar value.
+  /// Divides this [FileSize] by a scalar value.
   ///
-  /// Returns a new [SizedFile] with the scaled size.
+  /// Returns a new [FileSize] with the scaled size.
   ///
   /// Example:
   /// ```dart
-  /// final fileSize = SizedFile.mb(30);
+  /// final fileSize = FileSize.mb(30);
   /// final third = fileSize / 3;
   /// print(third.format()); // "10.00 MB"
   ///
   /// final half = fileSize / 2;
   /// print(half.format()); // "15.00 MB"
   /// ```
-  SizedFile operator /(covariant num divisor) {
+  FileSize operator /(covariant num divisor) {
     if (divisor == 0) {
       throw ArgumentError('Cannot divide by zero');
     }
-    return SizedFile.b((inBytes / divisor).round());
+    return FileSize.b((inBytes / divisor).round());
   }
 
-  /// Calculates the ratio of this [SizedFile] to another [SizedFile].
+  /// Calculates the ratio of this [FileSize] to another [FileSize].
   ///
   /// Returns a double representing how many times [other] fits into this size.
   /// Useful for calculating percentages, quotas, and proportions.
   ///
   /// Example:
   /// ```dart
-  /// final total = SizedFile.gb(1);
-  /// final used = SizedFile.mb(250);
+  /// final total = FileSize.gb(1);
+  /// final used = FileSize.mb(250);
   /// final ratio = used.ratioTo(total);
   /// print('${(ratio * 100).toStringAsFixed(1)}% used'); // "24.4% used"
   ///
-  /// final original = SizedFile.mb(100);
-  /// final compressed = SizedFile.mb(25);
+  /// final original = FileSize.mb(100);
+  /// final compressed = FileSize.mb(25);
   /// final compressionRatio = compressed.ratioTo(original);
   /// print('Compressed to ${(compressionRatio * 100).toStringAsFixed(0)}%'); // "25%"
   /// ```
   ///
   /// Throws [ArgumentError] if [other] has zero bytes.
-  double ratioTo(SizedFile other) {
+  double ratioTo(FileSize other) {
     if (other.inBytes == 0) {
       throw ArgumentError('Cannot calculate ratio with zero bytes');
     }
     return inBytes / other.inBytes;
   }
 
-  /// Returns the smallest [SizedFile] from a collection.
+  /// Returns the smallest [FileSize] from a collection.
   ///
-  /// If the list is empty, returns a [SizedFile] with zero bytes.
+  /// If the list is empty, returns a [FileSize] with zero bytes.
   ///
   /// Example:
   /// ```dart
   /// final files = [
-  ///   SizedFile.mb(10),
-  ///   SizedFile.mb(5),
-  ///   SizedFile.mb(15),
+  ///   FileSize.mb(10),
+  ///   FileSize.mb(5),
+  ///   FileSize.mb(15),
   /// ];
-  /// final smallest = SizedFile.min(files);
+  /// final smallest = FileSize.min(files);
   /// print(smallest.format()); // "5.00 MB"
   /// ```
-  static SizedFile min(Iterable<SizedFile> sizes) {
-    if (sizes.isEmpty) return SizedFile.zero;
+  static FileSize min(Iterable<FileSize> sizes) {
+    if (sizes.isEmpty) return FileSize.zero;
     return sizes.reduce((a, b) => a <= b ? a : b);
   }
 
-  /// Returns the largest [SizedFile] from a collection.
+  /// Returns the largest [FileSize] from a collection.
   ///
-  /// If the list is empty, returns a [SizedFile] with zero bytes.
+  /// If the list is empty, returns a [FileSize] with zero bytes.
   ///
   /// Example:
   /// ```dart
   /// final files = [
-  ///   SizedFile.mb(10),
-  ///   SizedFile.mb(5),
-  ///   SizedFile.mb(15),
+  ///   FileSize.mb(10),
+  ///   FileSize.mb(5),
+  ///   FileSize.mb(15),
   /// ];
-  /// final largest = SizedFile.max(files);
+  /// final largest = FileSize.max(files);
   /// print(largest.format()); // "15.00 MB"
   /// ```
-  static SizedFile max(Iterable<SizedFile> sizes) {
-    if (sizes.isEmpty) return SizedFile.zero;
+  static FileSize max(Iterable<FileSize> sizes) {
+    if (sizes.isEmpty) return FileSize.zero;
     return sizes.reduce((a, b) => a >= b ? a : b);
   }
 
-  /// Returns the sum of multiple [SizedFile] instances.
+  /// Returns the sum of multiple [FileSize] instances.
   ///
-  /// If the list is empty, returns a [SizedFile] with zero bytes.
+  /// If the list is empty, returns a [FileSize] with zero bytes.
   ///
   /// Example:
   /// ```dart
   /// final files = [
-  ///   SizedFile.mb(10),
-  ///   SizedFile.mb(20),
-  ///   SizedFile.mb(30),
+  ///   FileSize.mb(10),
+  ///   FileSize.mb(20),
+  ///   FileSize.mb(30),
   /// ];
-  /// final total = SizedFile.sum(files);
+  /// final total = FileSize.sum(files);
   /// print(total.format()); // "60.00 MB"
   /// ```
-  static SizedFile sum(Iterable<SizedFile> sizes) {
-    if (sizes.isEmpty) return SizedFile.zero;
+  static FileSize sum(Iterable<FileSize> sizes) {
+    if (sizes.isEmpty) return FileSize.zero;
     return sizes.reduce((a, b) => a + b);
   }
 
-  /// Returns the average of multiple [SizedFile] instances.
+  /// Returns the average of multiple [FileSize] instances.
   ///
-  /// If the list is empty, returns a [SizedFile] with zero bytes.
+  /// If the list is empty, returns a [FileSize] with zero bytes.
   ///
   /// Example:
   /// ```dart
   /// final files = [
-  ///   SizedFile.mb(10),
-  ///   SizedFile.mb(20),
-  ///   SizedFile.mb(30),
+  ///   FileSize.mb(10),
+  ///   FileSize.mb(20),
+  ///   FileSize.mb(30),
   /// ];
-  /// final avg = SizedFile.average(files);
+  /// final avg = FileSize.average(files);
   /// print(avg.format()); // "20.00 MB"
   /// ```
-  static SizedFile average(Iterable<SizedFile> sizes) {
-    if (sizes.isEmpty) return SizedFile.zero;
+  static FileSize average(Iterable<FileSize> sizes) {
+    if (sizes.isEmpty) return FileSize.zero;
     final total = sum(sizes);
-    return SizedFile.b((total.inBytes / sizes.length).round());
+    return FileSize.b((total.inBytes / sizes.length).round());
   }
 }

@@ -1,5 +1,5 @@
-name: sized_file_example
-description: Example application for the sized_file package
+name: file_sized_example
+description: Example application for the file_sized package
 version: 1.0.0
 publish_to: none
 
@@ -7,5 +7,5 @@ environment:
   sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
-  sized_file:
+  file_sized:
     path: ../

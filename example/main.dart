@@ -1,15 +1,15 @@
-import 'package:sized_file/sized_file.dart';
+import 'package:file_sized/file_sized.dart';
 
 void main() {
-  print('=== Sized File Package Examples ===\n');
+  print('=== File Size Package Examples ===\n');
 
-  // Example 1: Creating SizedFile instances from different units
-  print('1. Creating SizedFile instances:');
-  final fromBytes = SizedFile.b(1024);
-  final fromKB = SizedFile.kb(1.5);
-  final fromMB = SizedFile.mb(100);
-  final fromGB = SizedFile.gb(2.5);
-  final fromTB = SizedFile.tb(1);
+  // Example 1: Creating FileSize instances from different units
+  print('1. Creating FileSize instances:');
+  final fromBytes = FileSize.b(1024);
+  final fromKB = FileSize.kb(1.5);
+  final fromMB = FileSize.mb(100);
+  final fromGB = FileSize.gb(2.5);
+  final fromTB = FileSize.tb(1);
 
   print('From bytes: ${fromBytes.format()}');
   print('From KB: ${fromKB.format()}');
@@ -19,7 +19,7 @@ void main() {
   print('');
 
   // Example 2: Creating from mixed units
-  print('2. Creating from mixed units with SizedFile.units:');
+  print('2. Creating from mixed units with FileSize.units:');
   mixedUnitsExample();
   print('');
 
@@ -30,7 +30,7 @@ void main() {
 
   // Example 3: Accessing different units
   print('3. Accessing different units:');
-  final fileSize = SizedFile.mb(5);
+  final fileSize = FileSize.mb(5);
   print('5 MB in different units:');
   print('  Bytes: ${fileSize.inBytes}');
   print('  KB: ${fileSize.inKB}');
@@ -41,7 +41,7 @@ void main() {
 
   // Example 4: Formatting with different fraction digits
   print('4. Custom fraction digits:');
-  final size = SizedFile.kb(1.5);
+  final size = FileSize.kb(1.5);
   print('1.5 KB formatted:');
   print('  0 digits: ${size.format(fractionDigits: 0)}');
   print('  1 digit:  ${size.format(fractionDigits: 1)}');
@@ -51,7 +51,7 @@ void main() {
 
   // Example 5: Custom postfixes for a single format call
   print('5. Custom postfixes:');
-  final customSize = SizedFile.mb(5);
+  final customSize = FileSize.mb(5);
   final customPostfixes = {
     'B': 'bytes',
     'KB': 'kilobytes',
@@ -65,13 +65,13 @@ void main() {
 
   // Example 6: Global postfix generator (for localization)
   print('6. Global postfix generator:');
-  SizedFile.setPostfixesGenerator(() {
+  FileSize.setPostfixesGenerator(() {
     return {'B': 'B', 'KB': 'Ko', 'MB': 'Mo', 'GB': 'Go', 'TB': 'To'};
   });
-  print('French style: ${SizedFile.mb(5).format()}');
+  print('French style: ${FileSize.mb(5).format()}');
 
   // Reset to default
-  SizedFile.setPostfixesGenerator(() {
+  FileSize.setPostfixesGenerator(() {
     return {'B': 'B', 'KB': 'KB', 'MB': 'MB', 'GB': 'GB', 'TB': 'TB'};
   });
   print('');
@@ -103,8 +103,8 @@ void main() {
 
   // Example 12: File size validation with comparison
   print('12. File size validation with comparison:');
-  validateSizedFileWithComparison(2097152, 5.0); // 2 MB file, 5 MB limit
-  validateSizedFileWithComparison(10485760, 5.0); // 10 MB file, 5 MB limit
+  validateFileSizeWithComparison(2097152, 5.0); // 2 MB file, 5 MB limit
+  validateFileSizeWithComparison(10485760, 5.0); // 10 MB file, 5 MB limit
   print('');
 
   // Example 13: Bandwidth calculation
@@ -115,21 +115,21 @@ void main() {
   // Example 14: Different size thresholds
   print('14. Automatic unit selection:');
   final sizes = [
-    SizedFile.b(500), // Bytes
-    SizedFile.b(2048), // Kilobytes
-    SizedFile.mb(1.5), // Megabytes
-    SizedFile.gb(2.5), // Gigabytes
+    FileSize.b(500), // Bytes
+    FileSize.b(2048), // Kilobytes
+    FileSize.mb(1.5), // Megabytes
+    FileSize.gb(2.5), // Gigabytes
   ];
   for (var s in sizes) {
     print('  ${s.inBytes.toString().padLeft(12)} bytes = ${s.format()}');
   }
 }
 
-/// Demonstrates creating SizedFile from mixed units
+/// Demonstrates creating FileSize from mixed units
 void mixedUnitsExample() {
   // Example 1: Video file with mixed units
   print('Video file size (2 GB + 500 MB + 256 KB):');
-  final videoFile = SizedFile.units(gb: 2, mb: 500, kb: 256);
+  final videoFile = FileSize.units(gb: 2, mb: 500, kb: 256);
   print('  Total: ${videoFile.format()}');
   print('  In MB: ${videoFile.inMB}');
   print('  In Bytes: ${videoFile.inBytes}');
@@ -137,30 +137,30 @@ void mixedUnitsExample() {
 
   // Example 2: Precise file size with bytes and larger units
   print('Database backup (10 MB + 1024 bytes):');
-  final dbBackup = SizedFile.units(mb: 10, bytes: 1024);
+  final dbBackup = FileSize.units(mb: 10, bytes: 1024);
   print('  Total: ${dbBackup.format()}');
   print('  In Bytes: ${dbBackup.inBytes}');
   print('');
 
   // Example 3: Complex media project
   print('Media project (1 GB + 750 MB + 512 KB + 256 bytes):');
-  final mediaProject = SizedFile.units(gb: 1, mb: 750, kb: 512, bytes: 256);
+  final mediaProject = FileSize.units(gb: 1, mb: 750, kb: 512, bytes: 256);
   print('  Total: ${mediaProject.format()}');
   print('  In GB: ${mediaProject.inGB.toStringAsFixed(2)}');
   print('');
 
   // Example 4: Using only one unit (same as direct constructor)
   print('Using units() with single unit:');
-  final singleUnit = SizedFile.units(mb: 500);
-  final directConstructor = SizedFile.mb(500);
+  final singleUnit = FileSize.units(mb: 500);
+  final directConstructor = FileSize.mb(500);
   print('  units(mb: 500): ${singleUnit.format()}');
   print('  mb(500): ${directConstructor.format()}');
   print('  Are equal: ${singleUnit == directConstructor}');
 }
 
-/// Demonstrates using extension methods for creating SizedFile instances
+/// Demonstrates using extension methods for creating FileSize instances
 void extensionMethodsExample() {
-  print('Creating SizedFile instances with extension methods:');
+  print('Creating FileSize instances with extension methods:');
 
   // Basic extension usage
   final document = 500.kb;
@@ -192,12 +192,12 @@ void extensionMethodsExample() {
 
   print('Comparing extension vs constructor:');
   final ext1 = 100.mb;
-  final cons1 = SizedFile.mb(100);
-  print('  100.mb == SizedFile.mb(100): ${ext1 == cons1}');
+  final cons1 = FileSize.mb(100);
+  print('  100.mb == FileSize.mb(100): ${ext1 == cons1}');
 
   final ext2 = 1024.b;
-  final cons2 = SizedFile.b(1024);
-  print('  1024.b == SizedFile.b(1024): ${ext2 == cons2}');
+  final cons2 = FileSize.b(1024);
+  print('  1024.b == FileSize.b(1024): ${ext2 == cons2}');
   print('');
 
   print('Complex calculations with extensions:');
@@ -215,13 +215,13 @@ void extensionMethodsExample() {
 
 /// Simulates a file upload progress display
 void simulateFileUpload(int totalBytes) {
-  final total = SizedFile.b(totalBytes);
+  final total = FileSize.b(totalBytes);
   final milestones = [0.25, 0.5, 0.75, 1.0];
 
   print('Uploading file (${total.format()})...');
   for (var progress in milestones) {
     final uploadedBytes = (totalBytes * progress).toInt();
-    final uploaded = SizedFile.b(uploadedBytes);
+    final uploaded = FileSize.b(uploadedBytes);
     final percent = (progress * 100).toStringAsFixed(0);
     print('  Progress: $percent% - ${uploaded.format()} / ${total.format()}');
   }
@@ -229,9 +229,9 @@ void simulateFileUpload(int totalBytes) {
 
 /// Displays storage usage summary
 void printStorageSummary(int usedBytes, int totalBytes) {
-  final used = SizedFile.b(usedBytes);
-  final total = SizedFile.b(totalBytes);
-  final free = SizedFile.b(totalBytes - usedBytes);
+  final used = FileSize.b(usedBytes);
+  final total = FileSize.b(totalBytes);
+  final free = FileSize.b(totalBytes - usedBytes);
 
   final percentUsed = (usedBytes / totalBytes * 100).toStringAsFixed(1);
 
@@ -242,9 +242,9 @@ void printStorageSummary(int usedBytes, int totalBytes) {
 }
 
 /// Validates if a file size is within the allowed limit using comparison operators
-void validateSizedFileWithComparison(int fileSizeBytes, double maxMB) {
-  final fileSize = SizedFile.b(fileSizeBytes);
-  final maxSize = SizedFile.mb(maxMB);
+void validateFileSizeWithComparison(int fileSizeBytes, double maxMB) {
+  final fileSize = FileSize.b(fileSizeBytes);
+  final maxSize = FileSize.mb(maxMB);
 
   // Use comparison operators instead of manual calculations
   final isValid = fileSize <= maxSize;
@@ -255,7 +255,7 @@ void validateSizedFileWithComparison(int fileSizeBytes, double maxMB) {
 
 /// Estimates download time based on file size and speed
 void estimateDownloadTime(int fileSizeBytes, double speedMBps) {
-  final fileSize = SizedFile.b(fileSizeBytes);
+  final fileSize = FileSize.b(fileSizeBytes);
   final seconds = fileSize.inMB / speedMBps;
 
   print('Download estimate:');
@@ -267,9 +267,9 @@ void estimateDownloadTime(int fileSizeBytes, double speedMBps) {
 /// Demonstrates equality and comparison operations
 void demonstrateEqualityAndComparison() {
   print('Equality operations:');
-  final size1 = SizedFile.kb(1);
-  final size2 = SizedFile.b(1024);
-  final size3 = SizedFile.mb(0.0009765625);
+  final size1 = FileSize.kb(1);
+  final size2 = FileSize.b(1024);
+  final size3 = FileSize.mb(0.0009765625);
 
   print('  ${size1.format()} == ${size2.format()}: ${size1 == size2}');
   print('  ${size2.format()} == ${size3.format()}: ${size2 == size3}');
@@ -277,14 +277,14 @@ void demonstrateEqualityAndComparison() {
 
   print('');
   print('Comparison operations:');
-  final small = SizedFile.kb(500);
-  final medium = SizedFile.mb(1);
-  final large = SizedFile.gb(1);
+  final small = FileSize.kb(500);
+  final medium = FileSize.mb(1);
+  final large = FileSize.gb(1);
 
   print('  ${small.format()} < ${medium.format()}: ${small < medium}');
   print('  ${medium.format()} < ${large.format()}: ${medium < large}');
   print('  ${large.format()} > ${small.format()}: ${large > small}');
-  print('  ${small.format()} <= ${SizedFile.kb(500).format()}: ${small <= SizedFile.kb(500)}');
+  print('  ${small.format()} <= ${FileSize.kb(500).format()}: ${small <= FileSize.kb(500)}');
   print('  ${large.format()} >= ${medium.format()}: ${large >= medium}');
 
   print('');
@@ -301,12 +301,12 @@ void demonstrateFileCollections() {
   print('Working with collections:');
 
   // Using Set to store unique file sizes
-  final fileSizes = <SizedFile>{
-    SizedFile.kb(1),
-    SizedFile.b(1024), // Same as 1 KB, won't be added twice
-    SizedFile.mb(1),
-    SizedFile.gb(1),
-    SizedFile.kb(1), // Duplicate, won't be added
+  final fileSizes = <FileSize>{
+    FileSize.kb(1),
+    FileSize.b(1024), // Same as 1 KB, won't be added twice
+    FileSize.mb(1),
+    FileSize.gb(1),
+    FileSize.kb(1), // Duplicate, won't be added
   };
 
   print('  Unique file sizes in Set: ${fileSizes.length}');
@@ -315,12 +315,12 @@ void demonstrateFileCollections() {
   }
 
   print('');
-  print('Using Map with SizedFile keys:');
-  final fileMap = <SizedFile, String>{
-    SizedFile.kb(1): 'Small document',
-    SizedFile.mb(5): 'Photo',
-    SizedFile.mb(50): 'Video clip',
-    SizedFile.gb(1): 'HD Movie',
+  print('Using Map with FileSize keys:');
+  final fileMap = <FileSize, String>{
+    FileSize.kb(1): 'Small document',
+    FileSize.mb(5): 'Photo',
+    FileSize.mb(50): 'Video clip',
+    FileSize.gb(1): 'HD Movie',
   };
 
   fileMap.forEach((size, description) {
@@ -330,11 +330,11 @@ void demonstrateFileCollections() {
   print('');
   print('Sorting files by size:');
   final randomSizes = [
-    SizedFile.gb(2),
-    SizedFile.kb(750),
-    SizedFile.mb(100),
-    SizedFile.b(500),
-    SizedFile.tb(1),
+    FileSize.gb(2),
+    FileSize.kb(750),
+    FileSize.mb(100),
+    FileSize.b(500),
+    FileSize.tb(1),
   ];
 
   print('  Before sorting:');
@@ -352,14 +352,14 @@ void demonstrateFileCollections() {
   print('');
   print('Filtering files by size:');
   final allFiles = [
-    SizedFile.kb(50), // Small
-    SizedFile.mb(2), // Medium
-    SizedFile.mb(15), // Large
-    SizedFile.kb(100), // Small
-    SizedFile.gb(1), // Very large
+    FileSize.kb(50), // Small
+    FileSize.mb(2), // Medium
+    FileSize.mb(15), // Large
+    FileSize.kb(100), // Small
+    FileSize.gb(1), // Very large
   ];
 
-  final threshold = SizedFile.mb(10);
+  final threshold = FileSize.mb(10);
   final largeFiles = allFiles.where((file) => file > threshold).toList();
   final smallFiles = allFiles.where((file) => file <= threshold).toList();
 
@@ -369,23 +369,23 @@ void demonstrateFileCollections() {
 
   print('');
   print('Storage capacity check:');
-  final totalStorage = allFiles.fold<SizedFile>(
-    SizedFile.b(0),
-    (sum, file) => SizedFile.b(sum.inBytes + file.inBytes),
+  final totalStorage = allFiles.fold<FileSize>(
+    FileSize.b(0),
+    (sum, file) => FileSize.b(sum.inBytes + file.inBytes),
   );
-  final availableSpace = SizedFile.gb(2);
+  final availableSpace = FileSize.gb(2);
 
   print('  Total files size: ${totalStorage.format()}');
   print('  Available space: ${availableSpace.format()}');
   print('  Fits in storage: ${totalStorage <= availableSpace ? "✓ Yes" : "✗ No"}');
 }
 
-/// Demonstrates arithmetic operations with SizedFile objects
+/// Demonstrates arithmetic operations with FileSize objects
 void demonstrateArithmeticOperations() {
   print('Addition operations:');
-  final doc1 = SizedFile.mb(2);
-  final doc2 = SizedFile.kb(500);
-  final doc3 = SizedFile.b(1024);
+  final doc1 = FileSize.mb(2);
+  final doc2 = FileSize.kb(500);
+  final doc3 = FileSize.b(1024);
 
   print('  Document 1: ${doc1.format()}');
   print('  Document 2: ${doc2.format()}');
@@ -396,8 +396,8 @@ void demonstrateArithmeticOperations() {
   print('');
 
   print('Subtraction operations:');
-  final totalStorage = SizedFile.gb(1);
-  final usedSpace = SizedFile.mb(750);
+  final totalStorage = FileSize.gb(1);
+  final usedSpace = FileSize.mb(750);
   final availableSpace = totalStorage - usedSpace;
 
   print('  Total storage: ${totalStorage.format()}');
@@ -406,9 +406,9 @@ void demonstrateArithmeticOperations() {
   print('');
 
   print('Combining operations:');
-  final photos = SizedFile.mb(200);
-  final videos = SizedFile.gb(1.5);
-  final backup = SizedFile.mb(50);
+  final photos = FileSize.mb(200);
+  final videos = FileSize.gb(1.5);
+  final backup = FileSize.mb(50);
 
   final mediaTotal = photos + videos;
   final withBackup = mediaTotal + backup;
@@ -425,25 +425,25 @@ void demonstrateArithmeticOperations() {
 
   print('Practical storage calculation:');
   final files = [
-    SizedFile.mb(5), // Document
-    SizedFile.mb(25), // Presentation
-    SizedFile.mb(150), // Video
-    SizedFile.kb(750), // Spreadsheet
-    SizedFile.gb(1), // Database backup
+    FileSize.mb(5), // Document
+    FileSize.mb(25), // Presentation
+    FileSize.mb(150), // Video
+    FileSize.kb(750), // Spreadsheet
+    FileSize.gb(1), // Database backup
   ];
 
-  var runningTotal = SizedFile.b(0);
+  var runningTotal = FileSize.b(0);
   print('  Building total from individual files:');
   for (int i = 0; i < files.length; i++) {
     runningTotal = runningTotal + files[i];
     print('    Adding ${files[i].format()}: Running total = ${runningTotal.format()}');
   }
 
-  final deviceCapacity = SizedFile.gb(2);
+  final deviceCapacity = FileSize.gb(2);
   final remainingSpace = deviceCapacity - runningTotal;
   print('  Device capacity: ${deviceCapacity.format()}');
   print('  Remaining space: ${remainingSpace.format()}');
-  print('  Can fit more files: ${remainingSpace > SizedFile.mb(100) ? "✓ Yes" : "✗ No"}');
+  print('  Can fit more files: ${remainingSpace > FileSize.mb(100) ? "✓ Yes" : "✗ No"}');
   print('');
 
   // Example 8: Multiplication and Division operations
@@ -469,7 +469,7 @@ void demonstrateArithmeticOperations() {
 /// Demonstrates multiplication, division, and ratio calculation operations
 void multiplicationDivisionExample() {
   print('Multiplication by scalar:');
-  final baseSize = SizedFile.mb(10);
+  final baseSize = FileSize.mb(10);
 
   print('  Base size: ${baseSize.format()}');
   print('  × 2: ${(baseSize * 2).format()}');
@@ -479,7 +479,7 @@ void multiplicationDivisionExample() {
   print('');
 
   print('Division by scalar:');
-  final largeFile = SizedFile.gb(1);
+  final largeFile = FileSize.gb(1);
 
   print('  Base size: ${largeFile.format()}');
   print('  ÷ 2: ${(largeFile / 2).format()}');
@@ -488,8 +488,8 @@ void multiplicationDivisionExample() {
   print('');
 
   print('Ratio calculation with ratioTo():');
-  final used = SizedFile.mb(250);
-  final capacity = SizedFile.gb(1);
+  final used = FileSize.mb(250);
+  final capacity = FileSize.gb(1);
   final ratio = used.ratioTo(capacity);
 
   print('  Used: ${used.format()}');
@@ -498,7 +498,7 @@ void multiplicationDivisionExample() {
   print('');
 
   print('Calculating per-item size:');
-  final totalSize = SizedFile.gb(5);
+  final totalSize = FileSize.gb(5);
   const fileCount = 500;
   final avgFileSize = totalSize / fileCount;
 
@@ -508,7 +508,7 @@ void multiplicationDivisionExample() {
   print('');
 
   print('Quota calculation:');
-  final userQuota = SizedFile.gb(10);
+  final userQuota = FileSize.gb(10);
   final quotaPercentage = 0.25; // 25% of quota
   final allocatedSpace = userQuota * quotaPercentage;
 
@@ -519,55 +519,55 @@ void multiplicationDivisionExample() {
 /// Demonstrates static helper methods
 void staticHelpersExample() {
   final sizes = [
-    SizedFile.mb(150),
-    SizedFile.kb(500),
-    SizedFile.gb(2),
-    SizedFile.mb(75),
-    SizedFile.kb(250),
+    FileSize.mb(150),
+    FileSize.kb(500),
+    FileSize.gb(2),
+    FileSize.mb(75),
+    FileSize.kb(250),
   ];
 
   print('File sizes: ${sizes.map((s) => s.format()).join(", ")}');
   print('');
 
   print('Using min() and max():');
-  final smallest = SizedFile.min(sizes);
-  final largest = SizedFile.max(sizes);
+  final smallest = FileSize.min(sizes);
+  final largest = FileSize.max(sizes);
 
   print('  Smallest file: ${smallest.format()}');
   print('  Largest file: ${largest.format()}');
   print('');
 
   print('Using sum():');
-  final total = SizedFile.sum(sizes);
+  final total = FileSize.sum(sizes);
   print('  Total size: ${total.format()}');
   print('  Total bytes: ${total.inBytes}');
   print('');
 
   print('Using average():');
-  final avg = SizedFile.average(sizes);
+  final avg = FileSize.average(sizes);
   print('  Average size: ${avg.format()}');
   print('  Count: ${sizes.length}');
   print('');
 
   print('Filtering and aggregating:');
-  final largeSizes = sizes.where((s) => s > SizedFile.mb(100)).toList();
-  final smallSizes = sizes.where((s) => s <= SizedFile.mb(100)).toList();
+  final largeSizes = sizes.where((s) => s > FileSize.mb(100)).toList();
+  final smallSizes = sizes.where((s) => s <= FileSize.mb(100)).toList();
 
   print('  Large files (> 100 MB): ${largeSizes.map((s) => s.format()).join(", ")}');
-  print('  Large files total: ${SizedFile.sum(largeSizes).format()}');
+  print('  Large files total: ${FileSize.sum(largeSizes).format()}');
   print('  Small files (≤ 100 MB): ${smallSizes.map((s) => s.format()).join(", ")}');
-  print('  Small files total: ${SizedFile.sum(smallSizes).format()}');
+  print('  Small files total: ${FileSize.sum(smallSizes).format()}');
 }
 
 /// Demonstrates Comparable interface and sorting
 void comparableExample() {
   final unsorted = [
-    SizedFile.gb(5),
-    SizedFile.kb(100),
-    SizedFile.mb(500),
-    SizedFile.b(2048),
-    SizedFile.gb(1),
-    SizedFile.mb(50),
+    FileSize.gb(5),
+    FileSize.kb(100),
+    FileSize.mb(500),
+    FileSize.b(2048),
+    FileSize.gb(1),
+    FileSize.mb(50),
   ];
 
   print('Unsorted files:');
@@ -577,7 +577,7 @@ void comparableExample() {
   print('');
 
   print('Sorted (ascending) using .sort():');
-  final ascending = List<SizedFile>.from(unsorted);
+  final ascending = List<FileSize>.from(unsorted);
   ascending.sort(); // Uses compareTo automatically
   for (final size in ascending) {
     print('  ${size.format()}');
@@ -585,7 +585,7 @@ void comparableExample() {
   print('');
 
   print('Sorted (descending):');
-  final descending = List<SizedFile>.from(unsorted);
+  final descending = List<FileSize>.from(unsorted);
   descending.sort((a, b) => b.compareTo(a));
   for (final size in descending) {
     print('  ${size.format()}');
@@ -593,8 +593,8 @@ void comparableExample() {
   print('');
 
   print('Using compareTo directly:');
-  final size1 = SizedFile.mb(100);
-  final size2 = SizedFile.mb(200);
+  final size1 = FileSize.mb(100);
+  final size2 = FileSize.mb(200);
   final comparison = size1.compareTo(size2);
 
   print('  ${size1.format()} vs ${size2.format()}');
@@ -606,10 +606,10 @@ void comparableExample() {
 void realWorldScenarios() {
   print('Scenario 1: Cloud backup pricing');
   const pricePerGB = 0.023; // $0.023 per GB
-  final dataToBackup = SizedFile.sum([
-    SizedFile.gb(50), // Documents
-    SizedFile.gb(200), // Photos
-    SizedFile.gb(100), // Videos
+  final dataToBackup = FileSize.sum([
+    FileSize.gb(50), // Documents
+    FileSize.gb(200), // Photos
+    FileSize.gb(100), // Videos
   ]);
 
   final totalGB = dataToBackup.inGB;
@@ -621,7 +621,7 @@ void realWorldScenarios() {
   print('');
 
   print('Scenario 2: Download time estimation');
-  final fileToDownload = SizedFile.gb(4.7); // DVD image
+  final fileToDownload = FileSize.gb(4.7); // DVD image
   const downloadSpeed = 10.5; // MB/s
 
   final timeInSeconds = fileToDownload.inMB / downloadSpeed;
@@ -634,8 +634,8 @@ void realWorldScenarios() {
   print('');
 
   print('Scenario 3: Compression ratio');
-  final originalSize = SizedFile.mb(150);
-  final compressedSize = SizedFile.mb(45);
+  final originalSize = FileSize.mb(150);
+  final compressedSize = FileSize.mb(45);
   final savedSpace = originalSize - compressedSize;
   final compressionRatio = compressedSize.ratioTo(originalSize);
 
@@ -647,7 +647,7 @@ void realWorldScenarios() {
   print('');
 
   print('Scenario 4: Multi-tier storage allocation');
-  final totalStorage = SizedFile.tb(1);
+  final totalStorage = FileSize.tb(1);
   final hotStorage = totalStorage * 0.2; // 20% hot (SSD)
   final warmStorage = totalStorage * 0.3; // 30% warm (HDD)
   final coldStorage = totalStorage * 0.5; // 50% cold (Archive)

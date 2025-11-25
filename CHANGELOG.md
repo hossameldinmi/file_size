@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.1] - 2025-10-26
 ### Added
 - New `extensionMethodsExample()` function in example/main.dart demonstrating:
-  - Basic extension usage for creating SizedFile instances
+  - Basic extension usage for creating FileSize instances
   - Using extensions in arithmetic expressions
   - Comparing extension syntax vs constructor syntax
   - Complex calculations with multiple extensions
@@ -27,13 +27,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2025-10-26
 
 ### Added
-- Extension methods on `num` for convenient `SizedFile` creation
-  - `.b` extension: Creates `SizedFile` from bytes (converts to integer)
-  - `.kb` extension: Creates `SizedFile` from kilobytes
-  - `.mb` extension: Creates `SizedFile` from megabytes
-  - `.gb` extension: Creates `SizedFile` from gigabytes
-  - `.tb` extension: Creates `SizedFile` from terabytes
-  - Example: `5.mb` is equivalent to `SizedFile.mb(5)`
+- Extension methods on `num` for convenient `FileSize` creation
+  - `.b` extension: Creates `FileSize` from bytes (converts to integer)
+  - `.kb` extension: Creates `FileSize` from kilobytes
+  - `.mb` extension: Creates `FileSize` from megabytes
+  - `.gb` extension: Creates `FileSize` from gigabytes
+  - `.tb` extension: Creates `FileSize` from terabytes
+  - Example: `5.mb` is equivalent to `FileSize.mb(5)`
 - Comprehensive test coverage for all extension methods (10 new tests, 126 total)
 - Extension methods documentation in README with usage examples and comparison table
 
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ByteConverter`: Added comprehensive class and method documentation
   - `UnitConverter` (formerly `ConverterStrategy`): Enhanced documentation with detailed explanations
   - `numericExtensions`: Added detailed documentation for each extension method
-  - `SizedFile`: Improved documentation for `_strategy`, `_postfixesGenerator`, `format()`, and `setPostfixesGenerator()`
+  - `FileSize`: Improved documentation for `_strategy`, `_postfixesGenerator`, `format()`, and `setPostfixesGenerator()`
 - Improved `format()` method documentation with clearer unit selection criteria including TB range
 - Updated README Features section to highlight extension methods
 
@@ -59,17 +59,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive unit tests for `inTB` property conversions
 
 ### Changed
-- **BREAKING**: `SizedFile.min()` now accepts `Iterable<SizedFile>` instead of two parameters
+- **BREAKING**: `FileSize.min()` now accepts `Iterable<FileSize>` instead of two parameters
   - Returns the smallest size from a collection
   - Returns zero if the collection is empty
-  - Example: `SizedFile.min([size1, size2, size3])`
-- **BREAKING**: `SizedFile.max()` now accepts `Iterable<SizedFile>` instead of two parameters
+  - Example: `FileSize.min([size1, size2, size3])`
+- **BREAKING**: `FileSize.max()` now accepts `Iterable<FileSize>` instead of two parameters
   - Returns the largest size from a collection
   - Returns zero if the collection is empty
-  - Example: `SizedFile.max([size1, size2, size3])`
-- **BREAKING** renaming  `SizedFile.values()` to `SizedFile.units()` factory constructor for creating instances from multiple units
+  - Example: `FileSize.max([size1, size2, size3])`
+- **BREAKING** renaming  `FileSize.values()` to `FileSize.units()` factory constructor for creating instances from multiple units
   - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
-  - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Example: `FileSize.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
   - Efficiently ignores zero values
   - All parameters default to 0
 - Updated all examples and documentation to reflect new `min()` and `max()` signatures
@@ -78,13 +78,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2025-10-22
 
 ### Added
-  - `SizedFile.units()` factory constructor for creating instances from multiple units
+  - `FileSize.units()` factory constructor for creating instances from multiple units
   - Accepts optional named parameters: `b`, `kb`, `mb`, `gb`, `tb`
-  - Example: `SizedFile.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
+  - Example: `FileSize.units(gb: 2, mb: 500, kb: 256)` creates a file size of 2 GB + 500 MB + 256 KB
   - Efficiently ignores zero values
   - All parameters default to 0
-- Complete documentation for `SizedFile.units` with usage examples in README
-- 8 new unit tests for `SizedFile.units` factory constructor (112 total tests)
+- Complete documentation for `FileSize.units` with usage examples in README
+- 8 new unit tests for `FileSize.units` factory constructor (112 total tests)
 - Practical examples in example/main.dart demonstrating mixed units use cases
 
 ## [1.1.2] - 2025-10-22
@@ -94,13 +94,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hash code support for use in `Set` and `Map` collections
 - Arithmetic operators for addition (`+`) and subtraction (`-`)
 - Multiplication operator (`*`) for scaling by numeric factors
-- Division operator (`/`) for dividing by numeric values (returns `SizedFile`)
-- `Comparable<SizedFile>` interface implementation with `compareTo()` method
+- Division operator (`/`) for dividing by numeric values (returns `FileSize`)
+- `Comparable<FileSize>` interface implementation with `compareTo()` method
 - Static helper methods: `min()`, `max()`, `sum()`, `average()`
-- New `ratioTo()` method for calculating ratios between two `SizedFile` instances
+- New `ratioTo()` method for calculating ratios between two `FileSize` instances
   - Returns `double` representing the ratio
   - Example: `used.ratioTo(total)` returns 0.244 for 250 MB / 1 GB
-- `SizedFile.zero` static constant for zero-byte instances
+- `FileSize.zero` static constant for zero-byte instances
 - Comprehensive test suite expanded to 104 tests
 - Advanced features examples demonstrating all new capabilities
 - Equality and comparison focused example file
@@ -128,10 +128,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-10-21
 
 ### Added
-- Initial release of the `sized_file` package
-- `SizedFile` class for handling file size conversions and formatting
+- Initial release of the `file_sized` package
+- `FileSize` class for handling file size conversions and formatting
 - Support for multiple size units: bytes (B), kilobytes (KB), megabytes (MB), gigabytes (GB), and terabytes (TB)
-- Constructors for creating instances from any unit: `SizedFile.b()`, `SizedFile.kb()`, `SizedFile.mb()`, `SizedFile.gb()`, `SizedFile.tb()`
+- Constructors for creating instances from any unit: `FileSize.b()`, `FileSize.kb()`, `FileSize.mb()`, `FileSize.gb()`, `FileSize.tb()`
 - Properties to access size in different units: `inBytes`, `inKB`, `inMB`, `inGB`
 - Smart `format()` method that automatically selects the most appropriate unit for display
 - Customizable fraction digits in formatting (default: 2 decimal places)
@@ -150,12 +150,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fully documented code with dartdoc comments
 - Tested and verified with 100% test coverage
 
-[1.3.1]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.3.1
-[1.3.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.3.0
-[1.2.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.2.2
-[1.2.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.2.0
-[1.1.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.1.2
-[1.0.2]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.2
-[1.0.1]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.1
-[1.0.0]: https://github.com/hossameldinmi/sized_file/releases/tag/v1.0.0
+[1.3.1]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.3.1
+[1.3.0]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.3.0
+[1.2.2]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.2.2
+[1.2.0]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.2.0
+[1.1.2]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.1.2
+[1.0.2]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.0.2
+[1.0.1]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.0.1
+[1.0.0]: https://github.com/hossameldinmi/file_sized/releases/tag/v1.0.0
 
