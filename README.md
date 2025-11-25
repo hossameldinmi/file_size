@@ -3,8 +3,8 @@
 </h2>
 
 <p align="center">
-   <a href="https://github.com/hossameldinmi/file_sized/actions/workflows/dart.yml">
-    <img src="https://github.com/hossameldinmi/file_sized/actions/workflows/dart.yml/badge.svg?branch=main" alt="Github action">
+   <a href="https://github.com/hossameldinmi/file_sized/actions/workflows/build.yml">
+    <img src="https://github.com/hossameldinmi/file_sized/actions/workflows/build.yml/badge.svg?branch=main" alt="Github action">
   </a>
   <a href="https://codecov.io/github/hossameldinmi/file_sized">
     <img src="https://codecov.io/github/hossameldinmi/file_sized/graph/badge.svg?token=JzTIIzoQOq" alt="Code Coverage">
